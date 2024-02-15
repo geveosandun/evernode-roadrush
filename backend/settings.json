@@ -1,0 +1,9 @@
+{
+	"settings": {
+		"postExecutionScriptName": "./post_exec.sh",
+		"dbPath": "roadRush.db",
+		"dbScriptsFolderPath": "./dbScripts",
+		"newContractZipFileName": "./newContractData.zip"
+	},
+	"contractUpdatingPublicKey": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA7eczZF7Hpj28WWAovkM/\nJN1G/7T77mUO+x2HShLu+yl66L1GrqdPfKE2dr5ElWKo1yAUXxE0BneZkf2bobAy\nMjNnO9EMHvnnqyO4d+mj+iU1LnjebMJcL2bV93wW2QVljip10p4tiAVRF/ay8ruA\nwPfJtUkPbQfMG9iXt6t4zIM0VdOBs+A2c2ZhZ1vHHjTe3vNth0zbH96NLdtkQklF\nH8q7/NykrtbqHEeJqwJ+1WP75+bnA75heTfESdWyF54i8Hjspt8C8RvSJLVgMy4i\nN/yPTexrj4UyoLhoKpYcVc0GiFVl+8aZobfhWJcXpQgQPzo4b5qYj1SH1tX9oxTz\nKQIDAQAB\n-----END PUBLIC KEY-----"
+}

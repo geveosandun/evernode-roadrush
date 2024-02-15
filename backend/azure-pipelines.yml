@@ -1,0 +1,108 @@
+# Node.js
+# Build a general Node.js project with npm.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- azure-pipiline-test-udith
+
+pr: none
+
+parameters:
+  - name: Mode
+    displayName: Choose the release type
+    default: DEV
+    type: string
+    values:
+      - DEV
+      - UAT
+      - PROD
+
+pool:
+  vmImage: ubuntu-latest
+  
+variables:
+- name: SecureFileSettings
+  ${{ if eq(parameters.Mode, 'DEV') }}:
+    value: 'settings-dev.json'
+  ${{ if eq(parameters.Mode, 'UAT') }}:
+    value: 'settings-uat.json'
+  ${{ if eq(parameters.Mode, 'PROD') }}:
+    value: 'settings-prod.json'
+- name: SecureFileContract
+  ${{ if eq(parameters.Mode, 'DEV') }}:
+    value: 'contract-dev.config'
+  ${{ if eq(parameters.Mode, 'UAT') }}:
+    value: 'contract-uat.config'
+  ${{ if eq(parameters.Mode, 'PROD') }}:
+    value: 'contract-prod.config'
+
+steps:
+- task: DownloadSecureFile@1
+  name: settingsJson
+  inputs:
+    secureFile: '$(SecureFileSettings)'
+  displayName: 'Download settings.json'
+
+- task: DownloadSecureFile@1
+  name: contractConfig
+  inputs:
+    secureFile: '$(SecureFileContract)'
+  displayName: 'Download contract.config'
+
+- task: NodeTool@0
+  inputs:
+    versionSpec: '18.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install
+    npm run build1
+    ls
+  displayName: 'npm install and build'
+
+- script: |
+    version=$(jq -r '.version' $(Build.SourcesDirectory)/package.json)
+    echo "##vso[build.updatebuildnumber]$version"
+  displayName: 'Set Version Variable' 
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Agent.TempDirectory)'
+    Contents: '$(SecureFileSettings)'
+    TargetFolder: '$(Build.SourcesDirectory)/dist'
+    FlattenFolders: true
+    Overwrite: true
+    TargetFiles: 'settings.json'
+  displayName: 'Copy Settings.json to dist Directory' 
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Agent.TempDirectory)'
+    Contents: '$(SecureFileContract)'
+    TargetFolder: '$(Build.SourcesDirectory)/dist'
+    FlattenFolders: true
+    Overwrite: true
+    TargetFiles: 'contract.config'
+  displayName: 'Copy contract.config to dist Directory' 
+
+- script: |
+    rm '$(Build.SourcesDirectory)/dist/settings.json'
+    rm '$(Build.SourcesDirectory)/dist/hp.cfg.override'
+    cp '$(Build.SourcesDirectory)/dist/$(SecureFileSettings)' '$(Build.SourcesDirectory)/dist/settings.json'
+    cp '$(Build.SourcesDirectory)/dist/$(SecureFileContract)' '$(Build.SourcesDirectory)/dist/contract.config'
+    rm '$(Build.SourcesDirectory)/dist/$(SecureFileSettings)'
+    rm '$(Build.SourcesDirectory)/dist/$(SecureFileContract)'
+  displayName: 'Deleting and renaming the config , settings fies'
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Build.SourcesDirectory)/dist'
+    includeRootFolder: false
+    archiveFile: '$(build.artifactstagingdirectory)/dist/dist.zip'
+  displayName: 'Zip Dist Folder'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
+  displayName: 'Publish the zipped file.'
