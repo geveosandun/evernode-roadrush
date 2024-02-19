@@ -48,6 +48,145 @@ export class DBInitializer {
 				PRIMARY KEY("Id" AUTOINCREMENT)
 			)`);
 
+			//create table User
+			await this.#runQuery(`CREATE TABLE IF NOT EXISTS ${Tables.USERS} (
+				UserID INTEGER PRIMARY KEY,
+				Username TEXT NOT NULL,
+				Password TEXT NOT NULL,
+				Email TEXT NOT NULL,
+				CreatedDate TEXT,
+				CreatedBy TEXT,
+				UpdatedDate TEXT,
+				UpdatedBy TEXT
+			)`);
+
+			await this.#runQuery(`CREATE TABLE IF NOT EXISTS ${Tables.ROLES}(
+				RoleID INTEGER PRIMARY KEY,
+    			RoleName TEXT,
+				CreatedDate TEXT,
+				CreatedBy TEXT,
+				UpdatedDate TEXT,
+				UpdatedBy TEXT
+			)`);
+
+			await this.#runQuery(`CREATE TABLE IF NOT EXISTS ${Tables.USERROLES}(
+				UserID INTEGER,
+    			RoleID INTEGER,
+    			PRIMARY KEY (UserID, RoleID),
+    			FOREIGN KEY (UserID) REFERENCES Users(UserID),
+    			FOREIGN KEY (RoleID) REFERENCES Roles(RoleID)
+			)`);
+
+			await this.#runQuery(`CREATE TABLE IF NOT EXISTS ${Tables.DRIVERS}(
+				DriverID INTEGER PRIMARY KEY,
+				UserID INTEGER,
+				DriverLicenseNumber TEXT,
+				VehicleMake TEXT,
+				VehicleModel TEXT,
+				VehiclePlateNumber TEXT,
+				DriverRating REAL,
+				CreatedDate TEXT,
+				CreatedBy TEXT,
+				UpdatedDate TEXT,
+				UpdatedBy TEXT,
+				FOREIGN KEY (UserID) REFERENCES Users(UserID)
+			)`)
+
+			await this.#runQuery(`CREATE TABLE IF NOT EXISTS ${Tables.PASSANGERS}(
+				PassengerID INTEGER PRIMARY KEY,
+				UserID INTEGER,
+				PaymentMethod TEXT,
+				CreatedDate TEXT,
+				CreatedBy TEXT,
+				UpdatedDate TEXT,
+				UpdatedBy TEXT,
+				FOREIGN KEY (UserID) REFERENCES Users(UserID)
+			)`);
+
+			await this.#runQuery(`CREATE TABLE IF NOT EXISTS ${Tables.RIDES}(
+				RideID INTEGER PRIMARY KEY,
+				DriverID INTEGER,
+				PassengerID INTEGER,
+				PickupLocation TEXT,
+				Destination TEXT,
+				RideStatus TEXT,
+				RideDateTime TEXT,
+				FareAmount REAL,
+				CreatedDate TEXT,
+				CreatedBy TEXT,
+				UpdatedDate TEXT,
+				UpdatedBy TEXT,
+				FOREIGN KEY (DriverID) REFERENCES Drivers(DriverID),
+				FOREIGN KEY (PassengerID) REFERENCES Passengers(PassengerID)
+			)`);
+
+			await this.#runQuery(`CREATE TABLE IF NOT EXISTS ${Tables.PAYMENTS}(
+				PaymentID INTEGER PRIMARY KEY,
+				RideID INTEGER,
+				PaymentType TEXT,
+				Amount REAL,
+				PaymentDateTime TEXT,
+				PaymentStatus TEXT,
+				CreatedDate TEXT,
+				CreatedBy TEXT,
+				UpdatedDate TEXT,
+				UpdatedBy TEXT,
+				FOREIGN KEY (RideID) REFERENCES Rides(RideID)
+			)`);
+
+			await this.#runQuery(`CREATE TABLE IF NOT EXISTS ${Tables.LOCATIONS}(
+				LocationID INTEGER PRIMARY KEY,
+				Name TEXT,
+				Latitude REAL,
+				Longitude REAL,
+				CreatedDate TEXT,
+				CreatedBy TEXT,
+				UpdatedDate TEXT,
+				UpdatedBy TEXT
+			)`);
+
+			await this.#runQuery(`CREATE TABLE IF NOT EXISTS ${Tables.RIDEREQUESTS}(
+				RideRequestID INTEGER PRIMARY KEY,
+				DriverID INTEGER,
+				PassengerID INTEGER,
+				PickupLocation TEXT,
+				Destination TEXT,
+				RideDateTime TEXT,
+				RequestStatus TEXT,
+				CreatedDate TEXT,
+				CreatedBy TEXT,
+				UpdatedDate TEXT,
+				UpdatedBy TEXT,
+				FOREIGN KEY (DriverID) REFERENCES Drivers(DriverID),
+				FOREIGN KEY (PassengerID) REFERENCES Passengers(PassengerID)
+			)`);
+
+			await this.#runQuery(`CREATE TABLE IF NOT EXISTS ${Tables.WALLETS}(
+				WalletId INTEGER PRIMARY KEY,
+				UserID TEXT,
+				BalanceInEvrs FLOAT,
+				CreatedDate TEXT,
+				CreatedBy TEXT,
+				UpdatedDate TEXT,
+				UpdatedBy TEXT,
+				FOREIGN KEY (UserID) REFERENCES Users(UserID)
+			)`);
+
+			await this.#runQuery(`CREATE TABLE IF NOT EXISTS ${Tables.EVERSTRANSACTIONS}(
+				TransactionID INTEGER PRIMARY KEY,
+				UserID INTEGER,
+				EvrsAmount REAL,
+				CashAmount REAL,
+				TransactionType TEXT, 
+				TransactionDateTime TEXT,
+				CreatedDate TEXT,
+				CreatedBy TEXT,
+				UpdatedDate TEXT,
+				UpdatedBy TEXT,
+				FOREIGN KEY (UserID) REFERENCES Users(UserID
+			)`)
+
+
 			this.#db.close();
 		}
 
