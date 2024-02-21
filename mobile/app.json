@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "Road Rush",
+    "slug": "Geveo-RoadRush-Mobile",
+    "scheme": "com.geveo.roadrush.mobile",
+    "version": "0.0.1",
+    "orientation": "portrait",
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "icon": "./app/assets/images/icon.png",
+    "userInterfaceStyle": "light",
+    "androidStatusBar": {
+      "barStyle": "dark-content"
+    },
+    "splash": {
+      "image": "./app/assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./app/assets/images/icon.png",
+        "backgroundImage": "./app/assets/images/icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.geveo.roadrush.mobile"
+    },
+    "plugins": [
+      "./androidManifestPlugin.js",
+      [
+      "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 34,
+            "targetSdkVersion": 34,
+            "minSdkVersion": 26
+          }
+        }
+      ]
+    ]
+  },
+  "name": "Road Rush"
+}
