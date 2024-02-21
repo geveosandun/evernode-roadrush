@@ -183,9 +183,8 @@ export class DBInitializer {
 				CreatedBy TEXT,
 				UpdatedDate TEXT,
 				UpdatedBy TEXT,
-				FOREIGN KEY (UserID) REFERENCES Users(UserID
-			)`)
-
+				FOREIGN KEY (UserID) REFERENCES Users(UserID)
+			)`);
 
 			this.#db.close();
 		}
