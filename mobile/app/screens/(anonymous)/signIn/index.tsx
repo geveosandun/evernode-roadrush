@@ -56,18 +56,14 @@ export default function SignInScreen({ navigation }) {
               />
               <TouchableOpacity onPress={toggleShowPassword} style={{ position: 'absolute', right: 10, top: 10, padding:5 }}>
                 {showPassword ? 
-                  <FontAwesomeIcon icon={faEye} style={{opacity: 0.8}} color='gray' /> : 
-                  <FontAwesomeIcon icon={faEyeSlash} style={{opacity: 0.8}} color='gray' />
+                  <FontAwesomeIcon icon={faEyeSlash} style={{opacity: 0.8}} color='gray' /> : 
+                  <FontAwesomeIcon icon={faEye} style={{opacity: 0.8}} color='gray' />
                 }
               </TouchableOpacity>
             </View>
-            <Text style={{alignSelf: "flex-end", marginRight: 5, fontWeight: "bold"}}>Forgot Password?</Text>
             <View style={styles.loginBtn}>
-              <SCButton showLeftArrow={false} showRightArrow={true} text="Login" />
+              <SCButton showLeftArrow={false} showRightArrow={false} text="Login" onTap={() => navigation.navigate("HomeScreen")} />
             </View>
-          </View>
-          <View style={{alignSelf: "center", position: "absolute", bottom: 10, flexDirection: "row"}}>
-            <Text>Dont have an account? </Text><Text style={{fontWeight: "bold"}}>SignUp</Text>
           </View>
         </View>
       </AnonymousLayout>
@@ -81,7 +77,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   loginForm: {
-    marginTop: 70,
+    marginTop: 50,
     alignSelf: "center",
     width: "85%"
   },

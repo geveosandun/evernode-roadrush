@@ -4,7 +4,7 @@ let AppTheme = {
     black: "#000000",
     red: "#FF2800",
     primary: "#FFA533",
-    backgroundShade: "#71EF9533", // with 20% alpha value
+    backgroundShade: "#FFC57A", // with 20% alpha value
     mediumGrey: "#808080",
     darkGrey: "#333333",
     toast_infoBlue:"#279FDB",

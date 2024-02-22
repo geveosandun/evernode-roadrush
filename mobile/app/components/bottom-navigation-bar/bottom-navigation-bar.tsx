@@ -1,11 +1,11 @@
 import {
+  faBars,
+  faBell,
   faHome,
-  faList,
-  faShoePrints,
   faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
 import AppTheme from "../../helpers/theme";
 import React from "react";
 import { Dimensions } from 'react-native';
@@ -13,9 +13,9 @@ import { Dimensions } from 'react-native';
 const screenWidth = Dimensions.get('window').width;
 export enum BottomNavigationButtons {
   Home,
-  List,
-  Steps,
-  Account,
+  Activity,
+  Notification,
+  Profile
 }
 
 export default function SCBottomNavigationBar({
@@ -29,16 +29,16 @@ export default function SCBottomNavigationBar({
 
       if (allowNavigation) {
         switch (tappedTab) {
-          case BottomNavigationButtons.List:
-            navigation.navigate("ListScreen");
+          case BottomNavigationButtons.Activity:
+            navigation.navigate("ActivityScreen");
             break;
 
-          case BottomNavigationButtons.Steps:
-            navigation.navigate("StepsScreen");
+          case BottomNavigationButtons.Notification:
+            navigation.navigate("NotificationScreen");
             break;
 
-          case BottomNavigationButtons.Account:
-            navigation.navigate("AccountScreen");
+          case BottomNavigationButtons.Profile:
+            navigation.navigate("ProfileScreen");
             break;
 
           case BottomNavigationButtons.Home:
@@ -52,80 +52,69 @@ export default function SCBottomNavigationBar({
 
   return (
     <View style={styles.container}>
-      {/* <View
-        style={{ height: 2, backgroundColor: AppTheme.colors.primary }}
-      ></View> */}
       <View style={styles.navbar}>
-        <View
-          style={[
-            styles.actionButton,
-            selectedTab == BottomNavigationButtons.Home
-              ? styles.activeActionButton
-              : styles.inactiveActionButton,
-          ]}
-        >
+        <View style={styles.actionButton}>
           <TouchableOpacity
             activeOpacity={0.7}
             onPress={async () => {
               await onTap(BottomNavigationButtons.Home);
             }}
+            style={[
+              selectedTab === BottomNavigationButtons.Home
+                ? styles.activeActionButton
+                : styles.inactiveActionButton
+            ]}
           >
             <FontAwesomeIcon icon={faHome} size={25} />
+            {selectedTab === BottomNavigationButtons.Home && <Text style={styles.navigationText}>   Home</Text>}
           </TouchableOpacity>
         </View>
-        <View
-          style={[
-            styles.actionButton,
-            selectedTab == BottomNavigationButtons.List
-              ? styles.activeActionButton
-              : styles.inactiveActionButton,
-          ]}
-        >
+        <View style={styles.actionButton}>
           <TouchableOpacity
             activeOpacity={0.7}
             onPress={async () => {
-              await onTap(BottomNavigationButtons.List);
+              await onTap(BottomNavigationButtons.Activity);
             }}
+            style={[
+              selectedTab === BottomNavigationButtons.Activity
+                ? styles.activeActionButton
+                : styles.inactiveActionButton
+            ]}
           >
-            <FontAwesomeIcon icon={faList} size={25} />
+            <FontAwesomeIcon icon={faBars} size={25} />
+            {selectedTab === BottomNavigationButtons.Activity && <Text style={styles.navigationText}>   Activity</Text>}
           </TouchableOpacity>
         </View>
-        <View
-          style={[
-            styles.actionButton,
-            selectedTab == BottomNavigationButtons.Steps
-              ? styles.activeActionButton
-              : styles.inactiveActionButton,
-          ]}
-        >
+        <View style={styles.actionButton}>
           <TouchableOpacity
             activeOpacity={0.7}
             onPress={async () => {
-              await onTap(BottomNavigationButtons.Steps);
+              await onTap(BottomNavigationButtons.Notification);
             }}
+            style={[
+              selectedTab === BottomNavigationButtons.Notification
+                ? styles.activeActionButton
+                : styles.inactiveActionButton
+            ]}
           >
-            <FontAwesomeIcon
-              icon={faShoePrints}
-              size={25}
-              style={{ transform: [{ rotate: "-90deg" }] }}
-            />
+            <FontAwesomeIcon icon={faBell} size={25} />
+            {selectedTab === BottomNavigationButtons.Notification && <Text style={styles.navigationText}>   Notification</Text>}
           </TouchableOpacity>
         </View>
-        <View
-          style={[
-            styles.actionButton,
-            selectedTab == BottomNavigationButtons.Account
-              ? styles.activeActionButton
-              : styles.inactiveActionButton,
-          ]}
-        >
+        <View style={styles.actionButton}>
           <TouchableOpacity
             activeOpacity={0.7}
             onPress={async () => {
-              await onTap(BottomNavigationButtons.Account);
+              await onTap(BottomNavigationButtons.Profile);
             }}
+            style={[
+              selectedTab === BottomNavigationButtons.Profile
+                ? styles.activeActionButton
+                : styles.inactiveActionButton
+            ]}
           >
             <FontAwesomeIcon icon={faUser} size={25} />
+            {selectedTab === BottomNavigationButtons.Profile && <Text style={styles.navigationText}>   Profile</Text>}
           </TouchableOpacity>
         </View>
       </View>
@@ -145,23 +134,30 @@ const styles = StyleSheet.create({
     flexWrap: "nowrap",
     justifyContent: "space-between",
     backgroundColor: "#FFFFFF",
-    borderRadius: 25,
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
     height:90,
     width: screenWidth,
     elevation: 10,
   },
   actionButton: {
     alignSelf: "center",
+    alignItems: "center",
     marginBottom: 10,
     paddingVertical: 15,
-    paddingHorizontal: 40,
     width: screenWidth/4,
   },
   activeActionButton: {
     backgroundColor: AppTheme.colors.backgroundShade,
+    padding: 15,
+    alignItems: "center",
     borderRadius: 50,
+    flexDirection: "row",
   },
   inactiveActionButton: {
     opacity: 0.3,
   },
+  navigationText: {
+    fontSize: 11
+  }
 });
