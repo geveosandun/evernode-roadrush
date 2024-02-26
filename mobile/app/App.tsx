@@ -4,6 +4,10 @@ import WelcomeScreen from "./welcome-screen";
 import LandingScreen from "./screens/(anonymous)/landing";
 import SignInScreen from "./screens/(anonymous)/signIn";
 import SplashScreen from "./screens/(anonymous)/splash";
+import Home from "./screens/(authorized)/home";
+import Activity from "./screens/(authorized)/activity";
+import Notification from "./screens/(authorized)/notification";
+import Profile from "./screens/(authorized)/profile";
 
 const Stack = createStackNavigator();
 
@@ -19,11 +23,26 @@ export default function App() {
           component={SignInScreen}
           options={{ title: "Sign In" }}
         />
-        {/* <Stack.Screen
+        <Stack.Screen
           name="HomeScreen"
           component={Home}
           options={{ title: "Home" }}
-        /> */}
+        />
+        <Stack.Screen
+          name="ActivityScreen"
+          component={Activity}
+          options={{ title: "Activity" }}
+        />
+        <Stack.Screen
+          name="NotificationScreen"
+          component={Notification}
+          options={{ title: "Notification" }}
+        />
+        <Stack.Screen
+          name="ProfileScreen"
+          component={Profile}
+          options={{ title: "Profile" }}
+        />
         <Stack.Screen
           name="WelcomeScreen"
           component={WelcomeScreen}
