@@ -62,7 +62,7 @@ export default function SignInScreen({ navigation }) {
               </TouchableOpacity>
             </View>
             <View style={styles.loginBtn}>
-              <SCButton showLeftArrow={false} showRightArrow={false} text="Login" onTap={() => navigation.navigate("HomeScreen")} />
+              <SCButton showLeftArrow={false} showRightArrow={false} text="Login" onTap={() => navigation.navigate("SelectTypeScreen")} />
             </View>
           </View>
         </View>

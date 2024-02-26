@@ -4,10 +4,13 @@ import WelcomeScreen from "./welcome-screen";
 import LandingScreen from "./screens/(anonymous)/landing";
 import SignInScreen from "./screens/(anonymous)/signIn";
 import SplashScreen from "./screens/(anonymous)/splash";
+import SelectTypeScreen from "./screens/(anonymous)/selectType";
 import Home from "./screens/(authorized)/home";
 import Activity from "./screens/(authorized)/activity";
 import Notification from "./screens/(authorized)/notification";
 import Profile from "./screens/(authorized)/profile";
+import HomePassenger from "./screens/(authorized)/home-passenger";
+import HomeDriver from "./screens/(authorized)/home-driver";
 
 const Stack = createStackNavigator();
 
@@ -57,6 +60,21 @@ export default function App() {
           name="SplashScreen"
           component={SplashScreen}
           options={{ title: "Splash" }}
+        />
+        <Stack.Screen
+          name="SelectTypeScreen"
+          component={SelectTypeScreen}
+          options={{ title: "Select Type" }}
+        />
+          <Stack.Screen
+          name="HomePassenger"
+          component={HomePassenger}
+          options={{ title: "Home Passenger" }}
+        />
+          <Stack.Screen
+          name="HomeDriver"
+          component={HomeDriver}
+          options={{ title: "Home Driver" }}
         />
       </Stack.Navigator>
     </NavigationContainer>

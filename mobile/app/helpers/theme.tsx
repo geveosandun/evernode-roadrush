@@ -3,8 +3,8 @@ let AppTheme = {
     white: "#FFFFFF",
     black: "#000000",
     red: "#FF2800",
-    primary: "#FFA533",
-    backgroundShade: "#FFC57A", // with 20% alpha value
+    primary: "#218a55",
+    backgroundShade: "#218a55", // with 20% alpha value
     mediumGrey: "#808080",
     darkGrey: "#333333",
     toast_infoBlue:"#279FDB",

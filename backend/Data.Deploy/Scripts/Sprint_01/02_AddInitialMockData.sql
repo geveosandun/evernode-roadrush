@@ -1,7 +1,7 @@
 
 	-- Mock data for Users table
 INSERT INTO Users (Username, Password, Email, CreatedDate, CreatedBy, UpdatedDate, UpdatedBy) 
-		VALUES ('Thisuri', '$2y$04$X/2BWDTB5S3vjF6OSai4ke7yr3tb6IoQGLqZDmRFWCv.naQIYk5wG', 'thisuri@yopmail.com', CURRENT_TIMESTAMP, 'Thisuri', CURRENT_TIMESTAMP, 'Thisuri');
+		VALUES ('Thisuri', '$2y$04$X/2BWDTB5S3vjF6OSai4ke7yr3tb6IoQGLqZDmRFWCv.naQIYk5wG', 'thisuri@yopmail.com', DATETIME('now'), 'Thisuri', DATETIME('now'), 'Thisuri');
         -- SunnyD@y111
 INSERT INTO Users (Username, Password, Email, CreatedDate, CreatedBy, UpdatedDate, UpdatedBy) 
 					VALUES ('John Doe', '$2y$04$iJvGbWMoN2wPOuV7N0bGJerpLkBVUAGABqMeZXESEphtrhtZhuPYS', 'johndoe@yopmail.com', DATETIME('now'), 'John Doe', DATETIME('now'), 'John Doe');
