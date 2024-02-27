@@ -36,7 +36,7 @@ export default function SignInScreen({ navigation }) {
       .then((response: any) => {
         if (response === 'Login Success') {
           showToast("Logged in Successfully!", ToastMessageTypes.success);
-          navigation.replace("HomeScreen");
+          navigation.replace("SelectTypeScreen");
         }
       })
       .catch((error) => {
