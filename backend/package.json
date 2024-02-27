@@ -15,8 +15,8 @@
     "stopContainer": "docker rm -f roadrush-build-container && docker image prune -f && docker container prune -f",
     "buildLinux": "npx ncc build ./startup.js -o dist",
     "buildLinux:prod": "npx ncc build ./startup.js --minify -o dist",
-    "start": "npm run build && set HP_INSTANCE_IMAGE=evernodedev/sashimono:hp.0.6.4-ubt.20.04-njs.20 && hpdevkit deploy dist",
-    "start1": "npm run build1 && export HP_INSTANCE_IMAGE=evernodedev/sashimono:hp.0.6.4-ubt.20.04-njs.20 && hpdevkit deploy dist",
+    "start": "npm run build && set HP_INSTANCE_IMAGE=evernode/sashimono:hp.0.6.4-ubt.20.04-njs.20 && hpdevkit deploy dist",
+    "start1": "npm run build1 && export HP_INSTANCE_IMAGE=evernode/sashimono:hp.0.6.4-ubt.20.04-njs.20 && hpdevkit deploy dist",
     "build1": "npm run removeDistLinux && npx ncc build ./startup.js -o dist && npm run copyStaticFilesLinux",
     "build": "npm run removeDist && npm run dockerBuild && npm run dockerRun && npm run fetchDist && npm run copyStaticFiles && npm run stopContainer",
     "postinstall": "npm i sqlite3 --target_platform=linux --target_arch=x64 --target_libc=glibc --no-save"

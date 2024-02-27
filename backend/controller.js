@@ -2,6 +2,7 @@ import { ServiceTypes } from "./Constants/ServiceTypes";
 import { AuthService } from "./Services/Common.Services/Auth.service";
 import { ContractUpdateController } from "./Controllers/ContractUpdate.Controller";
 import { TestController } from "./Controllers/Test.Controller";
+import { AuthenticationController } from "./Controllers/Authentication.Controller";
 
 const settings = require("./settings.json").settings;
 
@@ -10,10 +11,12 @@ export class Controller {
 
 	#contractController = null;
 	#testController = null;
+	#authenticationController = null;
 
 	async handleRequest(user, message, isReadOnly) {
 		this.#contractController = new ContractUpdateController(message);
 		this.#testController = new TestController(message); // For test purposes
+		this.#authenticationController = new AuthenticationController(message);
 		let _authService = new AuthService();
 
 		let result = {};
@@ -28,6 +31,9 @@ export class Controller {
 		} else {
 			if (message.Service == ServiceTypes.TEST) {
 				result = await this.#testController.handleRequest();
+			}
+			if (message.Service === ServiceTypes.AUTHENTICATION) {
+				result = await this.#authenticationController.handleRequest();
 			}
 		}
 

@@ -5,6 +5,7 @@ export const LogMessages = {
 		CONTROLLER_FILE_ERROR: "Error in controller file.",
 		UPDATE_CONTRACT_ERROR: "Error in updateContract function.",
 		GET_ACTIVITY_LOGS_ERROR: "Error in getActivityLogs function.",
+		USER_LOGIN_ERROR: "Error in login function",
 	},
 	SUCCESS: {
 		SUCCESS: "Success!",

@@ -1,4 +1,4 @@
-import { Animated, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { showToast } from "../../../services/toast-service";
 import { ToastMessageTypes } from "../../../helpers/constants";
 import AnonymousLayout from "../../../components/layouts/anonymous-layout";
@@ -10,6 +10,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 export default function SignInScreen({ navigation }) {
+  const _authService = AuthService.getInstance();
+
   const [showWaitIndicator, setShowWaitIndicator] = useState(false);
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
@@ -22,6 +24,28 @@ export default function SignInScreen({ navigation }) {
   const toggleShowPassword = () => {
     setShowPassword(!showPassword);
   };
+
+  const submitLogin = () => {
+    const loginData = {
+      Username: userName,
+      Password: password
+    }
+
+    setShowWaitIndicator(true);
+    _authService.submitLoginRequest(loginData)
+      .then((response: any) => {
+        if (response === 'Login Success') {
+          showToast("Logged in Successfully!", ToastMessageTypes.success);
+          navigation.replace("SelectTypeScreen");
+        }
+      })
+      .catch((error) => {
+        showToast(error.displayErrorMessage, ToastMessageTypes.error);
+      })
+      .finally(() => {
+        setShowWaitIndicator(false);
+      });
+  }
 
   return (
     <>
@@ -62,7 +86,7 @@ export default function SignInScreen({ navigation }) {
               </TouchableOpacity>
             </View>
             <View style={styles.loginBtn}>
-              <SCButton showLeftArrow={false} showRightArrow={false} text="Login" onTap={() => navigation.navigate("SelectTypeScreen")} />
+              <SCButton showLeftArrow={false} showRightArrow={false} text="Login" onTap={submitLogin} />
             </View>
           </View>
         </View>
