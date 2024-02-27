@@ -43,7 +43,7 @@ export default function SCBottomNavigationBar({
 
           case BottomNavigationButtons.Home:
           default:
-            navigation.navigate("HomeScreen");
+            navigation.navigate("HomePassanger");
             break;
         }
       }
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "nowrap",
     justifyContent: "space-between",
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "##218a55",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     height:90,
