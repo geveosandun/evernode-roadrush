@@ -43,7 +43,7 @@ export default function SCBottomNavigationBar({
 
           case BottomNavigationButtons.Home:
           default:
-            navigation.navigate("HomePassanger");
+            navigation.navigate("HomePassenger");
             break;
         }
       }
@@ -65,8 +65,8 @@ export default function SCBottomNavigationBar({
                 : styles.inactiveActionButton
             ]}
           >
-            <FontAwesomeIcon icon={faHome} size={25} />
-            {selectedTab === BottomNavigationButtons.Home && <Text style={styles.navigationText}>   Home</Text>}
+            <FontAwesomeIcon icon={faHome} size={25} color={AppTheme.colors.secondary}/>
+            {selectedTab === BottomNavigationButtons.Home && <Text style={styles.navigationText}>  Home</Text>}
           </TouchableOpacity>
         </View>
         <View style={styles.actionButton}>
@@ -81,8 +81,8 @@ export default function SCBottomNavigationBar({
                 : styles.inactiveActionButton
             ]}
           >
-            <FontAwesomeIcon icon={faBars} size={25} />
-            {selectedTab === BottomNavigationButtons.Activity && <Text style={styles.navigationText}>   Activity</Text>}
+            <FontAwesomeIcon icon={faBars} size={25} color={AppTheme.colors.secondary} />
+            {selectedTab === BottomNavigationButtons.Activity && <Text style={styles.navigationText}>  Activity</Text>}
           </TouchableOpacity>
         </View>
         <View style={styles.actionButton}>
@@ -97,8 +97,8 @@ export default function SCBottomNavigationBar({
                 : styles.inactiveActionButton
             ]}
           >
-            <FontAwesomeIcon icon={faBell} size={25} />
-            {selectedTab === BottomNavigationButtons.Notification && <Text style={styles.navigationText}>   Notification</Text>}
+            <FontAwesomeIcon icon={faBell} size={25} color={AppTheme.colors.secondary} />
+            {selectedTab === BottomNavigationButtons.Notification && <Text style={styles.navigationText}>  Notification</Text>}
           </TouchableOpacity>
         </View>
         <View style={styles.actionButton}>
@@ -113,8 +113,8 @@ export default function SCBottomNavigationBar({
                 : styles.inactiveActionButton
             ]}
           >
-            <FontAwesomeIcon icon={faUser} size={25} />
-            {selectedTab === BottomNavigationButtons.Profile && <Text style={styles.navigationText}>   Profile</Text>}
+            <FontAwesomeIcon icon={faUser} size={25} color={AppTheme.colors.secondary} />
+            {selectedTab === BottomNavigationButtons.Profile && <Text style={styles.navigationText}>  Profile</Text>}
           </TouchableOpacity>
         </View>
       </View>
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "nowrap",
     justifyContent: "space-between",
-    backgroundColor: "##218a55",
+    backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     height:90,

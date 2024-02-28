@@ -11,6 +11,7 @@ import Notification from "./screens/(authorized)/notification";
 import Profile from "./screens/(authorized)/profile";
 import HomePassenger from "./screens/(authorized)/home-passenger";
 import HomeDriver from "./screens/(authorized)/home-driver";
+import RideBooking from "./screens/(authorized)/ride-booking-passenger";
 
 const Stack = createStackNavigator();
 
@@ -75,6 +76,11 @@ export default function App() {
           name="HomeDriver"
           component={HomeDriver}
           options={{ title: "Home Driver" }}
+        />
+        <Stack.Screen
+          name="RideBookinghScreen"
+          component={RideBooking}
+          options={{ title: "Ride Booking" }}
         />
       </Stack.Navigator>
     </NavigationContainer>
