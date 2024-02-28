@@ -11,6 +11,8 @@ import Notification from "./screens/(authorized)/notification";
 import Profile from "./screens/(authorized)/profile";
 import HomePassenger from "./screens/(authorized)/home-passenger";
 import HomeDriver from "./screens/(authorized)/home-driver";
+import GoogleMapScreen from "./screens/(authorized)/google-maps";
+import GoogleMapSearch from "./screens/(authorized)/map-search"
 import RideBooking from "./screens/(authorized)/ride-booking-passenger";
 
 const Stack = createStackNavigator();
@@ -76,6 +78,16 @@ export default function App() {
           name="HomeDriver"
           component={HomeDriver}
           options={{ title: "Home Driver" }}
+        />
+          <Stack.Screen
+          name="GoogleMapScreen"
+          component={GoogleMapScreen}
+          options={{ title: "Google MapScreen" }}
+        />
+          <Stack.Screen
+          name="GoogleMapSearch"
+          component={GoogleMapSearch}
+          options={{ title: " Google Map Search" }}
         />
         <Stack.Screen
           name="RideBookinghScreen"
