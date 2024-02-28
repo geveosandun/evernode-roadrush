@@ -13,6 +13,7 @@ import HomePassenger from "./screens/(authorized)/home-passenger";
 import HomeDriver from "./screens/(authorized)/home-driver";
 import GoogleMapScreen from "./screens/(authorized)/google-maps";
 import GoogleMapSearch from "./screens/(authorized)/map-search"
+import RideDetails from "./screens/(authorized)/ride-details-for-passenger";
 
 const Stack = createStackNavigator();
 
@@ -87,6 +88,11 @@ export default function App() {
           name="GoogleMapSearch"
           component={GoogleMapSearch}
           options={{ title: " Google Map Search" }}
+        />
+          <Stack.Screen
+          name="RideDetails"
+          component={RideDetails}
+          options={{ title: "Ride Details" }}
         />
       </Stack.Navigator>
     </NavigationContainer>

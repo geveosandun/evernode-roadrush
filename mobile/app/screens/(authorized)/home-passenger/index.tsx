@@ -21,7 +21,7 @@ export default function HomePassanger({ navigation }) {
     return (
       <AuthorizedLayout showWaitIndicator={showLoadingIndicator}>
         <View style={styles.mainContainer}>
-          <GoogleMapSearch></GoogleMapSearch>
+          <GoogleMapSearch navigation={navigation}></GoogleMapSearch>
         </View>
         <View style={{ height: 80 }}>
           <SCBottomNavigationBar

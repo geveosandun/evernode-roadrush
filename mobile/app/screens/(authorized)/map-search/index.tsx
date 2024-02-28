@@ -1,15 +1,15 @@
 import * as React from "react";
 import { useRef, useState } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, Pressable } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { GOOGLE_MAPS_API_KEY } from "../../../helpers/constants";
 import MapViewDirections from "react-native-maps-directions";
 
-interface googleMapProps {}
 
-const GoogleMapSearch = (props: googleMapProps) => {
+export default function GoogleMapSearch({ navigation }) {
   const mapRef = useRef(null);
+
   const [origin, setOrigin] = useState<{ latitude: number; longitude: number } | undefined>();
   const [destination, setDestination] = useState<{ latitude: number; longitude: number } | undefined>()
   const [markerList, setMarkerList] = useState([
@@ -114,11 +114,13 @@ const GoogleMapSearch = (props: googleMapProps) => {
           />
         ) : null}
       </MapView>
+      
+      <Pressable style={styles.button}  onPress={() => navigation.navigate("RideDetails")}>
+        <Text style={styles.buttonText}>PROCEED</Text>
+      </Pressable>
     </View>
   );
 };
-
-export default GoogleMapSearch;
 
 const styles = StyleSheet.create({
   container: {
@@ -127,5 +129,17 @@ const styles = StyleSheet.create({
   map: {
     ...StyleSheet.absoluteFillObject,
     zIndex: 0,
+  },
+  button: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    backgroundColor: 'green',
+    padding: 10,
+    borderRadius: 10,
+  },
+  buttonText: {
+    color: 'white',
+    fontWeight: 'bold',
   },
 });
