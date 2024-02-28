@@ -80,8 +80,8 @@ export default function SignInScreen({ navigation }) {
               />
               <TouchableOpacity onPress={toggleShowPassword} style={{ position: 'absolute', right: 10, top: 10, padding:5 }}>
                 {showPassword ? 
-                  <FontAwesomeIcon icon={faEyeSlash} style={{opacity: 0.8}} color='gray' /> : 
-                  <FontAwesomeIcon icon={faEye} style={{opacity: 0.8}} color='gray' />
+                  <FontAwesomeIcon icon={faEye} style={{opacity: 0.8}} color='gray' /> : 
+                  <FontAwesomeIcon icon={faEyeSlash} style={{opacity: 0.8}} color='gray' />
                 }
               </TouchableOpacity>
             </View>
