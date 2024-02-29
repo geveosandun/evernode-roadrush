@@ -115,7 +115,7 @@ export default function GoogleMapSearch({ navigation }) {
         ) : null}
       </MapView>
       
-      <Pressable style={styles.button}  onPress={() => navigation.navigate("RideDetails")}>
+      <Pressable style={styles.button}  onPress={() => navigation.navigate("RideBookinghScreen")}>
         <Text style={styles.buttonText}>PROCEED</Text>
       </Pressable>
     </View>

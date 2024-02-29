@@ -11,10 +11,12 @@ import Notification from "./screens/(authorized)/notification";
 import Profile from "./screens/(authorized)/profile";
 import HomePassenger from "./screens/(authorized)/home-passenger";
 import HomeDriver from "./screens/(authorized)/home-driver";
-import GoogleMapScreen from "./screens/(authorized)/google-maps";
+import GoogleMapTrack from "./screens/(authorized)/map-track";
 import GoogleMapSearch from "./screens/(authorized)/map-search"
 import RideBooking from "./screens/(authorized)/ride-booking-passenger";
 import RideDetails from "./screens/(authorized)/ride-details-for-passenger";
+import RideViewScreen from "./screens/(authorized)/ride-view-driver";
+import WalletScreen from "./screens/(authorized)/wallet";
 
 const Stack = createStackNavigator();
 
@@ -23,7 +25,7 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={{ headerShown: false }}
-        initialRouteName={"SplashScreen"}
+        initialRouteName={"HomeDriver"}
       >
         <Stack.Screen
           name="SignInScreen"
@@ -81,9 +83,9 @@ export default function App() {
           options={{ title: "Home Driver" }}
         />
           <Stack.Screen
-          name="GoogleMapScreen"
-          component={GoogleMapScreen}
-          options={{ title: "Google MapScreen" }}
+          name="GoogleMapTrack"
+          component={GoogleMapTrack}
+          options={{ title: "Google Map Track" }}
         />
           <Stack.Screen
           name="GoogleMapSearch"
@@ -99,6 +101,16 @@ export default function App() {
           name="RideDetails"
           component={RideDetails}
           options={{ title: "Ride Details" }}
+        />
+          <Stack.Screen
+          name="RideViewScreen"
+          component={RideViewScreen}
+          options={{ title: "Ride  View Screen" }}
+        />
+          <Stack.Screen
+          name="WalletScreen"
+          component={WalletScreen}
+          options={{ title: "Wallet Screen" }}
         />
       </Stack.Navigator>
     </NavigationContainer>

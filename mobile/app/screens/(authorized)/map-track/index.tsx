@@ -5,9 +5,8 @@ import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 
-interface googleMapProps {}
 
-const GoogleMap = (props: googleMapProps) => {
+export default function GoogleMapTrack( {navigation}) {
 
   const [markerList, setMarkerList] = useState([
     {
@@ -42,7 +41,6 @@ const GoogleMap = (props: googleMapProps) => {
   );
 };
 
-export default GoogleMap;
 
 const styles = StyleSheet.create({
   container: {

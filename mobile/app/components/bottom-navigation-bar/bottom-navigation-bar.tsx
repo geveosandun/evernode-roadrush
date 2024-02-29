@@ -38,7 +38,7 @@ export default function SCBottomNavigationBar({
             break;
 
           case BottomNavigationButtons.Profile:
-            navigation.navigate("ProfileScreen");
+            navigation.navigate("WalletScreen");
             break;
 
           case BottomNavigationButtons.Home:
