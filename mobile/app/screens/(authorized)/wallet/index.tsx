@@ -40,7 +40,7 @@ export default function WalletScreen({ navigation }) {
         <View style={styles.historyContainer}>
             <Text style={{marginBottom: 10, fontSize: 20, fontWeight: 'bold'}}>Wallet History</Text>
           {walletHistory.map((item, index) => (
-            <View style={styles.historyItem}>
+            <View key={index} style={styles.historyItem}>
               <Text key={index} style={styles.historyData}>
                 {item}
               </Text>

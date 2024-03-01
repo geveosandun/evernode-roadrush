@@ -6,12 +6,15 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import { GOOGLE_MAPS_API_KEY } from "../../../helpers/constants";
 import MapViewDirections from "react-native-maps-directions";
 
-
 export default function GoogleMapSearch({ navigation }) {
   const mapRef = useRef(null);
 
-  const [origin, setOrigin] = useState<{ latitude: number; longitude: number } | undefined>();
-  const [destination, setDestination] = useState<{ latitude: number; longitude: number } | undefined>()
+  const [origin, setOrigin] = useState<
+    { latitude: number; longitude: number } | undefined
+  >();
+  const [destination, setDestination] = useState<
+    { latitude: number; longitude: number } | undefined
+  >();
   const [markerList, setMarkerList] = useState([
     {
       latitude: 6.836611,
@@ -43,12 +46,11 @@ export default function GoogleMapSearch({ navigation }) {
         style={{
           zIndex: 1,
           flex: 0.5,
-          flexDirection: "row",
           marginHorizontal: 10,
           marginVertical: 5,
         }}
       >
-        <View style={{ flex: 0.5 }}>
+        <View style={{ flexDirection: "row" }}>
           <GooglePlacesAutocomplete
             fetchDetails={true}
             placeholder="Origin"
@@ -67,7 +69,8 @@ export default function GoogleMapSearch({ navigation }) {
             onFail={(error) => console.log(error)}
           />
         </View>
-        <View style={{ flex: 0.5, marginLeft: 6 }}>
+
+        <View style={{ flex: 1, flexDirection: "row", marginLeft: 6 }}>
           <GooglePlacesAutocomplete
             fetchDetails={true}
             placeholder="Destination"
@@ -99,7 +102,9 @@ export default function GoogleMapSearch({ navigation }) {
         }}
       >
         {origin !== undefined ? <Marker coordinate={origin}></Marker> : null}
-        {destination !== undefined ? ( <Marker coordinate={destination}></Marker>) : null}
+        {destination !== undefined ? (
+          <Marker coordinate={destination}></Marker>
+        ) : null}
         <Marker
           coordinate={{ latitude: 6.838545, longitude: 81.007132 }}
           title={"Current Location"}
@@ -114,13 +119,16 @@ export default function GoogleMapSearch({ navigation }) {
           />
         ) : null}
       </MapView>
-      
-      <Pressable style={styles.button}  onPress={() => navigation.navigate("RideBookinghScreen")}>
+
+      <Pressable
+        style={styles.button}
+        onPress={() => navigation.navigate("RideBookinghScreen")}
+      >
         <Text style={styles.buttonText}>PROCEED</Text>
       </Pressable>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -131,15 +139,15 @@ const styles = StyleSheet.create({
     zIndex: 0,
   },
   button: {
-    position: 'absolute',
+    position: "absolute",
     bottom: 20,
     right: 20,
-    backgroundColor: 'green',
+    backgroundColor: "green",
     padding: 10,
     borderRadius: 10,
   },
   buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
   },
 });
