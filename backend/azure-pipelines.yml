@@ -63,7 +63,7 @@ steps:
 
 - script: |
     version=$(jq -r '.version' $(Build.SourcesDirectory)/package.json)
-    echo "##vso[build.updatebuildnumber]$version"
+    echo "$(Build.BuildId)"
   displayName: 'Set Version Variable' 
 - task: CopyFiles@2
   inputs:
