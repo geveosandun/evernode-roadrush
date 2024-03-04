@@ -53,6 +53,7 @@ export class DBInitializer {
 				UserID INTEGER PRIMARY KEY,
 				Username TEXT NOT NULL,
 				Password TEXT NOT NULL,
+				WalletAddress TEXT NOT NULL,
 				Email TEXT NOT NULL,
 				CreatedDate TEXT,
 				CreatedBy TEXT,

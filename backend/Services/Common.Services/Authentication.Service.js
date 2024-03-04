@@ -29,29 +29,31 @@ export class AuthenticationService {
             this.#dbContext.open();
 
             let foundUser = await this.#dbContext.getValues(Tables.USERS, {
-                Username: this.#message.Data.Username
+                WalletAddress: this.#message.Data.Address
             });
             dbp++;
 
             if (foundUser.length > 0) {
                 dbp++;
-                const hash = crypto.createHash('SHA256');
-                hash.update(this.#message.Data.Password);
-                const hashedValue = hash.digest('hex');
-                dbp++;
+                // const hash = crypto.createHash('SHA256');
+                // hash.update(this.#message.Data.Password);
+                // const hashedValue = hash.digest('hex');
+                // dbp++;
 
-                console.log('user record', foundUser[0]);
-                console.log('hash Password: ', hashedValue);
+                // console.log('user record', foundUser[0]);
+                // console.log('hash Password: ', hashedValue);
 
-                if (hashedValue === foundUser[0].Password) {
-                    console.log('success');
-                    resObj.success = 'Login Success';
-                } else {
-                    console.log('fail');
-                    resObj.error = new ErrorResponseDto(this.#message, dbp, "Password not Valid", new Error("Error occured in user login"));
-                }
+                // if (hashedValue === foundUser[0].Password) {
+                //     console.log('success');
+                //     resObj.success = 'Login Success';
+                // } else {
+                //     console.log('fail');
+                //     resObj.error = new ErrorResponseDto(this.#message, dbp, "Password not Valid", new Error("Error occured in user login"));
+                // }
+                resObj.success = true;
             } else {
-                resObj.error = new ErrorResponseDto(this.#message, dbp, "User Name not Valid", new Error("Error occured in user login"));
+                // resObj.error = new ErrorResponseDto(this.#message, dbp, "User not Valid", new Error("Error occured in user login"));
+                resObj.success = false;
             }
 
             console.log('return', resObj)
