@@ -3,8 +3,8 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
-#trigger:
-#- azure-pipiline-test-udith
+trigger:
+- azure-pipiline-test-udith
 
 pr: none
 
@@ -63,10 +63,9 @@ steps:
 
 - script: |
     version=$(jq -r '.version' $(Build.SourcesDirectory)/package.json)
-    echo '##vso[build.updatebuildnumber]'$newbuildnumber
+    echo "##vso[build.updatebuildnumber]$version"
   displayName: 'Set Version Variable' 
-- 
-  task: CopyFiles@2
+- task: CopyFiles@2
   inputs:
     SourceFolder: '$(Agent.TempDirectory)'
     Contents: '$(SecureFileSettings)'
@@ -75,7 +74,6 @@ steps:
     Overwrite: true
     TargetFiles: 'settings.json'
   displayName: 'Copy Settings.json to dist Directory' 
-
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(Agent.TempDirectory)'
