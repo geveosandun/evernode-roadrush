@@ -57,7 +57,7 @@ export default function SignInScreen({ navigation }) {
           />
           <Image
             style={styles.tinyLogo}
-            source={require("../../../assets/images/splash.png")}
+            source={require("../../../assets/images/logo.png")}
           />
           <View style={styles.loginForm}>
             <View style={{borderBottomWidth: 0.5, borderBottomColor: AppTheme.colors.primary, marginBottom: 10}}>

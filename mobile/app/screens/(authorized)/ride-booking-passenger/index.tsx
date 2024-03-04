@@ -53,7 +53,9 @@ export default function RideBooking({navigation}) {
                             }}
                         />
                         <Text style={{marginHorizontal: 10}}>Cameron Williamson</Text>
-                        <TouchableOpacity style={styles.bookkBtn}><Text style={{color: AppTheme.colors.white}}>Book Now</Text></TouchableOpacity>
+                        <TouchableOpacity style={styles.bookkBtn} onPress={() => navigation.navigate("RideDetails")}>
+                            <Text style={{color: AppTheme.colors.white}}>Book Now</Text>
+                            </TouchableOpacity>
                     </View>
                 </View>
             </View>
@@ -92,7 +94,7 @@ const styles = StyleSheet.create({
         margin: 10,
         borderWidth: 0.5,
         borderRadius: 15,
-        borderColor: AppTheme.colors.primary,
+      //  borderColor: AppTheme.colors.primary,
         padding: 15,
         elevation: 3,
         backgroundColor: AppTheme.colors.white,
@@ -113,7 +115,7 @@ const styles = StyleSheet.create({
         margin: 10,
         borderWidth: 0.5,
         borderRadius: 15,
-        borderColor: AppTheme.colors.primary,
+       // borderColor: AppTheme.colors.primary,
         padding: 15,
         elevation: 3,
         backgroundColor: AppTheme.colors.white,

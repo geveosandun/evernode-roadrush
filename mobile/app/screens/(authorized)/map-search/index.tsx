@@ -1,17 +1,20 @@
 import * as React from "react";
 import { useRef, useState } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, Pressable } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { GOOGLE_MAPS_API_KEY } from "../../../helpers/constants";
 import MapViewDirections from "react-native-maps-directions";
 
-interface googleMapProps {}
-
-const GoogleMapSearch = (props: googleMapProps) => {
+export default function GoogleMapSearch({ navigation }) {
   const mapRef = useRef(null);
-  const [origin, setOrigin] = useState<{ latitude: number; longitude: number } | undefined>();
-  const [destination, setDestination] = useState<{ latitude: number; longitude: number } | undefined>()
+
+  const [origin, setOrigin] = useState<
+    { latitude: number; longitude: number } | undefined
+  >();
+  const [destination, setDestination] = useState<
+    { latitude: number; longitude: number } | undefined
+  >();
   const [markerList, setMarkerList] = useState([
     {
       latitude: 6.836611,
@@ -43,12 +46,11 @@ const GoogleMapSearch = (props: googleMapProps) => {
         style={{
           zIndex: 1,
           flex: 0.5,
-          flexDirection: "row",
           marginHorizontal: 10,
           marginVertical: 5,
         }}
       >
-        <View style={{ flex: 0.5 }}>
+        <View style={{ flexDirection: "row" }}>
           <GooglePlacesAutocomplete
             fetchDetails={true}
             placeholder="Origin"
@@ -67,7 +69,8 @@ const GoogleMapSearch = (props: googleMapProps) => {
             onFail={(error) => console.log(error)}
           />
         </View>
-        <View style={{ flex: 0.5, marginLeft: 6 }}>
+
+        <View style={{ flex: 1, flexDirection: "row", marginLeft: 6 }}>
           <GooglePlacesAutocomplete
             fetchDetails={true}
             placeholder="Destination"
@@ -99,7 +102,9 @@ const GoogleMapSearch = (props: googleMapProps) => {
         }}
       >
         {origin !== undefined ? <Marker coordinate={origin}></Marker> : null}
-        {destination !== undefined ? ( <Marker coordinate={destination}></Marker>) : null}
+        {destination !== undefined ? (
+          <Marker coordinate={destination}></Marker>
+        ) : null}
         <Marker
           coordinate={{ latitude: 6.838545, longitude: 81.007132 }}
           title={"Current Location"}
@@ -114,11 +119,16 @@ const GoogleMapSearch = (props: googleMapProps) => {
           />
         ) : null}
       </MapView>
+
+      <Pressable
+        style={styles.button}
+        onPress={() => navigation.navigate("RideBookinghScreen")}
+      >
+        <Text style={styles.buttonText}>PROCEED</Text>
+      </Pressable>
     </View>
   );
-};
-
-export default GoogleMapSearch;
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -127,5 +137,17 @@ const styles = StyleSheet.create({
   map: {
     ...StyleSheet.absoluteFillObject,
     zIndex: 0,
+  },
+  button: {
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    backgroundColor: "green",
+    padding: 10,
+    borderRadius: 10,
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
   },
 });

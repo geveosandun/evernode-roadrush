@@ -9,11 +9,11 @@ import SCButton from "../../../components/button/button";
 export default function HomeDriver({ navigation }) {
     const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
     const requests = [
-        { id: '1', name: 'John Doe' },
-        { id: '2', name: 'Robert Will' },
-        { id: '3', name: 'Will Smith' },
-        { id: '4', name: 'Jimmy Kay' },
-        { id: '5', name: 'Lilly White' },
+        { id: '1', name: 'John Doe',pickUpDistance: '2 Km' },
+        { id: '2', name: 'Robert Will', pickUpDistance: '2.4 Km' },
+        { id: '3', name: 'Will Smith', pickUpDistance: '3 Km' },
+        { id: '4', name: 'Jimmy Kay', pickUpDistance: '3 Km' },
+        { id: '5', name: 'Lilly White', pickUpDistance: '3.2 Km' },
     ];
 
 
@@ -30,13 +30,11 @@ export default function HomeDriver({ navigation }) {
                     <View key={item.id} style={styles.item}>
                         <View style={styles.textContainer}>
                             <Text style={styles.itemText}>{item.name}</Text>
+                            <Text style={styles.itemText}>{item.pickUpDistance} away</Text>
                         </View>
                         <View style={styles.buttonsContainer}>
-                            <View style={{ marginHorizontal: 10 }}>
-                                <Button title="View" onPress={() => console.log('View pressed')} />
-                            </View>
-                            <View style={{ backgroundColor: 'a80c16' }}>
-                                <Button title="Cancel" onPress={() => console.log('Cancel pressed')} />
+                            <View >
+                                <Button title="Accept" onPress={() => navigation.navigate("RideViewScreen")} />
                             </View>
                         </View>
                     </View>
