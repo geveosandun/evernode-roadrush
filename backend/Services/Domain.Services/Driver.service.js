@@ -42,7 +42,7 @@ export class DriverService {
                 row.VehiclePlateNumber
             )
             );
-            resObj.message = driversDetails;
+            resObj.success = driversDetails;
             return resObj;             
         }catch(error) {
             console.log("Error occured when fetching driver details.")
