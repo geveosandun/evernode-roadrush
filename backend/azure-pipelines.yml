@@ -100,6 +100,12 @@ steps:
     archiveFile: '$(build.artifactstagingdirectory)/dist/dist.zip'
   displayName: 'Zip Dist Folder'
 
+- task: CmdLine@2
+  inputs:
+    script: |
+      echo 'ARTIFACTS PATH'
+      echo '$(build.artifactstagingdirectory)/dist/dist.zip'
+
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
