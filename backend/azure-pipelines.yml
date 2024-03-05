@@ -56,9 +56,11 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
+    cd backend
     npm install
     npm run build1
     ls
+    cd..
   displayName: 'npm install and build'
 
 - script: |
