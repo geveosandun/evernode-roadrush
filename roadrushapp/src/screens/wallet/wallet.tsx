@@ -2,8 +2,11 @@ import {StyleSheet, View, Text, Image} from 'react-native';
 import {BottomNavigationButtons} from '../../components/bottom-navigation-bar/bottom-navigation-bar';
 import AuthorizedLayout from '../../layouts/authorized-layout';
 import {useState} from 'react';
+import RRButton from '../../components/button/button';
+import AuthService from '../../services/auth-service';
 
 export default function Wallet({navigation}) {
+  const _authService = AuthService.getInstance();
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
   const [walletHistory, setWalletHistory] = useState([
     '0.34 EVRs transfred to *******98 on 09/02/2024',
@@ -17,6 +20,14 @@ export default function Wallet({navigation}) {
   async function onBottomNavigationTapped(tab: BottomNavigationButtons) {
     console.log(tab);
     return true;
+  }
+
+  const handleClick = () => {
+    _authService.submitLogoutRequest().then((resposne: any) => {
+        if (resposne) {
+            navigation.navigate("login");
+        }
+    })
   }
 
   return (
@@ -47,6 +58,9 @@ export default function Wallet({navigation}) {
             </Text>
           </View>
         ))}
+      </View>
+      <View>
+        <RRButton showLeftArrow={false} showRightArrow={false} text="Logout" onTap={handleClick}/>
       </View>
     </AuthorizedLayout>
   );

@@ -28,9 +28,10 @@ export default class AuthService {
     try {
       const response: any =
         await HotPocketClientService.submitContractReadRequest(message);
+      
       if (response.hasAccount) {
         await AsyncStorage.setItem('isLoggedIn', 'true');
-        await AsyncStorage.setItem('user', response.user)
+        await AsyncStorage.setItem('user', JSON.stringify(response.user))
       }
       return response.hasAccount;
     } catch (error) {
