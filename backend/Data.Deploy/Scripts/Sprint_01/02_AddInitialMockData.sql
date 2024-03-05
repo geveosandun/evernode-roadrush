@@ -9,3 +9,14 @@ INSERT INTO Roles (RoleName, CreatedDate, CreatedBy, UpdatedDate, UpdatedBy)
 					VALUES ('passenger', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
 INSERT INTO Roles (RoleName, CreatedDate, CreatedBy, UpdatedDate, UpdatedBy) 
 					VALUES ('admin', CURRENT_TIMESTAMP, 'admin', NULL, NULL);
+
+INSERT INTO UserRoles (UserID, RoleID) 
+						VALUES (1, 2);
+INSERT INTO UserRoles (UserID, RoleID) 
+						VALUES (2, 1);
+
+INSERT INTO Drivers (UserID, DriverLicenseNumber, VehicleMake, VehicleModel, VehiclePlateNumber, DriverRating, CreatedDate, CreatedBy, UpdatedDate, UpdatedBy) 
+VALUES (1, 'DL123456', 'Toyota', 'Camry', 'ABC123', 4.5, CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, 'admin');
+
+INSERT INTO Drivers (UserID, DriverLicenseNumber, VehicleMake, VehicleModel, VehiclePlateNumber, DriverRating, CreatedDate, CreatedBy, UpdatedDate, UpdatedBy) 
+VALUES (2, 'DL654321', 'Honda', 'Accord', 'XYZ789', 4.2, CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, 'admin');
