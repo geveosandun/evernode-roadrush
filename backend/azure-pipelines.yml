@@ -62,12 +62,12 @@ steps:
     ls
     echo '--------dist folder---------'
     ls dist
-    cd..
+    cd ..
   displayName: 'npm install and build'
 
 - script: |
     version=$(jq -r '.version' $(Build.SourcesDirectory)/backend/package.json)
-    echo "$(Build.BuildId).$version"
+    echo "$(Build.BuildId)_$version"
   displayName: 'Set Version Variable'
 
 - task: CopyFiles@2
