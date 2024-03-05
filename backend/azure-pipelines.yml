@@ -60,6 +60,8 @@ steps:
     npm install
     npm run build1
     ls
+    echo '--------dist folder---------'
+    ls dist
     cd..
   displayName: 'npm install and build'
 
