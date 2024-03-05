@@ -3,8 +3,8 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
-trigger:
-- azure-pipiline-test-udith
+#trigger:
+#- azure-pipiline-test-udith
 
 pr: none
 
@@ -63,8 +63,9 @@ steps:
 
 - script: |
     version=$(jq -r '.version' $(Build.SourcesDirectory)/package.json)
-    echo "$(Build.BuildId)"
-  displayName: 'Set Version Variable' 
+    echo "##vso[build.updatebuildnumber]$version"
+  displayName: 'Set Version Variable'
+
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(Agent.TempDirectory)'
@@ -74,6 +75,7 @@ steps:
     Overwrite: true
     TargetFiles: 'settings.json'
   displayName: 'Copy Settings.json to dist Directory' 
+
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(Agent.TempDirectory)'
@@ -99,12 +101,6 @@ steps:
     includeRootFolder: false
     archiveFile: '$(build.artifactstagingdirectory)/dist/dist.zip'
   displayName: 'Zip Dist Folder'
-
-- task: CmdLine@2
-  inputs:
-    script: |
-      echo 'ARTIFACTS PATH'
-      echo '$(build.artifactstagingdirectory)/dist/dist.zip'
 
 - task: PublishBuildArtifacts@1
   inputs:
