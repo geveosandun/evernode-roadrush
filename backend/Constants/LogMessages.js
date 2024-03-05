@@ -6,6 +6,9 @@ export const LogMessages = {
 		UPDATE_CONTRACT_ERROR: "Error in updateContract function.",
 		GET_ACTIVITY_LOGS_ERROR: "Error in getActivityLogs function.",
 		USER_LOGIN_ERROR: "Error in login function",
+		RIDE_BOOKING_ERROR: "Error in bookRide function",
+		GET_RIDE_REQUESTS_ERROR: "Error in getRideRequests function",
+		ACPET_RIDE_REQUEST_ERRO: "Error in acceptRide function",
 	},
 	SUCCESS: {
 		SUCCESS: "Success!",

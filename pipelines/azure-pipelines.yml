@@ -3,8 +3,8 @@
 # Add steps that analyze code, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
-trigger:
-- azure-pipiline-test-udith
+#trigger:
+#- azure-pipiline-test-udith
 
 pr: none
 
@@ -62,42 +62,44 @@ steps:
   displayName: 'npm install and build'
 
 - script: |
-    version=$(jq -r '.version' $(Build.SourcesDirectory)/package.json)
-    echo "$(Build.BuildId)"
+    version=$(jq -r '.version' $(Build.SourcesDirectory)/backend/package.json)
+    echo '##vso[build.updatebuildnumber]'$newbuildnumber
   displayName: 'Set Version Variable' 
-- task: CopyFiles@2
+- 
+  task: CopyFiles@2
   inputs:
     SourceFolder: '$(Agent.TempDirectory)'
     Contents: '$(SecureFileSettings)'
-    TargetFolder: '$(Build.SourcesDirectory)/dist'
+    TargetFolder: '$(Build.SourcesDirectory)/backend/dist'
     FlattenFolders: true
     Overwrite: true
     TargetFiles: 'settings.json'
   displayName: 'Copy Settings.json to dist Directory' 
+
 - task: CopyFiles@2
   inputs:
     SourceFolder: '$(Agent.TempDirectory)'
     Contents: '$(SecureFileContract)'
-    TargetFolder: '$(Build.SourcesDirectory)/dist'
+    TargetFolder: '$(Build.SourcesDirectory)/backend/dist'
     FlattenFolders: true
     Overwrite: true
     TargetFiles: 'contract.config'
   displayName: 'Copy contract.config to dist Directory' 
 
 - script: |
-    rm '$(Build.SourcesDirectory)/dist/settings.json'
-    rm '$(Build.SourcesDirectory)/dist/hp.cfg.override'
-    cp '$(Build.SourcesDirectory)/dist/$(SecureFileSettings)' '$(Build.SourcesDirectory)/dist/settings.json'
-    cp '$(Build.SourcesDirectory)/dist/$(SecureFileContract)' '$(Build.SourcesDirectory)/dist/contract.config'
-    rm '$(Build.SourcesDirectory)/dist/$(SecureFileSettings)'
-    rm '$(Build.SourcesDirectory)/dist/$(SecureFileContract)'
+    rm '$(Build.SourcesDirectory)/backend/dist/settings.json'
+    rm '$(Build.SourcesDirectory)/backend/dist/hp.cfg.override'
+    cp '$(Build.SourcesDirectory)/backend/dist/$(SecureFileSettings)' '$(Build.SourcesDirectory)/backend/dist/settings.json'
+    cp '$(Build.SourcesDirectory)/backend/dist/$(SecureFileContract)' '$(Build.SourcesDirectory)/backend/dist/contract.config'
+    rm '$(Build.SourcesDirectory)/backend/dist/$(SecureFileSettings)'
+    rm '$(Build.SourcesDirectory)/backend/dist/$(SecureFileContract)'
   displayName: 'Deleting and renaming the config , settings fies'
 
 - task: ArchiveFiles@2
   inputs:
-    rootFolderOrFile: '$(Build.SourcesDirectory)/dist'
+    rootFolderOrFile: '$(Build.SourcesDirectory)/backend/dist'
     includeRootFolder: false
-    archiveFile: '$(build.artifactstagingdirectory)/dist/dist.zip'
+    archiveFile: '$(build.artifactstagingdirectory)/backend/dist/dist.zip'
   displayName: 'Zip Dist Folder'
 
 - task: PublishBuildArtifacts@1
