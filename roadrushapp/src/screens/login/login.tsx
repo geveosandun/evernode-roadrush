@@ -6,48 +6,50 @@ import AppTheme from '../../helpers/theme';
 import AnonymousLayout from '../../layouts/anonymous-layout';
 import AuthService from '../../services/auth-service';
 import {showToast} from '../../services/toast-service';
+import { Wallet } from 'xrpl';
+const xrpl = require("xrpl");
 
 export function Login({navigation}): React.JSX.Element {
   const _authService = AuthService.getInstance();
 
   const [showWaitIndicator, setShowWaitIndicator] = useState(false);
   const [walletSecret, setWalletSecret] = useState('');
-  const [userName, setUserName] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
 
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
+  const UrlConstants = {
+    XRPL_URL: "wss://xahau-test.net/"
   };
+  const xrplClient = new xrpl.Client(UrlConstants.XRPL_URL);
 
-  const submitLogin = () => {
-    // test code
-    setShowWaitIndicator(true);
+  const submitLogin = async () => {
+    if (walletSecret !== '') {
+      setShowWaitIndicator(true);
+      await xrplClient.connect();
 
-    setTimeout(() => {
-      setShowWaitIndicator(false);
-      navigation.replace('usermodeselection');
-    }, 1000);
-
-    // const loginData = {
-    //   Username: userName,
-    //   Password: password,
-    // };
-
-    // _authService
-    //   .submitLoginRequest(loginData)
-    //   .then((response: any) => {
-    //     if (response === 'Login Success') {
-    //       showToast('Logged in successfully!', ToastMessageTypes.success);
-    //       navigation.replace('SelectTypeScreen');
-    //     }
-    //   })
-    //   .catch(error => {
-    //     showToast(error.displayErrorMessage, ToastMessageTypes.error);
-    //   })
-    //   .finally(() => {
-    //     setShowWaitIndicator(false);
-    //   });
+      const wallet = Wallet.fromSeed(walletSecret);
+      if (wallet) {
+        _authService.submitLoginRequest(wallet.publicKey)
+          .then((response: any) => {
+            if (response) {
+              showToast('Logged in successfully!', ToastMessageTypes.success);
+              navigation.replace('usermodeselection');
+            } else {
+              //Can implement routing to a register page
+              showToast("Invalid Login", ToastMessageTypes.error);
+            }
+          })
+          .catch((error) => {
+            console.log('Error', error);
+          })
+          .finally(() => {
+            setShowWaitIndicator(false);
+          });
+      } else {
+        console.log("error", wallet);
+        showToast("Invalid Login", ToastMessageTypes.error);
+      }
+    } else {
+      showToast('Please provide a secret', ToastMessageTypes.error);
+    }
   };
 
   return (
@@ -60,7 +62,8 @@ export function Login({navigation}): React.JSX.Element {
       <TextInput
         placeholder="Wallet Secret"
         style={AppTheme.components.textbox}
-        onChangeText={text => setWalletSecret(text)}
+        value={walletSecret}
+        onChangeText={(text) => setWalletSecret(text)}
       />
 
       <RRButton
