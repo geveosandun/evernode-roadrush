@@ -5,6 +5,7 @@ import RRBottomNavigationBar, {
 } from '../../../components/bottom-navigation-bar/bottom-navigation-bar';
 import GoogleMapSearch from '../../../components/google-map-search/google-map-search';
 import AuthorizedLayout from '../../../layouts/authorized-layout';
+import AuthorizedLayoutWithoutScroll from '../../../layouts/authorized-layout-without-scroll';
 
 export function PassengerHome({navigation}): React.JSX.Element {
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
@@ -15,7 +16,7 @@ export function PassengerHome({navigation}): React.JSX.Element {
   }
 
   return (
-    <AuthorizedLayout
+    <AuthorizedLayoutWithoutScroll
       title="Passenger Home"
       navigation={navigation}
       showWaitIndicator={showLoadingIndicator}
@@ -24,7 +25,7 @@ export function PassengerHome({navigation}): React.JSX.Element {
       <View style={styles.mainContainer}>
         <GoogleMapSearch navigation={navigation}></GoogleMapSearch>
       </View>
-    </AuthorizedLayout>
+    </AuthorizedLayoutWithoutScroll>
   );
 }
 

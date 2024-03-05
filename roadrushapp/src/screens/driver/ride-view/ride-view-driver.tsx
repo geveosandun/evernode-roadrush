@@ -5,6 +5,7 @@ import MapView, {Marker} from 'react-native-maps';
 import MapViewDirections from 'react-native-maps-directions';
 import AppSettings from '../../../helpers/app-settings';
 import RRButton from '../../../components/button/button';
+import LiveMap from '../../passenger/live-map/live-map';
 
 export default function RideViewDriver({navigation}): React.JSX.Element {
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
@@ -25,7 +26,7 @@ export default function RideViewDriver({navigation}): React.JSX.Element {
       showBottomNavigation={true}
       title="Current Ride">
       <View style={styles.container}>
-        <MapView
+        {/* <MapView
           style={styles.map}
           initialRegion={{
             latitude: 6.838545,
@@ -43,7 +44,8 @@ export default function RideViewDriver({navigation}): React.JSX.Element {
           />
           <Marker coordinate={origin} title="Starting Point" />
           <Marker coordinate={destination} title="Destination Point" />
-        </MapView>
+        </MapView> */}
+        <LiveMap navigation={navigation} origin={origin} destination={destination} ></LiveMap>
       </View>
       <View style={styles.detailsContainer}>
         <Text style={{marginTop: 20}}>Passanger : John Doe </Text>

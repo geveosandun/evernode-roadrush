@@ -9,12 +9,10 @@ import AppTheme from '../../helpers/theme';
 export default function GoogleMapSearch({navigation}): React.JSX.Element {
   const mapRef = useRef(null);
 
-  const [origin, setOrigin] = useState<
-    {latitude: number; longitude: number} | undefined
-  >();
-  const [destination, setDestination] = useState<
-    {latitude: number; longitude: number} | undefined
-  >();
+  const [origin, setOrigin] = useState<{latitude: number; longitude: number} | undefined>();
+  const [destination, setDestination] = useState<{latitude: number; longitude: number} | undefined>();
+  const [originAddress, setOriginAddress] = useState("");
+  const [destinationAddress, setDestinationAddress] = useState("");
   const [markerList, setMarkerList] = useState([
     {
       latitude: 6.836611,
@@ -63,11 +61,13 @@ export default function GoogleMapSearch({navigation}): React.JSX.Element {
               },
             }}
             onPress={(data, details = null) => {
+              let originAddress = details.address_components[0].short_name;
               let originCoordinates = {
                 latitude: details?.geometry?.location.lat,
                 longitude: details?.geometry?.location.lng,
               };
               setOrigin(originCoordinates);
+              setOriginAddress(originAddress)
               moveToLocation(originCoordinates);
             }}
             query={{
@@ -92,10 +92,12 @@ export default function GoogleMapSearch({navigation}): React.JSX.Element {
               },
             }}
             onPress={(data, details = null) => {
+              let destinationAddress = details.address_components[0].short_name;
               let destinationCoordinates = {
                 latitude: details?.geometry?.location.lat,
                 longitude: details?.geometry?.location.lng,
               };
+              setDestinationAddress(destinationAddress)
               setDestination(destinationCoordinates);
               moveToLocation(destinationCoordinates);
             }}
@@ -139,7 +141,7 @@ export default function GoogleMapSearch({navigation}): React.JSX.Element {
 
       <Pressable
         style={styles.button}
-        onPress={() => navigation.navigate('ridebookingpassenger')}>
+        onPress={() => navigation.navigate('ridebookingpassenger', { origin: origin, destination: destination, originAddress: originAddress, destinationAddress: destinationAddress })}>
         <Text style={styles.buttonText}>PROCEED</Text>
       </Pressable>
     </View>

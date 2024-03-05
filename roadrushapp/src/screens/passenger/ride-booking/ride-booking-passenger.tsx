@@ -9,8 +9,15 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import {BottomNavigationButtons} from '../../../components/bottom-navigation-bar/bottom-navigation-bar';
+import {getDistance, getPreciseDistance} from 'geolib';
+import AppSettings from '../../../helpers/app-settings';
 
-export default function RideBookingPassenger({navigation}): React.JSX.Element {
+export default function RideBookingPassenger({navigation, route}): React.JSX.Element {
+
+  const {  origin, destination, originAddress, destinationAddress } = route.params;
+  var distanceinKm = getPreciseDistance(origin, destination)/1000;
+  var priceForTheRideInEvrs = AppSettings.pricePerKm * distanceinKm  
+
   return (
     <AuthorizedLayout
       navigation={navigation}
@@ -34,9 +41,9 @@ export default function RideBookingPassenger({navigation}): React.JSX.Element {
             />
           </View>
           <View style={styles.locationDetailsContainer}>
-            <Text style={{marginBottom: 20}}>Location</Text>
+            <Text style={{marginBottom: 20}}>{originAddress}</Text>
             <View style={styles.horizontalDashedLine}></View>
-            <Text>Destination</Text>
+            <Text>{destinationAddress}</Text>
           </View>
         </View>
         <View style={styles.rideDetails}>
@@ -45,13 +52,13 @@ export default function RideBookingPassenger({navigation}): React.JSX.Element {
             <Text>Audi e-tron Sportback</Text>
           </View>
           <View style={styles.rideFeeContainer}>
-            <Text>8.5km</Text>
+            <Text>{distanceinKm} km</Text>
             <Text
               style={{
                 marginLeft: 50,
                 color: AppTheme.specification.colors.red,
               }}>
-              0.56 Evrs
+              {priceForTheRideInEvrs} Evrs
             </Text>
           </View>
           <View style={styles.driverDetailsContainer}>
@@ -59,14 +66,12 @@ export default function RideBookingPassenger({navigation}): React.JSX.Element {
               style={styles.profileImage}
               resizeMethod="resize"
               resizeMode="contain"
-              source={{
-                uri: 'https://eu.ui-avatars.com/api/?name=Mahinsha+Ramyathilake&size=250',
-              }}
+              source={require('../../../assets/images/profile_picture.png')}
             />
             <Text style={{marginHorizontal: 10}}>Cameron Williamson</Text>
             <TouchableOpacity
               style={styles.bookBtn}
-              onPress={() => navigation.navigate('activeridedetailspassenger')}>
+              onPress={() => navigation.navigate('activeridedetailspassenger', {origin, destination, originAddress, destinationAddress, distanceinKm, priceForTheRideInEvrs})}>
               <Text style={{color: AppTheme.specification.colors.white}}>
                 Book Now
               </Text>
@@ -81,7 +86,7 @@ export default function RideBookingPassenger({navigation}): React.JSX.Element {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    margin: 10,
+    margin: 5,
   },
   bottomNav: {
     height: 80,
@@ -99,7 +104,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   locationDetails: {
-    margin: 10,
+    margin: 2,
     borderWidth: 0.5,
     borderRadius: 15,
     //  borderColor: AppTheme.colors.primary,
@@ -109,7 +114,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   locationIconContainer: {
-    marginRight: 10,
+    marginRight: 1,
   },
   horizontalDashedLine: {
     borderBottomWidth: 1,
@@ -120,7 +125,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   rideDetails: {
-    margin: 10,
+    margin: 5,
     borderWidth: 0.5,
     borderRadius: 15,
     padding: 15,
@@ -150,15 +155,18 @@ const styles = StyleSheet.create({
   },
   profileImage: {
     borderRadius: 100,
-    borderColor: AppTheme.specification.colors.white,
-    borderWidth: 2,
+    //borderColor: AppTheme.specification.colors.white,
+    //borderWidth: 2,
     width: 50,
     height: 50,
-    backgroundColor: AppTheme.specification.colors.mediumGrey,
+    //marginLeft: -50,
+    marginRight:20
+   // backgroundColor: AppTheme.specification.colors.mediumGrey,
   },
   bookBtn: {
     padding: 10,
     backgroundColor: AppTheme.specification.colors.primary,
     borderRadius: 10,
+    marginLeft: 40
   },
 });

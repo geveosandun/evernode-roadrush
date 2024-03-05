@@ -24,8 +24,10 @@ import RRButton from '../../../components/button/button';
 
 export default function ActiveRideDetailsPassenger({
   navigation,
+  route
 }): React.JSX.Element {
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
+  const {origin, destination, originAddress, destinationAddress, distanceinKm, priceForTheRideInEvrs} = route.params;
 
   async function onBottomNavigationTapped(tab: BottomNavigationButtons) {
     console.log(tab);
@@ -55,18 +57,18 @@ export default function ActiveRideDetailsPassenger({
             />
           </View>
           <View style={styles.locationDetailsContainer}>
-            <Text style={{marginBottom: 20}}>Location</Text>
+            <Text style={{marginBottom: 20}}>{originAddress}</Text>
             <View style={styles.horizontalDashedLine}></View>
-            <Text>Destination</Text>
+            <Text>{destinationAddress}</Text>
           </View>
         </View>
         <View style={styles.rideFeeContainer}>
           <Text style={{marginRight: 20, marginLeft: 15}}>
             Audi e-tron Sportback
           </Text>
-          <Text style={{marginRight: 57, marginLeft: 40}}>8.5km</Text>
+          <Text style={{marginRight: 57, marginLeft: 40}}>{distanceinKm} km</Text>
           <Text style={{color: AppTheme.specification.colors.red}}>
-            0.56 Evrs
+           {priceForTheRideInEvrs} Evrs
           </Text>
         </View>
           <RRButton
@@ -77,7 +79,7 @@ export default function ActiveRideDetailsPassenger({
           />
       </View>
       <View style={styles.trackScreen}>
-        <LiveMap navigation={navigation}></LiveMap>
+        <LiveMap navigation={navigation} origin={origin} destination={destination} ></LiveMap>
       </View>
       <View style={styles.driverDetails}>
         <FontAwesomeIcon icon={faUserCircle} size={40} />

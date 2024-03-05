@@ -3,7 +3,7 @@ import {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 
-export default function LiveMap({navigation}): React.JSX.Element {
+export default function LiveMap({navigation, origin, destination}): React.JSX.Element {
   const [markerList, setMarkerList] = useState([
     {
       latitude: 6.836611,
@@ -28,7 +28,7 @@ export default function LiveMap({navigation}): React.JSX.Element {
           longitudeDelta: 0.0121,
         }}>
         <Marker
-          coordinate={{latitude: 6.838545, longitude: 81.007132}}
+          coordinate={origin}
           title={'Current Location'}
         />
       </MapView>
