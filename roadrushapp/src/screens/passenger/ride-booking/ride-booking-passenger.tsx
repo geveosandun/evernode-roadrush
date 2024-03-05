@@ -12,6 +12,7 @@ import {BottomNavigationButtons} from '../../../components/bottom-navigation-bar
 import {getDistance, getPreciseDistance} from 'geolib';
 import AppSettings from '../../../helpers/app-settings';
 import ApiService from '../../../services/api-service';
+import HotPocketClientService from '../../../services/hp-client-service';
 
 export default function RideBookingPassenger({navigation, route}): React.JSX.Element {
   const apiService = ApiService.getInstance();
@@ -20,13 +21,12 @@ export default function RideBookingPassenger({navigation, route}): React.JSX.Ele
   var priceForTheRideInEvrs = AppSettings.pricePerKm * distanceinKm  
   const [DriversList, setDriversList] = useState([]);
    useEffect(() =>{
-    console.log("In1")
       apiService.getDriversDetails()
       .then((response: any) =>{
           console.log("RESPONSE ", response)
         
       })
-   },[])
+   })
 
   
 

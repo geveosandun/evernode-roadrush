@@ -9,7 +9,7 @@ export default class ApiService {
     this._contractService = HotPocketClientService.getInstance();
   }
 
-  public static getInstance(): ApiService {
+  public static  getInstance(): ApiService {
     if (!ApiService.instance) {
         ApiService.instance = new ApiService();
     }
@@ -23,12 +23,9 @@ export default class ApiService {
     };
 
     try {
-      console.log("in2 ",message)
       const response: any =
         await HotPocketClientService.submitContractReadRequest(message);
-        console.log("in3", response)
       if (response) {
-        console.log("***", response)
       }
       return response;
     } catch (error) {
