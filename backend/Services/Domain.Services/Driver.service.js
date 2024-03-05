@@ -4,6 +4,7 @@ import { SharedService } from "../Common.Services/SharedService";
 import { ErrorCodes } from '../../Constants/ErrorCodes';
 import { LogMessages } from '../../Constants/LogMessages';
 import { LogTypes } from '../../Constants/LogTypes';
+import { DriverDto } from "../../Dto/DriverDto";
 
 const settings = require("../../settings.json").settings;
 const { SqliteDatabase } = require("./../Common.Services/dbHandler").default;
@@ -18,6 +19,43 @@ export class DriverService {
         this.#message = message;
         this.#dbContext = new SqliteDatabase(this.#dbPath);
         this.#activityLogger = new ActivityLogService(message);
+    }
+
+    async getDriversDetails() {
+        let resObj = {};
+        let dbp = 0;
+
+        try{
+            this.#dbContext.open();
+            dbp++;
+            let query = `SELECT ${Tables.DRIVERS}.*
+                         FROM ${Tables.DRIVERS}`;
+             
+            const rows = await this.#dbContext.runSelectQuery(query);
+            dbp++;
+            const driversDetails = rows.map(row => new DriverDto(
+                row.DriverID,
+                row.UserID,
+                row.DriverLicenseNumber,
+                row.VehicleMake,
+                row.VehicleModel,
+                row.VehiclePlateNumber
+            )
+            );
+            resObj.message = driversDetails;
+            return resObj;             
+        }catch(error) {
+            console.log("Error occured when fetching driver details.")
+            throw new ErrorResponseDto(
+                this.#message, dbp,
+                "Error occured when fetching driver details",
+                error.message, ErrorCodes.DEFAULT,
+                new LoggingInfo(LogTypes.ERROR, LogMessages.ERROR.GET_DRIVER_DETAILS_ERROR, error.message, Date.now())
+            );
+        }
+        finally{
+            this.#dbContext.close();
+            }
     }
 
     async getRideRequests() {

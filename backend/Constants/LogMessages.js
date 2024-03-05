@@ -9,6 +9,7 @@ export const LogMessages = {
 		RIDE_BOOKING_ERROR: "Error in bookRide function",
 		GET_RIDE_REQUESTS_ERROR: "Error in getRideRequests function",
 		ACPET_RIDE_REQUEST_ERRO: "Error in acceptRide function",
+		GET_DRIVER_DETAILS_ERROR: "Error in fetching driver details"
 	},
 	SUCCESS: {
 		SUCCESS: "Success!",
