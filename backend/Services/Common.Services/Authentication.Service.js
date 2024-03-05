@@ -29,7 +29,7 @@ export class AuthenticationService {
             this.#dbContext.open();
 
             let foundUser = await this.#dbContext.getValues(Tables.USERS, {
-                WalletAddress: this.#message.Data.Address
+                PublicKey: this.#message.Data.PublicKey
             });
             dbp++;
 

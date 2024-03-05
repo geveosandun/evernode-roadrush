@@ -16,20 +16,19 @@ export default class AuthService {
     return AuthService.instance;
   }
 
-  public async submitLoginRequest(loginData: any) {
+  public async submitLoginRequest(publickKey: any) {
     const message = {
       Service: 'Authentication',
       Action: 'Login',
       Data: {
-        Username: loginData.Username,
-        Password: loginData.Password,
+        PublicKey: publickKey,
       },
     };
 
     try {
       const response: any =
         await HotPocketClientService.submitContractReadRequest(message);
-      if (response === 'Login Success') {
+      if (response) {
         await AsyncStorage.setItem('isLoggedIn', 'true');
       }
       return response;
