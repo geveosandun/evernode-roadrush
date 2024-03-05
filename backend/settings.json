@@ -5,5 +5,5 @@
 		"dbScriptsFolderPath": "./dbScripts",
 		"newContractZipFileName": "./newContractData.zip"
 	},
-	"contractUpdatingPublicKey": "-----BEGIN RSA PUBLIC KEY-----\nMIIBigKCAYEAxmDGpNZsP89IS014uMGGmdNezJGu4nh2W+0qbQ8wpeSGstMzQIsd\nUhuyW5dfitG7VLPI3KhwiqCIMAkm9rb0gGVvDwe1bj6/1dBjyeZZKS8Dxon6iQnh\nUNlaaMYdFSeXYvVflpTFZA0OTAVsK7OODTW0AZ/Tqabv/q1qH/AD90CYC7cCuUfO\nPwECaRXKTt2C0mC5RhkOXaoCu4lJUTXlPexuuYAm1iXdGtju+h89TU03d/jeOq2K\nFQaSM61nEjkR3fSsVDOqFmJpU7jBBt3Pyhkcu4SB6mnlP4taafd9Nji9t84GkwJ2\n3W9Ui0J3RI3HDjscFtMTGYNxAuYMPurMwoUmeMDu4PIjDw0CzLWKLWGUeZyyVO43\n5/b6TBfW0rdfVQPWomlC9rBNqgMZ5Kd310hWnkzWW+rB7zBPNsC5wF30P4pevC9b\nFcspeAURXadmFdiMYEE3oLue5zBF3LWdP+uGHOoa2z3kx2ipdhvCpLUo8TmdXDAB\nmAWvpGm5qVkxAgMBAAE=\n-----END RSA PUBLIC KEY-----"
+	"contractUpdatingPublicKey": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlFV67XVX1LApYnkcIxaF\n5+1LwEVdQl44OpQOi+LZb385M8VcKB+9iOwKkWovbzzmJQXqRCm11iv78r0nshMb\neC720ZytR2H1va4g110k4I28IzBoRerWllrWVUS3A6onLmVez0zSENHBi9Avmurr\n6tNZBhA8mUgv2TfoLBJ8hiJhjIPrkgZUjvVYtPij6kmJefUyYXxIxkt+oEoraKq1\nxTqw72SBGSuxOo8mwXkxDCoUmOcTKgUdnh91+KSY9sEF5RKrfm9GRbZDrwQgYo+i\n3/aEqMKO55OIDR78GpI6AShzu/dlfZbXrYOBpPkil4n3n1kTajMkPtAPbZHOy8M8\ndwIDAQAB\n-----END PUBLIC KEY-----"
 }
