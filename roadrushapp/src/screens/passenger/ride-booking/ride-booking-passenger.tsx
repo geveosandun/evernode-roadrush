@@ -26,7 +26,7 @@ export default function RideBookingPassenger({navigation, route}): React.JSX.Ele
           console.log("RESPONSE ", response)
         
       })
-   })
+   },[])
 
   
 
