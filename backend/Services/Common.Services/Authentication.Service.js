@@ -50,10 +50,22 @@ export class AuthenticationService {
                 //     console.log('fail');
                 //     resObj.error = new ErrorResponseDto(this.#message, dbp, "Password not Valid", new Error("Error occured in user login"));
                 // }
-                resObj.success = true;
+                const resData = {
+                    hasAccount: true,
+                    user: {
+                        UserID: foundUser[0].UserID,
+                        UserName: foundUser[0].Username,
+                        PublicKey: foundUser[0].PublicKey,
+                        Email: foundUser[0].Email
+                    }
+                }
+                resObj.success = resData;
             } else {
                 // resObj.error = new ErrorResponseDto(this.#message, dbp, "User not Valid", new Error("Error occured in user login"));
-                resObj.success = false;
+                const resData= {
+                    hasAccount: false
+                };
+                resObj.success = resData;
             }
 
             console.log('return', resObj)
