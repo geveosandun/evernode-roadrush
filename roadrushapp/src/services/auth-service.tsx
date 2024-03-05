@@ -28,10 +28,12 @@ export default class AuthService {
     try {
       const response: any =
         await HotPocketClientService.submitContractReadRequest(message);
-      if (response) {
+      
+      if (response.hasAccount) {
         await AsyncStorage.setItem('isLoggedIn', 'true');
+        await AsyncStorage.setItem('user', JSON.stringify(response.user))
       }
-      return response;
+      return response.hasAccount;
     } catch (error) {
       throw error;
     }
@@ -40,6 +42,7 @@ export default class AuthService {
   public async submitLogoutRequest() {
     try {
       await AsyncStorage.removeItem('isLoggedIn');
+      await AsyncStorage.removeItem('user');
       return true;
     } catch (error) {
       console.error('Error setting logged in state', error);
