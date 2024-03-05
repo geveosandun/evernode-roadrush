@@ -19,6 +19,8 @@ export class DriverController {
                     return await this.#service.getRideRequests();
                 case 'AcceptRide':
                     return await this.#service.acceptRide();
+                case 'GetDriversDetails':
+                    return await this.#service.getDriversDetails();
                 default:
                     await this.#activityLogger.writeLog(LogTypes.ERROR, LogMessages.ERROR.ACTION_NOT_FOUND,LogMessages.ERROR.ACTION_NOT_FOUND);
                     break;
