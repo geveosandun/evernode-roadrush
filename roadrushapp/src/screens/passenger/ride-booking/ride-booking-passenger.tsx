@@ -97,7 +97,7 @@ export default function RideBookingPassenger({navigation, route}): React.JSX.Ele
             <TouchableOpacity
               style={styles.bookBtn}
               onPress={() => {
-                BookRide(item.DriverId);
+                BookRide(item.DriverID);
                 navigation.navigate('activeridedetailspassenger', {
                   origin,
                   destination,

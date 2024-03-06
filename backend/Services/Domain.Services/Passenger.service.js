@@ -27,6 +27,7 @@ export class PassengerService {
         try {
             this.#dbContext.open();
             const data = this.#message.Data;
+            console.log("DATA ", data);
             const passengerID = this.getPassengerId(data.passengerUserId)
             const inputData = {
                 DriverID: data.driverID,

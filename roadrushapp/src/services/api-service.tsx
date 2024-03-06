@@ -53,13 +53,13 @@ export default class ApiService {
     }
   }
 
-  public async bookRide(driverId, passangerUserId, passangerName, origin, destination){
+  public async bookRide(driverId, passengerUserId, origin, destination, passangerName){
     const message = {
       Service: 'Passenger',
       Action: 'BookRide',
       data: {
-        passangerUserId: passangerUserId,
-        passangerName: passangerName,
+        passengerUserId: passengerUserId,
+        passengerName: passangerName,
         driverId: driverId,
         pickupLocation: origin,
         destination: destination,
@@ -67,6 +67,7 @@ export default class ApiService {
       }
     }
     try {
+      console.log("MESSAGE ", message)
       const response: any =
         await HotPocketClientService.submitContractReadRequest(message);
       if (response) {
