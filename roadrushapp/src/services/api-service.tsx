@@ -57,7 +57,7 @@ export default class ApiService {
     const message = {
       Service: 'Passenger',
       Action: 'BookRide',
-      data: {
+      Data: {
         passengerUserId: passengerUserId,
         passengerName: passangerName,
         driverId: driverId,
