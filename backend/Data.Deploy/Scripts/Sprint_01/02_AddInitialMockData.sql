@@ -16,7 +16,7 @@ INSERT INTO UserRoles (UserID, RoleID)
 						VALUES (2, 1);
 
 INSERT INTO Drivers (UserID, DriverLicenseNumber, VehicleMake, VehicleModel, VehiclePlateNumber, DriverRating, CreatedDate, CreatedBy, UpdatedDate, UpdatedBy) 
-VALUES (1, 'DL123456', 'Toyota', 'Camry', 'ABC123', 4.5, CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, 'admin');
-
-INSERT INTO Drivers (UserID, DriverLicenseNumber, VehicleMake, VehicleModel, VehiclePlateNumber, DriverRating, CreatedDate, CreatedBy, UpdatedDate, UpdatedBy) 
 VALUES (2, 'DL654321', 'Honda', 'Accord', 'XYZ789', 4.2, CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, 'admin');
+
+INSERT INTO Passengers (UserID, PaymentMethod, CreatedDate, CreatedBy, UpdatedDate, UpdatedBy) 
+VALUES (1, 'Evrs', CURRENT_TIMESTAMP, 'admin', CURRENT_TIMESTAMP, 'admin');

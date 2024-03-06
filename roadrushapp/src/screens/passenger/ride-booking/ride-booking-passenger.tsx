@@ -13,22 +13,33 @@ import {getDistance, getPreciseDistance} from 'geolib';
 import AppSettings from '../../../helpers/app-settings';
 import ApiService from '../../../services/api-service';
 import HotPocketClientService from '../../../services/hp-client-service';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function RideBookingPassenger({navigation, route}): React.JSX.Element {
   const apiService = ApiService.getInstance();
   const {  origin, destination, originAddress, destinationAddress } = route.params;
   var distanceinKm = getPreciseDistance(origin, destination)/1000;
   var priceForTheRideInEvrs = AppSettings.pricePerKm * distanceinKm  
-  const [DriversList, setDriversList] = useState([]);
+  const [driversList, setDriversList] = useState([]);
    useEffect(() =>{
       apiService.getDriversDetails()
       .then((response: any) =>{
-          console.log("RESPONSE ", response)
-        
+          console.log("RESPONSE ", response);
+          setDriversList(response);
       })
-   })
+   },[])
 
-  
+  async function BookRide(driverId){
+    let loggedInUserDetails = await AsyncStorage.getItem('user');
+    let userDetailsJson = JSON.parse(loggedInUserDetails);
+    let passengerUserId = userDetailsJson.UserID;
+    let passengerName = userDetailsJson.UserName;
+    apiService.bookRide(driverId, passengerUserId, origin, destination, passengerName )
+    .then((response: any) =>{
+      console.log("Res** ", response);
+    })
+    ;
+  }
 
   return (
     <AuthorizedLayout
@@ -58,10 +69,12 @@ export default function RideBookingPassenger({navigation, route}): React.JSX.Ele
             <Text>{destinationAddress}</Text>
           </View>
         </View>
-        <View style={styles.rideDetails}>
+        {driversList.length >0 &&
+        driversList.map((item, index)=>(
+          <View key={index} style={styles.rideDetails}>
           <View style={styles.carIconContainer}>
             <FontAwesomeIcon icon={faCarSide} size={120} />
-            <Text>Audi e-tron Sportback</Text>
+            <Text>{item.VehicleMake} {item.VehicleModel}</Text>
           </View>
           <View style={styles.rideFeeContainer}>
             <Text>{distanceinKm} km</Text>
@@ -74,22 +87,31 @@ export default function RideBookingPassenger({navigation, route}): React.JSX.Ele
             </Text>
           </View>
           <View style={styles.driverDetailsContainer}>
-            <Image
+            {/* <Image
               style={styles.profileImage}
               resizeMethod="resize"
               resizeMode="contain"
               source={require('../../../assets/images/profile_picture.png')}
-            />
-            <Text style={{marginHorizontal: 10}}>Cameron Williamson</Text>
+            /> */}
+            {/* <Text style={{marginHorizontal: 10}}>Cameron Williamson</Text> */}
             <TouchableOpacity
               style={styles.bookBtn}
-              onPress={() => navigation.navigate('activeridedetailspassenger', {origin, destination, originAddress, destinationAddress, distanceinKm, priceForTheRideInEvrs})}>
+              onPress={() => {
+                BookRide(item.DriverId);
+                navigation.navigate('activeridedetailspassenger', {
+                  origin,
+                  destination,
+                  originAddress,
+                  destinationAddress,
+                  distanceinKm,
+                  priceForTheRideInEvrs
+                  })}}>
               <Text style={{color: AppTheme.specification.colors.white}}>
                 Book Now
               </Text>
             </TouchableOpacity>
           </View>
-        </View>
+        </View>))}
       </View>
     </AuthorizedLayout>
   );
@@ -179,6 +201,6 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: AppTheme.specification.colors.primary,
     borderRadius: 10,
-    marginLeft: 40
+    flexDirection: 'row'
   },
 });

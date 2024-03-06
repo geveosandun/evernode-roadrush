@@ -227,12 +227,10 @@ export default class HotPocketClientService {
     try {
       // await HotPocketClientService.applyDefaultEvents();
       const inpString = JSON.stringify(message);
-      console.log("in4 ", inpString)
       const output =
         await HotPocketClientService.HotPocketClient.submitContractReadRequest(
           inpString
         );
-        console.log("in5",output)
         
       const outputObj = JSON.parse(output.toString());
         if (outputObj && outputObj.hasOwnProperty("error")) {

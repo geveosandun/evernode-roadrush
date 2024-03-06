@@ -27,9 +27,10 @@ export class PassengerService {
         try {
             this.#dbContext.open();
             const data = this.#message.Data;
+            const passengerID = this.getPassengerId(data.passangerUserId)
             const inputData = {
                 DriverID: data.driverID,
-				PassengerID: data.passengerID,
+				PassengerID: passengerID,
 				PickupLocation: data.pickupLocation,
 				Destination: data.destination,
 				RideDateTime: data.rideDateTime,
@@ -61,4 +62,17 @@ export class PassengerService {
             this.#dbContext.close();
         }
     }
+
+    async getPassengerId(userId) {
+        try{
+        let query = `SELECT PassengerID FROM ${Tables.PASSANGERS}
+                        WHERE UserID = ${userId}`;
+        dbp++;
+        const passengerId = await this.#dbContext.runSelectQuery(query);
+        return passengerId;
+    }catch(error){
+        console.log("Error occured while fetching passengerId");
+        throw error;
+    }
+}
 }

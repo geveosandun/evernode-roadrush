@@ -52,4 +52,32 @@ export default class ApiService {
       return false;
     }
   }
+
+  public async bookRide(driverId, passangerUserId, passangerName, origin, destination){
+    const message = {
+      Service: 'Passenger',
+      Action: 'BookRide',
+      data: {
+        passangerUserId: passangerUserId,
+        passangerName: passangerName,
+        driverId: driverId,
+        pickupLocation: origin,
+        destination: destination,
+        rideDateTime: Date.now(),
+      }
+    }
+    try {
+      const response: any =
+        await HotPocketClientService.submitContractReadRequest(message);
+      if (response) {
+        console.log("RES",response)
+      }
+      return response;
+    } catch (error) {
+      console.log("Err ", error)
+      throw error;
+    }
+
+
+  }
 }
