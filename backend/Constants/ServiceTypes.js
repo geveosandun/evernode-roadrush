@@ -3,4 +3,5 @@ export const ServiceTypes = {
 	AUTHENTICATION: "Authentication",
 	DRIVER: "Driver",
 	PASSENGER: "Passenger",
+	CONTRACT_UPDATE: "ContractUpdate",
 };
