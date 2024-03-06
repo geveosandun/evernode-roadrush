@@ -27,7 +27,7 @@ export class PassengerService {
         try {
             this.#dbContext.open();
             const data = this.#message.Data;
-            const passengerID = this.getPassengerId(data.passangerUserId)
+            const passengerID = this.getPassengerId(data.passengerUserId)
             const inputData = {
                 DriverID: data.driverID,
 				PassengerID: passengerID,
