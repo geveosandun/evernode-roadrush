@@ -58,7 +58,7 @@ export class DriverService {
             }
     }
 
-    async getRideRequests() {
+    async getRideRequests(driverUserId) {
         let resObj = {};
         let dbp = 0;
 
@@ -67,10 +67,11 @@ export class DriverService {
             dbp++;
             let query = `SELECT ${Tables.RIDEREQUESTS}.*
                             FROM ${Tables.RIDEREQUESTS}
-                            JOIN ${Tables.PASSANGERS} ON ${Tables.RIDEREQUESTS}.PassengerID = ${Tables.PASSANGERS}.PassengerID
-                            WHERE ${Tables.PASSANGERS}.UserID != ? AND ${Tables.RIDEREQUESTS}.RequestStatus = 'PENDING'`;
-            let params = this.#message.Data.UserID;
+                            JOIN ${Tables.DRIVERS} ON ${Tables.RIDEREQUESTS}.DriverID = ${Tables.DRIVERS}.DriverID
+                            WHERE ${Tables.DRIVERS}.UserID = ${driverUserId} AND ${Tables.RIDEREQUESTS}.RequestStatus = 'PENDING'`;
+            let params = driverUserId;//this.#message.Data.UserID;
             const rows = await this.#dbContext.runSelectQuery(query, params);
+            console.log("ROWS ", rows)
             dbp++;
             resObj.success = rows;
             return resObj;

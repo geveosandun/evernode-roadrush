@@ -53,7 +53,7 @@ export default class ApiService {
     }
   }
 
-  public async bookRide(driverId, passengerUserId, origin, destination, passangerName){
+  public async bookRide(driverId, passengerUserId, origin, destination, passangerName, originAddress, destinationAddress, distanceinKm, priceForTheRideInEvrs){
     const message = {
       Service: 'Passenger',
       Action: 'BookRide',
@@ -63,9 +63,36 @@ export default class ApiService {
         driverId: driverId,
         pickupLocation: origin,
         destination: destination,
+        originAddress: originAddress,
+        destinationAddress: destinationAddress,
+        distanceinKm: distanceinKm,
+        priceForTheRideInEvrs: priceForTheRideInEvrs,
         rideDateTime: Date.now(),
       }
     }
+    try {
+      console.log("MESSAGE ", message)
+      const response: any =
+        await HotPocketClientService.submitInputToContract(message);
+      if (response) {
+        console.log("RES",response)
+      }
+      return response;
+    } catch (error) {
+      console.log("Err ", error)
+      throw error;
+    }
+  }
+
+  public async getRideRequests(userId){
+    const message ={
+      Service: 'Driver',
+      Action: 'GetRideRequests',
+      Data: {
+        userId: userId
+      }
+    }
+
     try {
       console.log("MESSAGE ", message)
       const response: any =
@@ -78,7 +105,5 @@ export default class ApiService {
       console.log("Err ", error)
       throw error;
     }
-
-
   }
 }

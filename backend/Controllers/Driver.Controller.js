@@ -16,7 +16,7 @@ export class DriverController {
         try {
             switch (this.#message.Action) {
                 case 'GetRideRequests':
-                    return await this.#service.getRideRequests();
+                    return await this.#service.getRideRequests(this.#message.Data.UserID);
                 case 'AcceptRide':
                     return await this.#service.acceptRide();
                 case 'GetDriversDetails':

@@ -34,7 +34,7 @@ export default function RideBookingPassenger({navigation, route}): React.JSX.Ele
     let userDetailsJson = JSON.parse(loggedInUserDetails);
     let passengerUserId = userDetailsJson.UserID;
     let passengerName = userDetailsJson.UserName;
-    apiService.bookRide(driverId, passengerUserId, origin, destination, passengerName )
+    apiService.bookRide(driverId, passengerUserId, origin, destination, passengerName, originAddress, destinationAddress, distanceinKm, priceForTheRideInEvrs )
     .then((response: any) =>{
       console.log("Res** ", response);
     })

@@ -1,18 +1,32 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
 import {BottomNavigationButtons} from '../../../components/bottom-navigation-bar/bottom-navigation-bar';
 import RRButton from '../../../components/button/button';
 import AuthorizedLayout from '../../../layouts/authorized-layout';
+import ApiService from '../../../services/api-service';
 
-export function DriverHome({navigation}): React.JSX.Element {
+export function DriverHome({navigation, route}): React.JSX.Element {
+  const apiService = ApiService.getInstance();
+  const user = route.params;
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
-  const requests = [
+
+  const [requests, setRequests ]= useState([
     {id: '1', name: 'John Doe', pickUpDistance: '2 km'},
     {id: '2', name: 'Robert Will', pickUpDistance: '2.4 km'},
     {id: '3', name: 'Will Smith', pickUpDistance: '3 km'},
     {id: '4', name: 'Jimmy Kay', pickUpDistance: '3 km'},
     {id: '5', name: 'Lilly White', pickUpDistance: '3.2 km'},
-  ];
+  ]);
+
+  useEffect(() => {
+    apiService.getRideRequests(user.UserID)
+    .then((response: any) =>{
+      console.log("Res driver home: ", response);
+      setRequests(response);
+    })
+   
+
+  }, []);
 
   async function onBottomNavigationTapped(tab: BottomNavigationButtons) {
     console.log(tab);

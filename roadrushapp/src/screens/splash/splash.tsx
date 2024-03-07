@@ -3,19 +3,22 @@ import {StyleSheet, Text, View, Image, BackHandler} from 'react-native';
 import AnonymousLayout from '../../layouts/anonymous-layout';
 import AuthService from '../../services/auth-service';
 import HotPocketClientService from '../../services/hp-client-service';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SplashScreen({navigation}) {
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
-
+  
   useEffect(() => {
     HotPocketClientService.getInstance().then(ins => {
       console.log(ins);
     });
 
-    AuthService.checkAuthentication().then(loggedIn => {
+    AuthService.checkAuthentication().then( loggedIn => {
       if (loggedIn) {
         // setTimeout(() => {
+        
         navigation.replace('usermodeselection');
+
         // }, 2000);
       } else {
         navigation.replace('login');
