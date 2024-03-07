@@ -17,3 +17,7 @@ CREATE TABLE IF NOT EXISTS RideRequests(
 				UpdatedBy TEXT,
 				FOREIGN KEY (DriverID) REFERENCES Drivers(DriverID),
 				FOREIGN KEY (PassengerID) REFERENCES Passengers(PassengerID));
+
+-- INSERT INTO RideRequests (DriverID, PassengerID, PickupLocation, Destination, PickUpAddress, DestinationAddress, Distance, Price, RideDateTime, RequestStatus, CreatedDate, CreatedBy, UpdatedDate, UpdatedBy)
+-- VALUES 
+--     (1, 1, 'LocationA', 'DestinationA', 'AddressA', 'DestinationAddressA', '10 miles', '20', '2024-03-07 08:00:00', 'PENDING', '2024-03-07', 'admin', '2024-03-07', 'admin')

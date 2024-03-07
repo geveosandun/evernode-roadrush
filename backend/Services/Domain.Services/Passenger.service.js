@@ -31,12 +31,12 @@ export class PassengerService {
             let userId = data.passengerUserId;
             let query = `SELECT PassengerID FROM ${Tables.PASSANGERS}
                         WHERE UserID = ${userId}`;
-            const passengerId = await this.#dbContext.runSelectQuery(query);
-            console.log("ID ",passengerId);
+            const dataRow = await this.#dbContext.runSelectQuery(query);
+            console.log("ID ",dataRow.PassengerID);
             dbp++;
             const inputData = {
-                DriverID: data.driverID,
-				PassengerID: passengerId,
+                DriverID: data.driverId,
+				PassengerID: dataRow.PassengerID,
 				PickupLocation: data.pickupLocation,
 				Destination: data.destination,
                 PickUpAddress: data.originAddress,
