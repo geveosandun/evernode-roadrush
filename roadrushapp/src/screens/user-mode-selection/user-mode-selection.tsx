@@ -13,7 +13,7 @@ export default function UserModeSelection({navigation}): React.JSX.Element {
   useEffect( () =>{
     const fetchUser = async () => {
       try {
-        const activeUser = await AsyncStorage.getItem('user');
+        let activeUser = await AsyncStorage.getItem('user');
         setUser(JSON.parse(activeUser));
         console.log("USER", JSON.parse(activeUser)); // Log the parsed user directly
       } catch (error) {

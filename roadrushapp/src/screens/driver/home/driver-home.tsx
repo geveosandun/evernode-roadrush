@@ -7,7 +7,7 @@ import ApiService from '../../../services/api-service';
 
 export function DriverHome({navigation, route}): React.JSX.Element {
   const apiService = ApiService.getInstance();
-  const user = route.params;
+  let user = route.params;
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
 
   const [requests, setRequests ]= useState([
@@ -19,7 +19,9 @@ export function DriverHome({navigation, route}): React.JSX.Element {
   ]);
 
   useEffect(() => {
-    apiService.getRideRequests(user.UserID)
+    //let userDetails = JSON.parse(user);
+    console.log("User#### ", user.user.UserID)
+    apiService.getRideRequests(user.user.UserID)
     .then((response: any) =>{
       console.log("Res driver home: ", response);
       setRequests(response);
@@ -37,9 +39,9 @@ export function DriverHome({navigation, route}): React.JSX.Element {
     <AuthorizedLayout
       navigation={navigation}
       showWaitIndicator={showLoadingIndicator}
-      showBottomNavigation={true}>
+      showBottomNavigation={true}
+      title='Requests'>
       <View style={styles.mainContainer}>
-        <Text style={styles.header}>Requests</Text>
         {requests.map(item => (
           <View key={item.id} style={styles.item}>
             <View style={styles.textContainer}>
