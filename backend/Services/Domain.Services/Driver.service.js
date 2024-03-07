@@ -61,16 +61,19 @@ export class DriverService {
     async getRideRequests(driverUserId) {
         let resObj = {};
         let dbp = 0;
-
+        console.log("****", driverUserId);
         try {
             this.#dbContext.open();
             dbp++;
-            let query = `SELECT ${Tables.RIDEREQUESTS}.*
-                            FROM ${Tables.RIDEREQUESTS}
-                            JOIN ${Tables.DRIVERS} ON ${Tables.RIDEREQUESTS}.DriverID = ${Tables.DRIVERS}.DriverID
-                            WHERE ${Tables.DRIVERS}.UserID = ${driverUserId} AND ${Tables.RIDEREQUESTS}.RequestStatus = 'PENDING'`;
-            let params = driverUserId;//this.#message.Data.UserID;
-            const rows = await this.#dbContext.runSelectQuery(query, params);
+            let query = `
+            SELECT ${Tables.RIDEREQUESTS}.*
+            FROM ${Tables.RIDEREQUESTS}
+            JOIN ${Tables.DRIVERS} ON ${Tables.RIDEREQUESTS}.DriverID = ${Tables.DRIVERS}.DriverID
+            WHERE ${Tables.DRIVERS}.UserID = ? AND ${Tables.RIDEREQUESTS}.RequestStatus = 'PENDING'
+        `;
+
+        // Execute the query with driverUserId as parameter
+        const rows = await this.#dbContext.runSelectQuery(query, [driverUserId]);
             console.log("ROWS ", rows)
             dbp++;
             resObj.success = rows;
