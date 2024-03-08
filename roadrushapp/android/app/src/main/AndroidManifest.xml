@@ -1,4 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.roadrush">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- OPTIONAL PERMISSIONS, REMOVE WHATEVER YOU DO NOT NEED -->
@@ -44,9 +44,16 @@
         android:launchMode="singleTask"
         android:windowSoftInputMode="adjustResize"
         android:exported="true">
-        <intent-filter>
+        <intent-filter android:autoVerify="true">
             <action android:name="android.intent.action.MAIN" />
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
             <category android:name="android.intent.category.LAUNCHER" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data android:scheme="http" />
+            <data android:scheme="https" />
+            <data android:scheme="roadrush" />
+            <data android:host="login" />
         </intent-filter>
       </activity>
     </application>

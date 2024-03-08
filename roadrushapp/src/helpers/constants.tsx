@@ -4,3 +4,7 @@ export enum ToastMessageTypes {
   error,
   success,
 }
+
+export class LocalStorageKeys {
+  static xummJwtToken = 'xummJwtToken';
+}
