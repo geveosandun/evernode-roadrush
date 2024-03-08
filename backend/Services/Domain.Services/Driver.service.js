@@ -61,7 +61,7 @@ export class DriverService {
     async getRideRequests(driverUserId) {
         let resObj = {};
         let dbp = 0;
-        console.log("****", driverUserId);
+        console.log( "Driver userId: ", driverUserId);
         try {
             this.#dbContext.open();
             dbp++;
@@ -73,13 +73,13 @@ export class DriverService {
         `;
 
         // Execute the query with driverUserId as parameter
-        const rows = await this.#dbContext.runSelectQuery(query, [driverUserId]);
-            console.log("ROWS ", rows)
+            const rows = await this.#dbContext.runSelectQuery(query, [driverUserId]);
+            console.log("Ride requests:  ", rows)
             dbp++;
             resObj.success = rows;
             return resObj;
         } catch (error) {
-            console.log('error in try catch', error);
+            console.log('Error in fetching ride requests', error);
             throw new ErrorResponseDto(
                 this.#message, dbp,
                 "Error occured in fetching ride requests",
@@ -91,31 +91,33 @@ export class DriverService {
         }
     }
 
-    async acceptRide() {
+    async acceptRide(rideDetails) {
         let resObj = {};
         let dbp = 0;
-
+        console.log("DATA ",rideDetails);
         try {
             this.#dbContext.open()
             dbp++;
-            const rideRequest = await this.#dbContext.getValues(Tables.RIDEREQUESTS, {RideRequestID: this.#message.Data.RequestID});
-            dbp++;
-            const updatedRows = await this.#dbContext.updateValues(Tables.RIDEREQUESTS, {RequestStatus: "ACCEPTED"}, {RideRequestID: this.#message.Data.RequestID});
+            const updatedRows = await this.#dbContext.updateValue(Tables.RIDEREQUESTS, {RequestStatus: "ACCEPTED",}, {RideRequestID: rideDetails.rideRequestId});
+            console.log("RideRequest record updated", updatedRows);
             dbp++
             const inputData = {
-                DriverID: rideRequest[0].DriverID,
-				PassengerID: rideRequest[0].PassengerID,
-				PickupLocation: rideRequest[0].PickupLocation,
-				Destination: rideRequest[0].Destination,
+                DriverID: rideDetails.driverID,
+				PassengerID: rideDetails.passengerId,
+				PickupLocation: rideDetails.pickUpLocation,
+				Destination: rideDetails.destination,
+                Distance: rideDetails.rideDistance,
 				RideStatus: "COMMITTED",
-				RideDateTime: rideRequest[0].RideDateTime,
-				FareAmount: this.#message.Data.fee,
+                RideRequestId:rideDetails.rideRequestId,
+				RideDateTime: rideDetails.rideDateTime,
+				FareAmount: rideDetails.rideFareAmount,
 				CreatedDate: SharedService.getCurrentTimestamp(),
-				CreatedBy: this.#message.Data.driverName,
+				//CreatedBy: rideDetails.driverID,
 				UpdatedDate: SharedService.getCurrentTimestamp(),
-				UpdatedBy: this.#message.Data.driverName,
+				//UpdatedBy: rideDetails.driverID,
             }
             const rowId = await this.#dbContext.insertValue(Tables.RIDES, inputData);
+            console.log("Ride record inserted ", rowId);
             dbp++
 
             if (rowId.lastId > 0) {
@@ -124,15 +126,75 @@ export class DriverService {
 
             return resObj;
         } catch (error) {
-            console.log('error in try catch', error);
+            console.log('Error in accepting ride request', error);
             throw new ErrorResponseDto(
                 this.#message, dbp,
-                "Error occured in accpeting ride requests",
+                "Error occured in accepting ride request",
                 error.message, ErrorCodes.DEFAULT,
-                new LoggingInfo(LogTypes.ERROR, LogMessages.ERROR.ACPET_RIDE_REQUEST_ERRO, error.message, Date.now())
+                new LoggingInfo(LogTypes.ERROR, LogMessages.ERROR.ACCEPT_RIDE_REQUEST_ERRO, error.message, Date.now())
             );
         } finally {
             this.#dbContext.close();
         }
+    }
+
+    async getDriverNameById(driverId){
+        let resObj = {};
+        let dbp = 0;
+        console.log("Driver Id ",driverId);
+        try{
+            let query = `
+            SELECT ${Tables.USERS}.UserName
+            FROM ${Tables.USERS}
+            JOIN ${Tables.DRIVERS} ON ${Tables.USERS}.UserID = ${Tables.DRIVERS}.UserID
+            WHERE ${Tables.DRIVERS}.DriverID = ?
+        `;
+        dbp++;
+        // Execute the query with driverUserId as parameter
+            const rows = await this.#dbContext.runSelectQuery(query, [driverId]);
+            resObj.success=rows;
+
+        } catch (error) {
+            console.log('Error in retrieving driver name ', error);
+            throw new ErrorResponseDto(
+                this.#message, dbp,
+                "Error occured in retrieving driver name",
+                error.message, ErrorCodes.DEFAULT,
+                new LoggingInfo(LogTypes.ERROR, LogMessages.ERROR.GET_DRIVER_NAME_ERROR, error.message, Date.now())
+            );
+        } finally {
+            this.#dbContext.close();
+        }
+
+    }
+
+    async getPassengerNameById(passengerId){
+        let resObj = {};
+        let dbp = 0;
+        console.log("Driver Id ",driverId);
+        try{
+            let query = `
+            SELECT ${Tables.USERS}.UserName
+            FROM ${Tables.USERS}
+            JOIN ${Tables.PASSANGERS} ON ${Tables.USERS}.UserID = ${Tables.PASSANGERS}.UserID
+            WHERE ${Tables.PASSANGERS}.PassengerID = ?
+        `;
+        dbp++;
+        // Execute the query with driverUserId as parameter
+            const rows = await this.#dbContext.runSelectQuery(query, [passengerId]);
+            resObj.success=rows;
+
+        } catch (error) {
+            console.log('Error in retrieving passenger name ', error);
+            throw new ErrorResponseDto(
+                this.#message, dbp,
+                "Error occured in retrieving passenger name",
+                error.message, ErrorCodes.DEFAULT,
+                new LoggingInfo(LogTypes.ERROR, LogMessages.ERROR.GET_PASSENGER_NAME_ERROR, error.message, Date.now())
+            );
+        } finally {
+            this.#dbContext.close();
+        }
+
     }
 }

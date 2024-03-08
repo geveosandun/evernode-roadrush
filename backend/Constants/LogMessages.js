@@ -8,8 +8,10 @@ export const LogMessages = {
 		USER_LOGIN_ERROR: "Error in login function",
 		RIDE_BOOKING_ERROR: "Error in bookRide function",
 		GET_RIDE_REQUESTS_ERROR: "Error in getRideRequests function",
-		ACPET_RIDE_REQUEST_ERRO: "Error in acceptRide function",
-		GET_DRIVER_DETAILS_ERROR: "Error in fetching driver details"
+		ACCEPT_RIDE_REQUEST_ERROR: "Error in acceptRide function",
+		GET_DRIVER_DETAILS_ERROR: "Error in fetching driver details",
+		GET_DRIVER_NAME_ERROR: "Error occured in retrieving driver name",
+		GET_PASSENGER_NAME_ERROR: "Error occured in retrieving passenger name",
 	},
 	SUCCESS: {
 		SUCCESS: "Success!",

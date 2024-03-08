@@ -104,12 +104,34 @@ export class DBInitializer {
 				FOREIGN KEY (UserID) REFERENCES Users(UserID)
 			)`);
 
+			await this.#runQuery(`CREATE TABLE IF NOT EXISTS ${Tables.RIDEREQUESTS}(
+				RideRequestID INTEGER PRIMARY KEY,
+				DriverID INTEGER,
+				PassengerID INTEGER,
+				PickupLocation TEXT,
+				Destination TEXT,
+				PickUpAddress TEXT,
+				DestinationAddress TEXT,
+				Distance TEXT,
+				Price TEXT,
+				RideDateTime TEXT,
+				RequestStatus TEXT,
+				CreatedDate TEXT,
+				CreatedBy TEXT,
+				UpdatedDate TEXT,
+				UpdatedBy TEXT,
+				FOREIGN KEY (DriverID) REFERENCES Drivers(DriverID),
+				FOREIGN KEY (PassengerID) REFERENCES Passengers(PassengerID)
+			)`);
+
 			await this.#runQuery(`CREATE TABLE IF NOT EXISTS ${Tables.RIDES}(
 				RideID INTEGER PRIMARY KEY,
 				DriverID INTEGER,
 				PassengerID INTEGER,
 				PickupLocation TEXT,
 				Destination TEXT,
+				Distance TEXT,
+				RideRequestId INTEGER,
 				RideStatus TEXT,
 				RideDateTime TEXT,
 				FareAmount REAL,
@@ -118,7 +140,9 @@ export class DBInitializer {
 				UpdatedDate TEXT,
 				UpdatedBy TEXT,
 				FOREIGN KEY (DriverID) REFERENCES Drivers(DriverID),
-				FOREIGN KEY (PassengerID) REFERENCES Passengers(PassengerID)
+				FOREIGN KEY (PassengerID) REFERENCES Passengers(PassengerID),
+				FOREIGN KEY (RideRequestId) REFERENCES RideRequests(RideRequestID)
+
 			)`);
 
 			await this.#runQuery(`CREATE TABLE IF NOT EXISTS ${Tables.PAYMENTS}(
@@ -146,25 +170,7 @@ export class DBInitializer {
 				UpdatedBy TEXT
 			)`);
 
-			await this.#runQuery(`CREATE TABLE IF NOT EXISTS ${Tables.RIDEREQUESTS}(
-				RideRequestID INTEGER PRIMARY KEY,
-				DriverID INTEGER,
-				PassengerID INTEGER,
-				PickupLocation TEXT,
-				Destination TEXT,
-				PickUpAddress TEXT,
-				DestinationAddress TEXT,
-				Distance TEXT,
-				Price TEXT,
-				RideDateTime TEXT,
-				RequestStatus TEXT,
-				CreatedDate TEXT,
-				CreatedBy TEXT,
-				UpdatedDate TEXT,
-				UpdatedBy TEXT,
-				FOREIGN KEY (DriverID) REFERENCES Drivers(DriverID),
-				FOREIGN KEY (PassengerID) REFERENCES Passengers(PassengerID)
-			)`);
+
 
 			await this.#runQuery(`CREATE TABLE IF NOT EXISTS ${Tables.WALLETS}(
 				WalletId INTEGER PRIMARY KEY,
