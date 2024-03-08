@@ -1,5 +1,5 @@
 import HotPocketClientService from './hp-client-service';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppSecureStorageService from './secure-storage-service';
 
 export default class AuthService {
   private static instance: AuthService;
@@ -28,10 +28,13 @@ export default class AuthService {
     try {
       const response: any =
         await HotPocketClientService.submitContractReadRequest(message);
-      
+
       if (response.hasAccount) {
-        await AsyncStorage.setItem('isLoggedIn', 'true');
-        await AsyncStorage.setItem('user', JSON.stringify(response.user))
+        await AppSecureStorageService.setItem('isLoggedIn', 'true');
+        await AppSecureStorageService.setItem(
+          'user',
+          JSON.stringify(response.user),
+        );
       }
       return response.hasAccount;
     } catch (error) {
@@ -41,8 +44,8 @@ export default class AuthService {
 
   public async submitLogoutRequest() {
     try {
-      await AsyncStorage.removeItem('isLoggedIn');
-      await AsyncStorage.removeItem('user');
+      await AppSecureStorageService.removeItem('isLoggedIn');
+      await AppSecureStorageService.removeItem('user');
       return true;
     } catch (error) {
       console.error('Error setting logged in state', error);
@@ -52,7 +55,7 @@ export default class AuthService {
 
   static async checkAuthentication() {
     try {
-      const loggedIn = await AsyncStorage.getItem('isLoggedIn');
+      const loggedIn = await AppSecureStorageService.getItem('isLoggedIn');
       return loggedIn === 'true';
     } catch (error) {
       console.error('Error retrieving logged in state', error);

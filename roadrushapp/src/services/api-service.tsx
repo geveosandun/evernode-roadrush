@@ -1,5 +1,5 @@
 import HotPocketClientService from './hp-client-service';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppSecureStorageService from './secure-storage-service';
 
 export default class ApiService {
   private static instance: ApiService;
@@ -9,9 +9,9 @@ export default class ApiService {
     this._contractService = HotPocketClientService.getInstance();
   }
 
-  public static  getInstance(): ApiService {
+  public static getInstance(): ApiService {
     if (!ApiService.instance) {
-        ApiService.instance = new ApiService();
+      ApiService.instance = new ApiService();
     }
     return ApiService.instance;
   }
@@ -35,7 +35,7 @@ export default class ApiService {
 
   public async submitLogoutRequest() {
     try {
-      await AsyncStorage.removeItem('isLoggedIn');
+      await AppSecureStorageService.removeItem('isLoggedIn');
       return true;
     } catch (error) {
       console.error('Error setting logged in state', error);
@@ -45,7 +45,7 @@ export default class ApiService {
 
   static async checkAuthentication() {
     try {
-      const loggedIn = await AsyncStorage.getItem('isLoggedIn');
+      const loggedIn = await AppSecureStorageService.getItem('isLoggedIn');
       return loggedIn === 'true';
     } catch (error) {
       console.error('Error retrieving logged in state', error);

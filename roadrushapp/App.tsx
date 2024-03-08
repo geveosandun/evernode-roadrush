@@ -1,6 +1,5 @@
 import React from 'react';
 import {StyleSheet} from 'react-native';
-
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {PassengerHome} from './src/screens/passenger/home/passenger-home';
@@ -13,12 +12,19 @@ import RideViewDriver from './src/screens/driver/ride-view/ride-view-driver';
 import Wallet from './src/screens/wallet/wallet';
 import RideBookingPassenger from './src/screens/passenger/ride-booking/ride-booking-passenger';
 import ActiveRideDetailsPassenger from './src/screens/passenger/active-ride-deails-passenger/active-ride-details-passenger';
+import WaitIndicator from './src/components/activity-indicator/activity-indicator';
+
+const linking = {
+  prefixes: ['roadrush://'],
+};
 
 const Stack = createNativeStackNavigator();
 
 function App(): React.JSX.Element {
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      linking={linking}
+      fallback={<WaitIndicator show={true} />}>
       <Stack.Navigator
         screenOptions={{headerShown: false}}
         initialRouteName="splash">
