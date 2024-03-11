@@ -68,8 +68,8 @@ export class DriverService {
             let query = `
             SELECT ${Tables.RIDEREQUESTS}.*
             FROM ${Tables.RIDEREQUESTS}
-            JOIN ${Tables.DRIVERS} ON ${Tables.RIDEREQUESTS}.DriverID = ${Tables.DRIVERS}.DriverID
-            WHERE ${Tables.DRIVERS}.UserID = ? AND ${Tables.RIDEREQUESTS}.RequestStatus = 'PENDING'
+            JOIN ${Tables.PASSANGERS} ON ${Tables.RIDEREQUESTS}.PassengerID = ${Tables.PASSANGERS}.PassengerID
+            WHERE ${Tables.PassengerID}.UserID != ? AND ${Tables.RIDEREQUESTS}.RequestStatus = 'PENDING'
         `;
 
         // Execute the query with driverUserId as parameter
@@ -98,7 +98,7 @@ export class DriverService {
         try {
             this.#dbContext.open()
             dbp++;
-            const updatedRows = await this.#dbContext.updateValue(Tables.RIDEREQUESTS, {RequestStatus: "ACCEPTED",}, {RideRequestID: rideDetails.rideRequestId});
+            const updatedRows = await this.#dbContext.updateValue(Tables.RIDEREQUESTS, { DriverID: rideDetails.driverID }, {RequestStatus: "ACCEPTED",}, {RideRequestID: rideDetails.rideRequestId});
             console.log("RideRequest record updated", updatedRows);
             dbp++
             const inputData = {

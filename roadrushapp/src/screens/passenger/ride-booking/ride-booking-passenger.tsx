@@ -74,7 +74,7 @@ export default function RideBookingPassenger({navigation, route}): React.JSX.Ele
           <View key={index} style={styles.rideDetails}>
           <View style={styles.carIconContainer}>
             <FontAwesomeIcon icon={faCarSide} size={120} />
-            <Text>{item.VehicleMake} {item.VehicleModel}</Text>
+            {/* <Text>{item.VehicleMake} {item.VehicleModel}</Text> */}
           </View>
           <View style={styles.rideFeeContainer}>
             <Text>{distanceinKm} km</Text>

@@ -10,13 +10,7 @@ export function DriverHome({navigation, route}): React.JSX.Element {
   let user = route.params;
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
 
-  const [requests, setRequests ]= useState([
-    {id: '1', name: 'John Doe', pickUpDistance: '2 km'},
-    {id: '2', name: 'Robert Will', pickUpDistance: '2.4 km'},
-    {id: '3', name: 'Will Smith', pickUpDistance: '3 km'},
-    {id: '4', name: 'Jimmy Kay', pickUpDistance: '3 km'},
-    {id: '5', name: 'Lilly White', pickUpDistance: '3.2 km'},
-  ]);
+  const [requests, setRequests ]= useState([ ]);
 
   useEffect(() => {
     //let userDetails = JSON.parse(user);
@@ -29,6 +23,10 @@ export function DriverHome({navigation, route}): React.JSX.Element {
    
 
   }, []);
+
+  function acceptRide(rideDetails){
+
+  }
 
   async function onBottomNavigationTapped(tab: BottomNavigationButtons) {
     console.log(tab);
@@ -43,14 +41,20 @@ export function DriverHome({navigation, route}): React.JSX.Element {
       title='Requests'>
       <View style={styles.mainContainer}>
         {requests.map(item => (
-          <View key={item.id} style={styles.item}>
+          <View key={parseInt(item.RideRequestID)} style={styles.item}>
             <View style={styles.textContainer}>
-              <Text style={styles.itemText}>{item.name}</Text>
-              <Text style={styles.itemText}>{item.pickUpDistance} away</Text>
+            <Text style={styles.itemText}>Pick up: {item.PickUpAddress}    </Text>
+              <Text style={styles.itemText}>Destination: {item.DestinationAddress}</Text>
+              {/* <Text style={styles.itemText}>Distance: {item.Distance} km   </Text> */}
+              {/* <Text style={styles.itemText}>Price: {item.Price} Evrs</Text> */}
 
               <RRButton
                 text="Accept"
-                onTap={() => navigation.navigate('rideviewdriver')}
+                onTap={() => {
+                  acceptRide(item);
+                  navigation.navigate('rideviewdriver', {item});
+                }
+                }
               />
             </View>
           </View>
@@ -75,7 +79,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 5,
     padding: 10,
-    backgroundColor: '#9fc4b1',
+    backgroundColor: '#e6e8e7',
     borderRadius: 5,
   },
   textContainer: {
