@@ -1,33 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import RRButton from '../../components/button/button';
 import {ToastMessageTypes} from '../../helpers/constants';
 import AppTheme from '../../helpers/theme';
 import AuthorizedLayout from '../../layouts/authorized-layout';
+import AppSecureStorageService from '../../services/secure-storage-service';
 import {showToast} from '../../services/toast-service';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function UserModeSelection({navigation}): React.JSX.Element {
-  const [user, setUser]= useState();
+  const [user, setUser] = useState();
 
-  useEffect( () =>{
+  useEffect(() => {
     const fetchUser = async () => {
       try {
-        let activeUser = await AsyncStorage.getItem('user');
+        let activeUser = await AppSecureStorageService.getItem('user');
         setUser(JSON.parse(activeUser));
-        console.log("USER", JSON.parse(activeUser)); // Log the parsed user directly
+        console.log('USER', JSON.parse(activeUser)); // Log the parsed user directly
       } catch (error) {
         console.error('Error fetching user:', error);
       }
     };
 
     fetchUser();
-  },[])
+  }, []);
 
   function gotoHomeScreen(mode: string) {
     switch (mode) {
       case 'passenger':
-        navigation.navigate('passengerhome',{user});
+        navigation.navigate('passengerhome', {user});
         break;
 
       case 'driver':

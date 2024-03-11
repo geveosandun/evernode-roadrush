@@ -13,7 +13,7 @@ import {getDistance, getPreciseDistance} from 'geolib';
 import AppSettings from '../../../helpers/app-settings';
 import ApiService from '../../../services/api-service';
 import HotPocketClientService from '../../../services/hp-client-service';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AppSecureStorageService from '../../../services/secure-storage-service';
 
 export default function RideBookingPassenger({navigation, route}): React.JSX.Element {
   const apiService = ApiService.getInstance();
@@ -30,7 +30,7 @@ export default function RideBookingPassenger({navigation, route}): React.JSX.Ele
    },[])
 
   async function BookRide(driverId){
-    let loggedInUserDetails = await AsyncStorage.getItem('user');
+    let loggedInUserDetails = await AppSecureStorageService.getItem('user');
     let userDetailsJson = JSON.parse(loggedInUserDetails);
     let passengerUserId = userDetailsJson.UserID;
     let passengerName = userDetailsJson.UserName;
