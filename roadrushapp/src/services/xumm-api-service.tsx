@@ -121,8 +121,13 @@ export default class XummApiService {
       const payload = Sdk.payload.createAndSubscribe(
         {
           TransactionType: 'Payment',
+          Account: 'rJWsLwA4AMcpWH5dtxfzG6rMH9mam3yFjw',
           Destination: destinationRAddress,
-          Amount: amount,
+          Amount: {
+            currency: 'EVR',
+            value: amount,
+            issuer: 'rQwnhceqeCkw7NJQEL5vXD2qEGo9rmzXY7'
+          },
         },
         e => {
           console.log(e.data);
