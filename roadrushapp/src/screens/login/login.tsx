@@ -190,7 +190,7 @@ export function Login({navigation}): React.JSX.Element {
       />
 
       <RRButton
-        onTap={() => xummLogin() /*submitLogin()*/}
+        onTap={() => submitLogin()}
         text="Login"
         showRightArrow={true}
       />

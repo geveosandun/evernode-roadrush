@@ -35,7 +35,7 @@ export class PassengerService {
             console.log("ID ",dataRow.PassengerID);
             dbp++;
             const inputData = {
-                DriverID: data.driverId,
+               // DriverID: data.driverId,
 				PassengerID: dataRow.PassengerID,
 				PickupLocation: data.pickupLocation,
 				Destination: data.destination,

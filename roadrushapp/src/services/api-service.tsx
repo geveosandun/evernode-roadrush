@@ -53,14 +53,14 @@ export default class ApiService {
     }
   }
 
-  public async bookRide(driverId, passengerUserId, origin, destination, passangerName, originAddress, destinationAddress, distanceinKm, priceForTheRideInEvrs){
+  public async bookRide(passengerUserId, origin, destination, passangerName, originAddress, destinationAddress, distanceinKm, priceForTheRideInEvrs){
     const message = {
       Service: 'Passenger',
       Action: 'BookRide',
       Data: {
         passengerUserId: passengerUserId,
         passengerName: passangerName,
-        driverId: driverId,
+        // driverId: driverId,
         pickupLocation: origin,
         destination: destination,
         originAddress: originAddress,
@@ -97,6 +97,37 @@ export default class ApiService {
       console.log("MESSAGE ", message)
       const response: any =
         await HotPocketClientService.submitContractReadRequest(message);
+      if (response) {
+        console.log("RES",response)
+      }
+      return response;
+    } catch (error) {
+      console.log("Err ", error)
+      throw error;
+    }
+  }
+
+  public async acceptRide(rideDetails){
+    const message ={
+      Service: 'Driver',
+      Action: 'AcceptRide',
+      Data: {
+        driverID: rideDetails.DriverID,
+        passengerId: rideDetails.PassengerID,
+        passengerName: rideDetails.CreatedBy,
+        pickUpLocation: rideDetails.PickupLocation,
+        destination:rideDetails.Destination,
+        rideDateTime: rideDetails.RideDateTime,
+        rideRequestId: rideDetails.RideRequestID,
+        rideFareAmount: rideDetails.Price,
+        rideDistance: rideDetails.Distance
+      }
+    }
+
+    try {
+      console.log("MESSAGE ", message)
+      const response: any =
+        await HotPocketClientService.submitInputToContract(message);
       if (response) {
         console.log("RES",response)
       }
