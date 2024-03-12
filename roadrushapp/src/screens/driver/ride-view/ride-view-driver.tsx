@@ -10,6 +10,7 @@ import AuthorizedLayoutWithoutScroll from '../../../layouts/authorized-layout-wi
 
 export default function RideViewDriver({navigation, route}): React.JSX.Element {
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
+  const passengerData = route.params;
   console.log("ITEM%%%%%%%", route.params)
   const [destination, setDestination] = useState({
     latitude: 6.836611,
@@ -50,11 +51,11 @@ export default function RideViewDriver({navigation, route}): React.JSX.Element {
         <LiveMap navigation={navigation} origin={origin} destination={destination} ></LiveMap>
       </View>
       <View style={styles.detailsContainer}>
-        <Text style={{marginTop: 20}}>Passanger : John Doe </Text>
-        <Text>Away : 2Km </Text>
-        <Text>Drop Down : Kottawa Town </Text>
-        <Text>Ride Distance : 15Km </Text>
-        <Text>Amount : 6.7 Evrs </Text>
+        <Text style={{marginTop: 20}}>Passanger : {passengerData.item.CreatedBy} </Text>
+        <Text>Pick Up  : {passengerData.item.PickUpAddress} </Text>
+        <Text>Drop Down : {passengerData.item.DestinationAddress} </Text>
+        <Text>Ride Distance : {passengerData.item.Distance} km</Text>
+        <Text>Amount : {passengerData.item.Price} Evrs</Text>
       </View>
       <View
         style={{
