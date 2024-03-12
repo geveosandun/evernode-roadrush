@@ -25,6 +25,7 @@ export function DriverHome({navigation, route}): React.JSX.Element {
   }, []);
 
   function acceptRide(rideDetails){
+    apiService.acceptRide(rideDetails);
 
   }
 

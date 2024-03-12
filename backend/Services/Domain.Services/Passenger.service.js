@@ -29,14 +29,15 @@ export class PassengerService {
             const data = this.#message.Data;
             console.log("DATA ", data);
             let userId = data.passengerUserId;
+            console.log("***", userId)
             let query = `SELECT PassengerID FROM ${Tables.PASSANGERS}
-                        WHERE UserID = ${userId}`;
-            const dataRow = await this.#dbContext.runSelectQuery(query);
-            console.log("ID ",dataRow.PassengerID);
+                        WHERE UserID = ?`;
+            const dataRow = await this.#dbContext.runSelectQuery(query,[userId]);
+            console.log("ID ",dataRow[0].PassengerID);
             dbp++;
             const inputData = {
                // DriverID: data.driverId,
-				PassengerID: dataRow.PassengerID,
+				PassengerID: dataRow[0].PassengerID,
 				PickupLocation: data.pickupLocation,
 				Destination: data.destination,
                 PickUpAddress: data.originAddress,

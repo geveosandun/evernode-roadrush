@@ -136,6 +136,7 @@ class SqliteDatabase {
 	 * @returns {Promise<Array>}   If no records, empty array will be returned.
 	 */
 	async runSelectQuery(query, params = []) {
+		console.log("Query", query);
 		return new Promise((resolve, reject) => {
 			this.db.all(query, params, (err, rows) => {
 				if (err) {
