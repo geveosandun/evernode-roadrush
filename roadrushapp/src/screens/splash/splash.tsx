@@ -51,10 +51,11 @@ export default function SplashScreen({navigation}) {
           style={styles.tinyLogo}
           source={require('../../assets/images/logo.png')}
         />
-        <Image
+        <View style={styles.geveoLogo}/>
+        {/* <Image
           style={styles.geveoLogo}
           source={require('../../assets/images/geveo.png')}
-        />
+        /> */}
         <View style={{alignSelf: 'center'}}>
           <Text style={styles.versionText}>Version 0.0.1</Text>
         </View>

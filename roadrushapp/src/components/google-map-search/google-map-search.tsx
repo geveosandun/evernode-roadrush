@@ -11,8 +11,8 @@ export default function GoogleMapSearch({navigation}): React.JSX.Element {
 
   const [origin, setOrigin] = useState<{latitude: number; longitude: number} | undefined>();
   const [destination, setDestination] = useState<{latitude: number; longitude: number} | undefined>();
-  const [originAddress, setOriginAddress] = useState("");
-  const [destinationAddress, setDestinationAddress] = useState("");
+  const [originAddress, setOriginAddress] = useState('');
+  const [destinationAddress, setDestinationAddress] = useState('');
   const [markerList, setMarkerList] = useState([
     {
       latitude: 6.836611,
@@ -67,7 +67,7 @@ export default function GoogleMapSearch({navigation}): React.JSX.Element {
                 longitude: details?.geometry?.location.lng,
               };
               setOrigin(originCoordinates);
-              setOriginAddress(originAddress)
+              setOriginAddress(originAddress);
               moveToLocation(originCoordinates);
             }}
             query={{
@@ -100,7 +100,7 @@ export default function GoogleMapSearch({navigation}): React.JSX.Element {
                 latitude: details?.geometry?.location.lat,
                 longitude: details?.geometry?.location.lng,
               };
-              setDestinationAddress(destinationAddress)
+              setDestinationAddress(destinationAddress);
               setDestination(destinationCoordinates);
               moveToLocation(destinationCoordinates);
             }}
@@ -145,7 +145,14 @@ export default function GoogleMapSearch({navigation}): React.JSX.Element {
 
       <Pressable
         style={styles.button}
-        onPress={() => navigation.navigate('ridebookingpassenger', { origin: origin, destination: destination, originAddress: originAddress, destinationAddress: destinationAddress })}>
+        onPress={() =>
+          navigation.navigate('ridebookingpassenger', {
+            origin: origin,
+            destination: destination,
+            originAddress: originAddress,
+            destinationAddress: destinationAddress,
+          })
+        }>
         <Text style={styles.buttonText}>PROCEED</Text>
       </Pressable>
     </View>

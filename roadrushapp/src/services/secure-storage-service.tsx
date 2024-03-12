@@ -12,10 +12,13 @@ export default class AppSecureStorageService {
   }
 
   static async getItem(key: string) {
-    let value = await RNSecureStorage.getItem(key);
-    if (value) {
-      return JSON.parse(value);
-    }
+    // error occures if the item not exists
+    try {
+      let value = await RNSecureStorage.getItem(key);
+      if (value) {
+        return JSON.parse(value);
+      }
+    } catch (e) {}
     return null;
   }
 
