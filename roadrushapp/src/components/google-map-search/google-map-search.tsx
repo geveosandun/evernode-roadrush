@@ -83,7 +83,10 @@ export default function GoogleMapSearch({navigation}): React.JSX.Element {
             fetchDetails={true}
             placeholder="Destination"
             enablePoweredByContainer={false}
-            numberOfLines={3}
+            numberOfLines={2}
+            disableScroll= {false}
+            currentLocation= {true}
+            debounce = {0}
             styles={{
               textInput: {
                 height: 40,
@@ -133,6 +136,7 @@ export default function GoogleMapSearch({navigation}): React.JSX.Element {
             origin={origin}
             strokeColor="blue"
             strokeWidth={6}
+            mode= 'DRIVING'
             destination={destination}
             apikey={AppSettings.googleApiKey}
           />

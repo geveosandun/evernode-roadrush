@@ -21,20 +21,20 @@ export default function RideBookingPassenger({navigation, route}): React.JSX.Ele
   var distanceinKm = getPreciseDistance(origin, destination)/1000;
   var priceForTheRideInEvrs = AppSettings.pricePerKm * distanceinKm  
   const [driversList, setDriversList] = useState([]);
-   useEffect(() =>{
-      apiService.getDriversDetails()
-      .then((response: any) =>{
-          console.log("RESPONSE ", response);
-          setDriversList(response);
-      })
-   },[])
+  //  useEffect(() =>{
+  //     apiService.getDriversDetails()
+  //     .then((response: any) =>{
+  //         console.log("RESPONSE ", response);
+  //         setDriversList(response);
+  //     })
+  //  },[])
 
-  async function BookRide(driverId){
+  async function BookRide(){
     let loggedInUserDetails = await AppSecureStorageService.getItem('user');
     let userDetailsJson = JSON.parse(loggedInUserDetails);
     let passengerUserId = userDetailsJson.UserID;
     let passengerName = userDetailsJson.UserName;
-    apiService.bookRide(driverId, passengerUserId, origin, destination, passengerName, originAddress, destinationAddress, distanceinKm, priceForTheRideInEvrs )
+    apiService.bookRide( passengerUserId, origin, destination, passengerName, originAddress, destinationAddress, distanceinKm, priceForTheRideInEvrs )
     .then((response: any) =>{
       console.log("Res** ", response);
     })
@@ -69,9 +69,8 @@ export default function RideBookingPassenger({navigation, route}): React.JSX.Ele
             <Text>{destinationAddress}</Text>
           </View>
         </View>
-        {driversList.length >0 &&
-        driversList.map((item, index)=>(
-          <View key={index} style={styles.rideDetails}>
+      
+          <View style={styles.rideDetails}>
           <View style={styles.carIconContainer}>
             <FontAwesomeIcon icon={faCarSide} size={120} />
             {/* <Text>{item.VehicleMake} {item.VehicleModel}</Text> */}
@@ -97,7 +96,7 @@ export default function RideBookingPassenger({navigation, route}): React.JSX.Ele
             <TouchableOpacity
               style={styles.bookBtn}
               onPress={() => {
-                BookRide(item.DriverID);
+                BookRide();
                 navigation.navigate('activeridedetailspassenger', {
                   origin,
                   destination,
@@ -111,7 +110,7 @@ export default function RideBookingPassenger({navigation, route}): React.JSX.Ele
               </Text>
             </TouchableOpacity>
           </View>
-        </View>))}
+        </View>
       </View>
     </AuthorizedLayout>
   );

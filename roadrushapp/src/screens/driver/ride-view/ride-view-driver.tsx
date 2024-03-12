@@ -6,9 +6,11 @@ import MapViewDirections from 'react-native-maps-directions';
 import AppSettings from '../../../helpers/app-settings';
 import RRButton from '../../../components/button/button';
 import LiveMap from '../../passenger/live-map/live-map';
+import AuthorizedLayoutWithoutScroll from '../../../layouts/authorized-layout-without-scroll';
 
-export default function RideViewDriver({navigation}): React.JSX.Element {
+export default function RideViewDriver({navigation, route}): React.JSX.Element {
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
+  console.log("ITEM%%%%%%%", route.params)
   const [destination, setDestination] = useState({
     latitude: 6.836611,
     longitude: 81.003073,
@@ -20,7 +22,7 @@ export default function RideViewDriver({navigation}): React.JSX.Element {
   });
 
   return (
-    <AuthorizedLayout
+    <AuthorizedLayoutWithoutScroll
       navigation={navigation}
       showWaitIndicator={showLoadingIndicator}
       showBottomNavigation={true}
@@ -66,7 +68,7 @@ export default function RideViewDriver({navigation}): React.JSX.Element {
           text="End Trip"
         />
       </View>
-    </AuthorizedLayout>
+    </AuthorizedLayoutWithoutScroll>
   );
 }
 
