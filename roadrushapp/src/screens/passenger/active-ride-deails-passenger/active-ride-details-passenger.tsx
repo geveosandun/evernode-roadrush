@@ -21,6 +21,7 @@ import {
   faRefresh,
 } from '@fortawesome/free-solid-svg-icons';
 import RRButton from '../../../components/button/button';
+import AuthorizedLayoutWithoutScroll from '../../../layouts/authorized-layout-without-scroll';
 
 export default function ActiveRideDetailsPassenger({
   navigation,
@@ -35,13 +36,20 @@ export default function ActiveRideDetailsPassenger({
   }
 
   return (
-    <AuthorizedLayout
+    <AuthorizedLayoutWithoutScroll
       navigation={navigation}
       showWaitIndicator={showLoadingIndicator}
       showBottomNavigation={true}
       title="Your Ride Details"
       selectedBottomNavigationTab={BottomNavigationButtons.Trips}>
       <View style={styles.mainContainer}>
+        <View style={styles.refreshIcon}>
+        <FontAwesomeIcon
+              icon={faRefresh}
+              color={AppTheme.specification.colors.secondary}
+              size={20}
+            />
+        </View>
         <View style={styles.locationDetails}>
           <View style={styles.locationIconContainer}>
             <FontAwesomeIcon
@@ -63,29 +71,29 @@ export default function ActiveRideDetailsPassenger({
           </View>
         </View>
         <View style={styles.rideFeeContainer}>
-          <Text style={{marginRight: 20, marginLeft: 15}}>
+          {/* <Text style={{marginRight: 20, marginLeft: 15}}>
             Audi e-tron Sportback
-          </Text>
-          <Text style={{marginRight: 57, marginLeft: 40}}>{distanceinKm} km</Text>
-          <Text style={{color: AppTheme.specification.colors.red}}>
+          </Text> */}
+          <Text style={{marginRight: 57, marginLeft: 20}}>{distanceinKm} km</Text>
+          <Text style={{color: AppTheme.specification.colors.red, marginLeft:170}}>
            {priceForTheRideInEvrs} Evrs
           </Text>
         </View>
-          <RRButton
+          {/* <RRButton
             bgColor={AppTheme.specification.colors.red}
             textColor={AppTheme.specification.colors.white}
-            text="Pay"
+            text="Processing"
             onTap={() => {}}
-          />
+          /> */}
       </View>
       <View style={styles.trackScreen}>
         <LiveMap navigation={navigation} origin={origin} destination={destination} ></LiveMap>
       </View>
-      <View style={styles.driverDetails}>
+      {/* <View style={styles.driverDetails}>
         <FontAwesomeIcon icon={faUserCircle} size={40} />
         <Text style={{marginLeft: 30}}> Cameron white is arriving..</Text>
-      </View>
-    </AuthorizedLayout>
+      </View> */}
+    </AuthorizedLayoutWithoutScroll>
   );
 }
 
@@ -193,4 +201,9 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
+  refreshIcon:{
+    marginTop:5,
+    marginRight: 5,
+   alignItems:'flex-end'
+  }
 });

@@ -2,23 +2,18 @@ import * as React from 'react';
 import {useState} from 'react';
 import {View, StyleSheet} from 'react-native';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import MapViewDirections from 'react-native-maps-directions';
+import AppSettings from '../../../helpers/app-settings';
 
 export default function LiveMap({navigation, origin, destination}): React.JSX.Element {
-  const [markerList, setMarkerList] = useState([
-    {
-      latitude: 6.836611,
-      longitude: 81.003073,
-      title: 'I am here',
-    },
-    {
-      latitude: 6.841405,
-      longitude: 81.004405,
-      title: 'I am here',
-    },
-  ]);
+  console.log("ORI **** ",origin);
+  console.log(" **** ",destination);
+  const originCoordinates = {latitude: origin.latitude, longitude: origin.longitude};
+const destinationCoordinates = {latitude: destination.latitude, longitude: destination.longitude};
+
   return (
     <View style={styles.container}>
-      <MapView
+      {/* <MapView
         provider={PROVIDER_GOOGLE} // remove if not using Google Maps
         style={styles.map}
         region={{
@@ -31,7 +26,26 @@ export default function LiveMap({navigation, origin, destination}): React.JSX.El
           coordinate={origin}
           title={'Current Location'}
         />
-      </MapView>
+      </MapView> */}
+      <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: origin.latitude,
+            longitude: origin.longitude,
+            latitudeDelta: 0.015,
+            longitudeDelta: 0.0121,
+          }}>
+          <MapViewDirections
+            origin={originCoordinates}
+            destination={destinationCoordinates}
+            apikey={AppSettings.googleApiKey}
+            strokeWidth={5}
+            strokeColor="blue"
+            mode= 'DRIVING'
+          />
+          <Marker coordinate={originCoordinates} title="Starting Point" />
+          <Marker coordinate={destinationCoordinates} title="Destination Point" />
+        </MapView>
     </View>
   );
 }

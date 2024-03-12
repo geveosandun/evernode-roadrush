@@ -69,7 +69,7 @@ export class DriverService {
             SELECT ${Tables.RIDEREQUESTS}.*
             FROM ${Tables.RIDEREQUESTS}
             JOIN ${Tables.PASSANGERS} ON ${Tables.RIDEREQUESTS}.PassengerID = ${Tables.PASSANGERS}.PassengerID
-            WHERE ${Tables.PassengerID}.UserID != ? AND ${Tables.RIDEREQUESTS}.RequestStatus = 'PENDING'
+            WHERE ${Tables.PASSANGERS}.UserID != ? AND ${Tables.RIDEREQUESTS}.RequestStatus = 'PENDING'
         `;
 
         // Execute the query with driverUserId as parameter
