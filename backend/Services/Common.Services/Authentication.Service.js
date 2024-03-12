@@ -29,7 +29,7 @@ export class AuthenticationService {
             this.#dbContext.open();
 
             let foundUser = await this.#dbContext.getValues(Tables.USERS, {
-                PublicKey: this.#message.Data.PublicKey
+                XRPAddress: this.#message.Data.XRPAddress
             });
             dbp++;
 
@@ -55,7 +55,7 @@ export class AuthenticationService {
                     user: {
                         UserID: foundUser[0].UserID,
                         UserName: foundUser[0].Username,
-                        PublicKey: foundUser[0].PublicKey,
+                        XRPAddress: foundUser[0].XRPAddress,
                         Email: foundUser[0].Email
                     }
                 }
