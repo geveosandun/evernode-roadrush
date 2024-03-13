@@ -7,4 +7,5 @@ export enum ToastMessageTypes {
 
 export class LocalStorageKeys {
   static xummJwtToken = 'xummJwtToken';
+  static xrpAddress = 'xrpAddress';
 }
