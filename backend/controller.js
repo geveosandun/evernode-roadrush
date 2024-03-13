@@ -5,6 +5,7 @@ import { TestController } from "./Controllers/Test.Controller";
 import { AuthenticationController } from "./Controllers/Authentication.Controller";
 import { PassengerController } from "./Controllers/Passenger.Controller";
 import { DriverController } from "./Controllers/Driver.Controller";
+import { UserController } from "./Controllers/User.Controller";
 
 const settings = require("./settings.json").settings;
 

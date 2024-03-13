@@ -39,7 +39,7 @@ const roadRushContract = async (ctx) => {
     await DBInitializer.init();
 
     const controller = new Controller();
-
+    await controller.handleRequest();
     for (const user of ctx.users.list()) {
         // Loop through inputs sent by each user.
         for (const input of user.inputs) {
@@ -55,7 +55,7 @@ const roadRushContract = async (ctx) => {
                 message = bson.deserialize(buf);
             }
             // Pass the JSON message to our application logic component.
-            await controller.handleRequest(user, message, isReadOnly);
+            //await controller.handleRequest(user, message, isReadOnly);
 
         }
 
