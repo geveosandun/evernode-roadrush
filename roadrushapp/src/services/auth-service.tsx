@@ -16,12 +16,12 @@ export default class AuthService {
     return AuthService.instance;
   }
 
-  public async submitLoginRequest(publickKey: any) {
+  public async submitLoginRequest(xrpaddress: any) {
     const message = {
       Service: 'Authentication',
       Action: 'Login',
       Data: {
-        PublicKey: publickKey,
+        XRPAddress: xrpaddress,
       },
     };
 
@@ -44,8 +44,7 @@ export default class AuthService {
 
   public async submitLogoutRequest() {
     try {
-      await AppSecureStorageService.removeItem('isLoggedIn');
-      await AppSecureStorageService.removeItem('user');
+      await AppSecureStorageService.removeAllItems();
       return true;
     } catch (error) {
       console.error('Error setting logged in state', error);

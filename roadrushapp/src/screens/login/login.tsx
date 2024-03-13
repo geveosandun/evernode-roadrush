@@ -31,18 +31,38 @@ export function Login({navigation}): React.JSX.Element {
     // console.log('Token: ' + token);
 
     let jwtDecoded = jwtDecode<JwtPayload>(token);
-    console.log(jwtDecoded);
+    let xrpaddress = jwtDecoded.sub
+    _authService.submitLoginRequest(xrpaddress)
+    .then(async (response: any) => {
+      if (response) {
+        const x = new XummApiService();
+        await x.init();
+        showToast('Logged in successfully!', ToastMessageTypes.success);
+        await AppSecureStorageService.setItem(LocalStorageKeys.xummJwtToken, token);
+        await AppSecureStorageService.setItem(LocalStorageKeys.xrpAddress, xrpaddress);
+        navigation.replace('usermodeselection');
+      } else {
+        //Can implement routing to a register page
+        //When implementing registration initiate a set trustline request for the account for EVRs.
+        showToast('Invalid Login', ToastMessageTypes.error);
+      }
+    })
+    .catch(error => {
+      console.log('Error', error);
+    })
+    .finally(() => {
+      setShowWaitIndicator(false);
+    });
 
-    await AppSecureStorageService.setItem(LocalStorageKeys.xummJwtToken, token);
+    
 
     // todo: save the rAddress to database
 
-    test(token);
+    // test(token);
   });
 
   const test = async (jwt?: string) => {
-    const x = new XummApiService();
-    await x.init();
+    
 
     // await x.makePaymentRequest('rM9J9GskMWkDEU5yarJzYkqgXPwLQw4QqQ', '1');
 
