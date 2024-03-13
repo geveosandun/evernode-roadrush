@@ -107,12 +107,12 @@ export default class ApiService {
     }
   }
 
-  public async acceptRide(rideDetails){
+  public async acceptRide(rideDetails, userId){
     const message ={
       Service: 'Driver',
       Action: 'AcceptRide',
       Data: {
-        driverID: rideDetails.DriverID,
+        driverUserID: userId,
         passengerId: rideDetails.PassengerID,
         passengerName: rideDetails.CreatedBy,
         pickUpLocation: rideDetails.PickupLocation,
@@ -137,4 +137,32 @@ export default class ApiService {
       throw error;
     }
   }
+
+  
+  public async getRideHistory(userId){
+    const loggedInAs = await AppSecureStorageService.getItem('loggedInAs');
+    console.log("LOgged IN AS  *****",loggedInAs)
+    const message ={
+      Service: 'User',
+      Action: 'GetRideHistory',
+      Data: {
+        userId: userId,
+        loggedInAs: loggedInAs
+      }
+    }
+
+    try {
+      console.log("MESSAGE ", message)
+      const response: any =
+        await HotPocketClientService.submitContractReadRequest(message);
+      if (response) {
+        console.log("RES",response)
+      }
+      return response;
+    } catch (error) {
+      console.log("Err ", error)
+      throw error;
+    }
+  }
+
 }

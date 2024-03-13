@@ -47,6 +47,7 @@ export default function UserModeSelection({navigation}): React.JSX.Element {
           showRightArrow={true}
           text="Login as a Passenger"
           onTap={() => {
+            AppSecureStorageService.setItem('loggedInAs','passenger');
             gotoHomeScreen('passenger');
           }}
         />
@@ -55,6 +56,7 @@ export default function UserModeSelection({navigation}): React.JSX.Element {
           showRightArrow={true}
           text="Login as a Driver"
           onTap={() => {
+            AppSecureStorageService.setItem('loggedInAs','driver');
             gotoHomeScreen('driver');
           }}
         />

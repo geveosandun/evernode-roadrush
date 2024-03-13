@@ -5,6 +5,7 @@ import { TestController } from "./Controllers/Test.Controller";
 import { AuthenticationController } from "./Controllers/Authentication.Controller";
 import { PassengerController } from "./Controllers/Passenger.Controller";
 import { DriverController } from "./Controllers/Driver.Controller";
+import { UserController } from "./Controllers/User.Controller";
 
 const settings = require("./settings.json").settings;
 
@@ -16,6 +17,7 @@ export class Controller {
 	#authenticationController = null;
 	#passengerController = null;
 	#driverController = null;
+	#userController = null;
 
 	async handleRequest(user, message, isReadOnly) {
 		this.#contractController = new ContractUpdateController(message);
@@ -23,6 +25,7 @@ export class Controller {
 		this.#authenticationController = new AuthenticationController(message);
 		this.#passengerController = new PassengerController(message);
 		this.#driverController = new DriverController(message);
+		this.#userController = new UserController(message);
 		let _authService = new AuthService();
 
 		let result = {};
@@ -46,6 +49,9 @@ export class Controller {
 			}
 			if (message.Service === ServiceTypes.DRIVER) {
 				result = await this.#driverController.handleRequest();
+			}
+			if (message.Service === ServiceTypes.USER) {
+				result = await this.#userController.handleRequest();
 			}
 		}
 

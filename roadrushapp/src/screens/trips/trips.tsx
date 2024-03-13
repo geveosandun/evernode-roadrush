@@ -1,21 +1,29 @@
 import {StyleSheet, View, Text, Image} from 'react-native';
 import {BottomNavigationButtons} from '../../components/bottom-navigation-bar/bottom-navigation-bar';
 import AuthorizedLayout from '../../layouts/authorized-layout';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import RRButton from '../../components/button/button';
-import AuthService from '../../services/auth-service';
+import ApiService from '../../services/api-service';
+import HotPocketClientService from '../../services/hp-client-service';
+import AppSecureStorageService from '../../services/secure-storage-service';
 
-export default function Trips({navigation}) {
-  const _authService = AuthService.getInstance();
+export default function Trips({navigation, route}) {
+  const apiService = ApiService.getInstance();
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
-
-
-  async function onBottomNavigationTapped(tab: BottomNavigationButtons) {
-    console.log(tab);
-    return true;
-  }
-
- 
+  const data = route.params;
+  const [rideHistory, setRideHIstory]= useState([]);
+  console.log("UserId******",data.userId);
+  useEffect(() => {
+    HotPocketClientService.getInstance().then(ins => {
+      console.log(ins);
+    });
+  
+    apiService.getRideHistory(data.userId)
+    .then((response: any) =>{
+      console.log("Res RideHistory: ", response);
+      setRideHIstory(response);
+    })
+  });
 
   return (
     <AuthorizedLayout
@@ -28,10 +36,16 @@ export default function Trips({navigation}) {
         <Image
           source={require('../../assets/images/profile_picture.png')}
           style={styles.image}></Image>
-        <Text style={{fontSize: 25, marginTop: 25}}> John Doe</Text>
+        {/* <Text style={{fontSize: 25, marginTop: 25}}> John Doe</Text> */}
       </View>
       
-       
+      {rideHistory  && rideHistory.map((item, index) => (
+          <View key={index} style={styles.historyItem}>
+            <Text key={index} style={styles.historyData}>
+              {item}
+            </Text>
+          </View>
+        ))}
      
     </AuthorizedLayout>
   );

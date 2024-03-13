@@ -4,6 +4,7 @@ import {BottomNavigationButtons} from '../../../components/bottom-navigation-bar
 import RRButton from '../../../components/button/button';
 import AuthorizedLayout from '../../../layouts/authorized-layout';
 import ApiService from '../../../services/api-service';
+import HotPocketClientService from '../../../services/hp-client-service';
 
 export function DriverHome({navigation, route}): React.JSX.Element {
   const apiService = ApiService.getInstance();
@@ -11,10 +12,16 @@ export function DriverHome({navigation, route}): React.JSX.Element {
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
 
   const [requests, setRequests] = useState([]);
+  const [userId, setUserId] = useState("");
 
   useEffect(() => {
     //let userDetails = JSON.parse(user);
+    HotPocketClientService.getInstance().then(ins => {
+      console.log(ins);
+    });
     console.log("User#### ", user.user.UserID)
+    setUserId(user.user.UserID);
+    console.log("##############", userId)
     apiService.getRideRequests(user.user.UserID)
     .then((response: any) =>{
       console.log("Res driver home: ", response);
@@ -24,8 +31,8 @@ export function DriverHome({navigation, route}): React.JSX.Element {
 
   }, []);
 
-  function acceptRide(rideDetails) {
-    apiService.acceptRide(rideDetails);
+  function acceptRide(rideDetails, userId) {
+    apiService.acceptRide(rideDetails, userId);
   }
 
   async function onBottomNavigationTapped(tab: BottomNavigationButtons) {
@@ -60,7 +67,7 @@ export function DriverHome({navigation, route}): React.JSX.Element {
               <RRButton
                 text="Accept"
                 onTap={() => {
-                  acceptRide(item);
+                  acceptRide(item, user.user.UserID);
                   navigation.navigate('rideviewdriver', {item});
                 }}
               />

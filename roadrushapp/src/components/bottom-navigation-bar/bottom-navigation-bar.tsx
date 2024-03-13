@@ -4,6 +4,7 @@ import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import AppTheme from '../../helpers/theme';
 import React from 'react';
 import {Dimensions} from 'react-native';
+import AppSecureStorageService from '../../services/secure-storage-service';
 
 const screenWidth = Dimensions.get('window').width;
 export enum BottomNavigationButtons {
@@ -17,7 +18,9 @@ export default function RRBottomNavigationBar({
   selectedTab = BottomNavigationButtons.Home,
   onTapCallback = null,
 }): React.JSX.Element {
+  
   async function onTap(tappedTab: BottomNavigationButtons) {
+   
     let allowNavigation = true;
 
     if (onTapCallback) {
@@ -27,7 +30,11 @@ export default function RRBottomNavigationBar({
     if (allowNavigation) {
       switch (tappedTab) {
         case BottomNavigationButtons.Trips:
-          navigation.navigate('trips');
+          let activeUser = await AppSecureStorageService.getItem('user');
+          console.log("#######",activeUser)
+          let activeUserId = JSON.parse(activeUser).UserID;
+         console.log("#######",activeUserId)
+          navigation.navigate('trips',{userId:activeUserId});
           break;
 
         case BottomNavigationButtons.Account:
