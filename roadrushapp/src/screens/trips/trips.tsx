@@ -30,7 +30,7 @@ export default function Trips({navigation, route}) {
       navigation={navigation}
       showWaitIndicator={showLoadingIndicator}
       showBottomNavigation={true}
-      selectedBottomNavigationTab={BottomNavigationButtons.Account}
+      selectedBottomNavigationTab={BottomNavigationButtons.Trips}
       title='Ride History'>
       <View style={styles.topContainer}>
         <Image
