@@ -13,6 +13,7 @@ import Wallet from './src/screens/wallet/wallet';
 import RideBookingPassenger from './src/screens/passenger/ride-booking/ride-booking-passenger';
 import ActiveRideDetailsPassenger from './src/screens/passenger/active-ride-deails-passenger/active-ride-details-passenger';
 import WaitIndicator from './src/components/activity-indicator/activity-indicator';
+import Trips from './src/screens/trips/trips';
 
 const linking = {
   prefixes: ['roadrush://'],
@@ -82,6 +83,12 @@ function App(): React.JSX.Element {
           name="about"
           component={About}
           options={{title: 'About'}}
+        />
+        
+        <Stack.Screen
+          name="trips"
+          component={Trips}
+          options={{title: 'Trips'}}
         />
       </Stack.Navigator>
     </NavigationContainer>
