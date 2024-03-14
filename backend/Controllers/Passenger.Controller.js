@@ -17,6 +17,8 @@ export class PassengerController {
             switch (this.#message.Action) {
                 case 'BookRide':
                     return await this.#service.bookRide();
+                case 'GetCurrentRideDetails':
+                    return await this.#service.gerCurrentRideDetails();        
                 default:
                     await this.#activityLogger.writeLog(LogTypes.ERROR, LogMessages.ERROR.ACTION_NOT_FOUND,LogMessages.ERROR.ACTION_NOT_FOUND);
                     break;
