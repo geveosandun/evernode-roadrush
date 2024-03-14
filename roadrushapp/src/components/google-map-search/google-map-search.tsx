@@ -5,6 +5,8 @@ import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete'
 import MapViewDirections from 'react-native-maps-directions';
 import AppSettings from '../../helpers/app-settings';
 import AppTheme from '../../helpers/theme';
+import { showToast } from '../../services/toast-service';
+import { ToastMessageTypes } from '../../helpers/constants';
 
 export default function GoogleMapSearch({navigation}): React.JSX.Element {
   const mapRef = useRef(null);
@@ -143,13 +145,16 @@ export default function GoogleMapSearch({navigation}): React.JSX.Element {
 
       <Pressable
         style={styles.button}
-        onPress={() =>
-          navigation.navigate('ridebookingpassenger', {
+        onPress={() =>{
+          if(origin ==undefined || destination==undefined)
+          {showToast('Enter Origin And Destination To Proceed', ToastMessageTypes.error);}
+          else
+         { navigation.navigate('ridebookingpassenger', {
             origin: origin,
             destination: destination,
             originAddress: originAddress,
             destinationAddress: destinationAddress,
-          })
+          })}}
         }>
         <Text style={styles.buttonText}>PROCEED</Text>
       </Pressable>

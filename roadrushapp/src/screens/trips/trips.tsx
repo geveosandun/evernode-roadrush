@@ -14,9 +14,9 @@ export default function Trips({navigation, route}) {
   const [rideHistory, setRideHIstory]= useState([]);
   console.log("UserId******",data.userId);
   useEffect(() => {
-    HotPocketClientService.getInstance().then(ins => {
-      console.log(ins);
-    });
+    // HotPocketClientService.getInstance().then(ins => {
+    //   console.log(ins);
+    // });
   
     apiService.getRideHistory(data.userId)
     .then((response: any) =>{
@@ -31,41 +31,30 @@ export default function Trips({navigation, route}) {
       showWaitIndicator={showLoadingIndicator}
       showBottomNavigation={true}
       selectedBottomNavigationTab={BottomNavigationButtons.Trips}
-      title='Ride History'>
+      title="Ride History">
       <View style={styles.topContainer}>
         <Image
           source={require('../../assets/images/profile_picture.png')}
           style={styles.image}></Image>
         {/* <Text style={{fontSize: 25, marginTop: 25}}> John Doe</Text> */}
       </View>
-      
-      {rideHistory  && rideHistory.map((item, index) => (
+
+      {rideHistory &&
+        rideHistory.map((item, index) => (
           <View key={index} style={styles.historyItem}>
-            <Text key={index} style={styles.historyData}>
-              {item}
-            </Text>
+            <Text style={styles.historyData}>Distance :  {item.Distance}km  Price: {item.FareAmount} Evrs </Text>
+            <Text style={styles.historyData}> Status: {item.RideStatus} Date: {item.UpdatedDate}</Text>
           </View>
         ))}
-     
     </AuthorizedLayout>
   );
 }
 
 const styles = StyleSheet.create({
   topContainer: {
-    flex: 0.2,
+    flex: 0.1,
     flexDirection: 'row',
     margin: 10,
-  },
-  walletContainer: {
-    flex: 0.2,
-    margin: 20,
-    backgroundColor: '#dee0de',
-    padding: 10,
-  },
-  historyContainer: {
-    flex: 0.5,
-    margin: 20,
   },
   image: {
     width: 75,
@@ -75,8 +64,10 @@ const styles = StyleSheet.create({
   historyData: {
     fontSize: 16,
     marginBottom: 5,
+    color: 'black'
   },
   historyItem: {
-    marginBottom: 3,
+    margin: 5,
+    backgroundColor: '#dee0de',
   },
 });
