@@ -102,24 +102,29 @@ async gerCurrentRideDetails(){
 
         const driverId = rideRequestdataRow[0].DriverID;
         console.log("Driver Id****",driverId)
-        const queryDriver = `SELECT ${Tables.DRIVERS}.*
-                            FROM ${Tables.DRIVERS}
-                            WHERE ${Tables.DRIVERS}.DriverID = ?`
-        const driverRow = await this.#dbContext.runSelectQuery(queryDriver, [driverId]);
-        console.log("Driver row****",driverRow)
-        dbp++;
-        const driversDetails = rows.map(row => new DriverDto(
-            driverRow.DriverID,
-            driverRow.UserID,
-            driverRow.DriverLicenseNumber,
-            driverRow.VehicleMake,
-            driverRow.VehicleModel,
-            driverRow.VehiclePlateNumber
-        )
-        );
+        if (driverId != null) {
+            const queryDriver = `SELECT ${Tables.DRIVERS}.*
+                                    FROM ${Tables.DRIVERS}
+                                    WHERE ${Tables.DRIVERS}.DriverID = ?`
+            const driverRow = await this.#dbContext.runSelectQuery(queryDriver, [driverId]);
+            console.log("Driver row****", driverRow)
+            dbp++;
+            const driversDetails = rows.map(row => new DriverDto(
+                driverRow.DriverID,
+                driverRow.UserID,
+                driverRow.DriverLicenseNumber,
+                driverRow.VehicleMake,
+                driverRow.VehicleModel,
+                driverRow.VehiclePlateNumber
+            )
+            );
 
-        const rideDetails = { status: rideRequestdataRow[0].RequestStatus, driverDetails: driversDetails }
-        resObj.success = rideDetails;
+            const rideDetails = { isSuccess:true,status: rideRequestdataRow[0].RequestStatus, driverDetails: driversDetails }
+            resObj.success = rideDetails;
+        }else{
+            resObj.success = "PENDING";
+        }
+  
         return resObj;
     } catch (error) {
         console.log('Error in fetching current ride details ', error);
