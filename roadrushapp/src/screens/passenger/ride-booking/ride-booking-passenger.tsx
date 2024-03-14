@@ -21,6 +21,7 @@ export default function RideBookingPassenger({navigation, route}): React.JSX.Ele
   var distanceinKm = getPreciseDistance(origin, destination)/1000;
   var priceForTheRideInEvrs = AppSettings.pricePerKm * distanceinKm  
   const [driversList, setDriversList] = useState([]);
+  const [rideRequetId, setRideRequestId] = useState("");
   //  useEffect(() =>{
   //     apiService.getDriversDetails()
   //     .then((response: any) =>{
@@ -37,6 +38,15 @@ export default function RideBookingPassenger({navigation, route}): React.JSX.Ele
     apiService.bookRide( passengerUserId, origin, destination, passengerName, originAddress, destinationAddress, distanceinKm, priceForTheRideInEvrs )
     .then((response: any) =>{
       console.log("Res** ", response);
+      navigation.navigate('activeridedetailspassenger', {
+        origin,
+        destination,
+        originAddress,
+        destinationAddress,
+        distanceinKm,
+        priceForTheRideInEvrs,
+        response
+        })
     })
     ;
   }
@@ -97,14 +107,7 @@ export default function RideBookingPassenger({navigation, route}): React.JSX.Ele
               style={styles.bookBtn}
               onPress={() => {
                 BookRide();
-                navigation.navigate('activeridedetailspassenger', {
-                  origin,
-                  destination,
-                  originAddress,
-                  destinationAddress,
-                  distanceinKm,
-                  priceForTheRideInEvrs
-                  })}}>
+            }}>
               <Text style={{color: AppTheme.specification.colors.white}}>
                 Book Now
               </Text>

@@ -22,18 +22,19 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import RRButton from '../../../components/button/button';
 import AuthorizedLayoutWithoutScroll from '../../../layouts/authorized-layout-without-scroll';
+import ApiService from '../../../services/api-service';
 
 export default function ActiveRideDetailsPassenger({
   navigation,
   route
 }): React.JSX.Element {
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
-  const {origin, destination, originAddress, destinationAddress, distanceinKm, priceForTheRideInEvrs} = route.params;
-
-  async function onBottomNavigationTapped(tab: BottomNavigationButtons) {
-    console.log(tab);
-    return true;
-  }
+  const {origin, destination, originAddress, destinationAddress, distanceinKm, priceForTheRideInEvrs, response} = route.params;
+  const apiService = ApiService.getInstance();
+  const [status, setStatus]  = useState("REQUEST PROCESSING");
+  const [driverDetails, setDriverDetails]  = useState({DriverID:'', UserID:'', DriverLicenseNumber:'', VehicleMake:'', VehicleModel:'', VehiclePlateNumber:''});
+ console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",route.params)
+ console.log("#####", response)
 
   return (
     <AuthorizedLayoutWithoutScroll
@@ -44,11 +45,28 @@ export default function ActiveRideDetailsPassenger({
       selectedBottomNavigationTab={BottomNavigationButtons.Trips}>
       <View style={styles.mainContainer}>
         <View style={styles.refreshIcon}>
+          <Pressable
+          onPress={()=>{
+            apiService.gerCurrentRideDetails(response)
+            .then((response:any)=>{
+              console.log("RESSSSSSSS",response)
+              if(response == "PENDING")  {
+                  setStatus(response);
+              }  else if(response.isSuccess == true) {
+                setStatus(response.status);
+                setDriverDetails(response.driverDetails);
+              } else{
+                setStatus("Error Occured")
+              }     
+             })
+                      }}>
         <FontAwesomeIcon
               icon={faRefresh}
               color={AppTheme.specification.colors.secondary}
               size={20}
+              
             />
+            </Pressable>
         </View>
         <View style={styles.locationDetails}>
           <View style={styles.locationIconContainer}>
@@ -89,10 +107,11 @@ export default function ActiveRideDetailsPassenger({
       <View style={styles.trackScreen}>
         <LiveMap navigation={navigation} origin={origin} destination={destination} ></LiveMap>
       </View>
-      {/* <View style={styles.driverDetails}>
-        <FontAwesomeIcon icon={faUserCircle} size={40} />
-        <Text style={{marginLeft: 30}}> Cameron white is arriving..</Text>
-      </View> */}
+      <View style={styles.driverDetails}>
+        <Text style={{marginLeft: 5, color:'white'}}> {status}</Text>
+        {driverDetails &&
+        <Text>Driver: {driverDetails.DriverID} Vehicle: {driverDetails.VehicleMake} {driverDetails.VehicleModel} Plate number: {driverDetails.VehiclePlateNumber}</Text>}
+      </View>
     </AuthorizedLayoutWithoutScroll>
   );
 }
@@ -111,8 +130,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 0.1,
     flexDirection: 'row',
-    marginLeft:10,
-    marginRight:10
+    backgroundColor: 'black'
   },
   heading: {
     flexDirection: 'row',
