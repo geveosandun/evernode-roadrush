@@ -4,17 +4,24 @@ import {BottomNavigationButtons} from '../../../components/bottom-navigation-bar
 import RRButton from '../../../components/button/button';
 import AuthorizedLayout from '../../../layouts/authorized-layout';
 import ApiService from '../../../services/api-service';
+import HotPocketClientService from '../../../services/hp-client-service';
 
 export function DriverHome({navigation, route}): React.JSX.Element {
   const apiService = ApiService.getInstance();
   let user = route.params;
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
 
-  const [requests, setRequests ]= useState([ ]);
+  const [requests, setRequests] = useState([]);
+  const [userId, setUserId] = useState("");
 
   useEffect(() => {
     //let userDetails = JSON.parse(user);
+    HotPocketClientService.getInstance().then(ins => {
+      console.log(ins);
+    });
     console.log("User#### ", user.user.UserID)
+    setUserId(user.user.UserID);
+    console.log("##############", userId)
     apiService.getRideRequests(user.user.UserID)
     .then((response: any) =>{
       console.log("Res driver home: ", response);
@@ -24,9 +31,8 @@ export function DriverHome({navigation, route}): React.JSX.Element {
 
   }, []);
 
-  function acceptRide(rideDetails){
-    apiService.acceptRide(rideDetails);
-
+  function acceptRide(rideDetails, userId) {
+    apiService.acceptRide(rideDetails, userId);
   }
 
   async function onBottomNavigationTapped(tab: BottomNavigationButtons) {
@@ -39,27 +45,36 @@ export function DriverHome({navigation, route}): React.JSX.Element {
       navigation={navigation}
       showWaitIndicator={showLoadingIndicator}
       showBottomNavigation={true}
-      title='Requests'>
+      title="Requests">
       <View style={styles.mainContainer}>
         {requests.map(item => (
           <View key={parseInt(item.RideRequestID)} style={styles.item}>
             <View style={styles.textContainer}>
-            <Text style={styles.itemText}>Pick up: {item.PickUpAddress}    </Text>
-              <Text style={styles.itemText}>Destination: {item.DestinationAddress}</Text>
-              {/* <Text style={styles.itemText}>Distance: {item.Distance} km   </Text> */}
-              {/* <Text style={styles.itemText}>Price: {item.Price} Evrs</Text> */}
-
+              <View style={styles.rideData}>
+                <Text style={styles.itemText}>
+                  Pick up: {item.PickUpAddress}{' '}
+                </Text>
+                <Text style={styles.itemTextRightAlign}>
+                  Destination: {item.DestinationAddress}
+                </Text>
+              </View>
+              <View style={styles.rideData}>
+                <Text style={styles.itemText}>
+                  Distance: {item.Distance} km{' '}
+                </Text>
+                <Text style={styles.itemTextRightAlign}>Price: {item.Price} Evrs</Text>
+              </View>
               <RRButton
                 text="Accept"
                 onTap={() => {
-                  acceptRide(item);
+                  acceptRide(item, user.user.UserID);
                   navigation.navigate('rideviewdriver', {item});
-                }
-                }
+                }}
               />
             </View>
           </View>
-        ))}
+        ))
+        }
       </View>
     </AuthorizedLayout>
   );
@@ -88,5 +103,15 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 16,
+    
   },
+  itemTextRightAlign: {
+    fontSize: 16,
+    textAlign:'right'
+  },
+  rideData:{
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  }
 });

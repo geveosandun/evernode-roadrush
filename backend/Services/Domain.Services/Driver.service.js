@@ -97,12 +97,14 @@ export class DriverService {
         console.log("DATA ",rideDetails);
         try {
             this.#dbContext.open()
+            const driverId = await this.getDriverIDByUserId(rideDetails.driverUserID);
+            console.log("DID####", driverId)
             dbp++;
-            const updatedRows = await this.#dbContext.updateValue(Tables.RIDEREQUESTS, { DriverID: rideDetails.driverID }, {RequestStatus: "ACCEPTED",}, {RideRequestID: rideDetails.rideRequestId});
+            const updatedRows = await this.#dbContext.updateValue(Tables.RIDEREQUESTS, { DriverID: rideDetails.driverID , RequestStatus: "ACCEPTED",}, {RideRequestID: rideDetails.rideRequestId});
             console.log("RideRequest record updated", updatedRows);
             dbp++
             const inputData = {
-                DriverID: rideDetails.driverID,
+                DriverID: driverId,
 				PassengerID: rideDetails.passengerId,
 				PickupLocation: rideDetails.pickUpLocation,
 				Destination: rideDetails.destination,
@@ -138,33 +140,31 @@ export class DriverService {
         }
     }
 
-    async getDriverNameById(driverId){
+    async getDriverIDByUserId(userId){
         let resObj = {};
         let dbp = 0;
-        console.log("Driver Id ",driverId);
+        console.log("User Id ", userId);
         try{
             let query = `
-            SELECT ${Tables.USERS}.UserName
-            FROM ${Tables.USERS}
-            JOIN ${Tables.DRIVERS} ON ${Tables.USERS}.UserID = ${Tables.DRIVERS}.UserID
-            WHERE ${Tables.DRIVERS}.DriverID = ?
+            SELECT ${Tables.DRIVERS}.DriverID
+            FROM ${Tables.DRIVERS}
+            WHERE ${Tables.DRIVERS}.UserID = ?
         `;
         dbp++;
         // Execute the query with driverUserId as parameter
-            const rows = await this.#dbContext.runSelectQuery(query, [driverId]);
-            resObj.success=rows;
+            const rows = await this.#dbContext.runSelectQuery(query, [userId]);
+            console.log("Row####", rows)
+            return rows[0].DriverID;
 
         } catch (error) {
-            console.log('Error in retrieving driver name ', error);
+            console.log('Error in retrieving driver id ', error);
             throw new ErrorResponseDto(
                 this.#message, dbp,
                 "Error occured in retrieving driver name",
                 error.message, ErrorCodes.DEFAULT,
                 new LoggingInfo(LogTypes.ERROR, LogMessages.ERROR.GET_DRIVER_NAME_ERROR, error.message, Date.now())
             );
-        } finally {
-            this.#dbContext.close();
-        }
+        } 
 
     }
 
@@ -192,9 +192,8 @@ export class DriverService {
                 error.message, ErrorCodes.DEFAULT,
                 new LoggingInfo(LogTypes.ERROR, LogMessages.ERROR.GET_PASSENGER_NAME_ERROR, error.message, Date.now())
             );
-        } finally {
-            this.#dbContext.close();
-        }
+        } 
 
     }
+
 }
