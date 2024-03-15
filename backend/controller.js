@@ -52,6 +52,7 @@ export class Controller {
 				result = await this.#passengerController.handleRequest();
 			}
 			if (message.Service === ServiceTypes.DRIVER) {
+				console.log('msg', message);
 				result = await this.#driverController.handleRequest();
 			}
 			if (message.Service === ServiceTypes.USER) {
