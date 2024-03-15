@@ -100,7 +100,7 @@ export class DriverService {
             const driverId = await this.getDriverIDByUserId(rideDetails.driverUserID);
             console.log("DID####", driverId)
             dbp++;
-            const updatedRows = await this.#dbContext.updateValue(Tables.RIDEREQUESTS, { DriverID: rideDetails.driverID , RequestStatus: "ACCEPTED",}, {RideRequestID: rideDetails.rideRequestId});
+            const updatedRows = await this.#dbContext.updateValue(Tables.RIDEREQUESTS, { DriverID: driverId , RequestStatus: "ACCEPTED",}, {RideRequestID: rideDetails.rideRequestId});
             console.log("RideRequest record updated", updatedRows);
             dbp++
             const inputData = {
@@ -238,8 +238,8 @@ export class DriverService {
             dbp++;
             console.log(updatedRides);
 
-            if (rowId.lastId > 0) {
-                console.log('successfully added transaction ', rowId.lastId);
+            if (updatedRideRequest.changes > 0) {
+                console.log('successfully added transaction ', updatedRideRequest.changes);
                 resObj.success = "Trip Ended Successfully";
             }
             

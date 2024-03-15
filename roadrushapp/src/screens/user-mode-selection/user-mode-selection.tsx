@@ -6,32 +6,44 @@ import AppTheme from '../../helpers/theme';
 import AuthorizedLayout from '../../layouts/authorized-layout';
 import AppSecureStorageService from '../../services/secure-storage-service';
 import {showToast} from '../../services/toast-service';
+import ApiService from '../../services/api-service';
 
 export default function UserModeSelection({navigation}): React.JSX.Element {
+  const apiService = ApiService.getInstance();
   const [user, setUser] = useState();
+  let userId = "";
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         let activeUser = await AppSecureStorageService.getItem('user');
+         userId = JSON.parse(activeUser).UserID;
         setUser(JSON.parse(activeUser));
+        
         console.log('USER', JSON.parse(activeUser)); // Log the parsed user directly
       } catch (error) {
         console.error('Error fetching user:', error);
       }
     };
-
     fetchUser();
   }, []);
 
   function gotoHomeScreen(mode: string) {
     switch (mode) {
       case 'passenger':
-        navigation.navigate('passengerhome', {user});
+        apiService.getUserOngoingRides(userId)
+        .then((response:any)=>{
+          console.log("Res P ",response);
+          navigation.navigate('passengerhome', {user});
+        })        
         break;
 
       case 'driver':
-        navigation.navigate('driverhome', {user});
+        apiService.getUserOngoingRides(userId)
+        .then((response:any)=>{
+          console.log("Res D ",response);
+          navigation.navigate('driverhome', {user});
+        })      
         break;
 
       default:

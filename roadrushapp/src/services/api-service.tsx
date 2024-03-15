@@ -247,6 +247,27 @@ export default class ApiService {
     }
   }
 
+  public async getUserOngoingRides(userId) {
+    const loggedInAs = await AppSecureStorageService.getItem('loggedInAs')
+    const message = {
+      Service: 'User',
+      Action: 'GetUserOngoingRides',
+      Data: {
+        userId: userId,
+        loggedInAs: loggedInAs
+      }
+    };
+
+    try {
+      const response: any = await HotPocketClientService.submitContractReadRequest(message);
+      return response;
+    } catch (error) {
+      console.log('err', error);
+      
+      throw error;
+    }
+  }
+
   public async endTrip(rideRequestId: any) {
     const message = {
       Service: 'Driver',

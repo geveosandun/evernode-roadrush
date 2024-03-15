@@ -37,7 +37,7 @@ export class UserService {
             } else if (loggedInAs == "passenger") {
                 query = `SELECT ${Tables.RIDES}.*
                     FROM ${Tables.RIDES}
-                    JOIN ${Tables.PASSANGERS} ON ${Tables.RIDES}.DriverID = ${Tables.PASSANGERS}.PassengerID
+                    JOIN ${Tables.PASSANGERS} ON ${Tables.RIDES}.PassengerID = ${Tables.PASSANGERS}.PassengerID
                     WHERE ${Tables.PASSANGERS}.UserID = ?`;
             }
             const rows = await this.#dbContext.runSelectQuery(query, [userId]);
@@ -57,4 +57,46 @@ export class UserService {
             this.#dbContext.close();
         }
     }
+
+    async getUserOngoingRides(data) {
+        let resObj = {};
+        let dbp = 0;
+        let query = ``;
+        try {
+            console.log("DATA", data)
+            this.#dbContext.open();
+            const userId = data.userId;
+            const loggedInAs = data.loggedInAs;
+
+            if (loggedInAs == "driver") {
+                query = `SELECT ${Tables.RIDES}.*
+                    FROM ${Tables.RIDES}
+                    JOIN ${Tables.DRIVERS} ON ${Tables.RIDES}.DriverID = ${Tables.DRIVERS}.DriverID
+                    WHERE ${Tables.DRIVERS}.UserID = ? AND ${Tables.RIDES}.RideStatus == "COMMITTED"
+                    ORDER BY ${Tables.RIDES}.RideDateTime DESC`;
+            } else if (loggedInAs == "passenger") {
+                query = `SELECT ${Tables.RIDEREQUESTS}.*
+                    FROM ${Tables.RIDEREQUESTS}
+                    JOIN ${Tables.PASSANGERS} ON ${Tables.RIDEREQUESTS}.PassengerID = ${Tables.PASSANGERS}.PassengerID
+                    WHERE ${Tables.PASSANGERS}.UserID = ?  AND ${Tables.RIDEREQUESTS}.RequestStatus == "ACCEPTED"
+                    ORDER BY ${Tables.RIDEREQUESTS}.RideDateTime DESC`;
+            }
+            const rows = await this.#dbContext.runSelectQuery(query, [userId]);
+            console.log("Current ride status:  ", rows)
+            dbp++
+            resObj.success = rows;
+            return resObj;
+        } catch (error) {
+            console.log('Error in fetching current ride status', error);
+            throw new ErrorResponseDto(
+                this.#message, dbp,
+                "Error occured in ride booking",
+                error.message, ErrorCodes.DEFAULT,
+                new LoggingInfo(LogTypes.ERROR, LogMessages.ERROR.RIDE_BOOKING_ERROR, error.message, Date.now())
+            );
+        } finally {
+            this.#dbContext.close();
+        }
+    }
+
 }

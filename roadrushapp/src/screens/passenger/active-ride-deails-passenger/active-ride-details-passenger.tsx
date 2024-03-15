@@ -42,27 +42,28 @@ export default function ActiveRideDetailsPassenger({
     const intervalId = setInterval(() => {
       // This function will run every 5 seconds
       // Put your code here
-      console.log('This runs every 10 seconds', response);
+      console.log('This runs every 5 seconds', response);
       apiService.gerCurrentRideDetails(response).then((res: any) => {
         if (res.status === 'FINISHED') {
           setStatus(res.status);
           setPayNowEnabled(true);
-          setDriverDetails(res.driverDetails);
+          setDriverDetails(res.driverDetails[0]);
           clearInterval(intervalId);
-        } else if (res.staus === 'COMMITTED') {
+        } else if (res.staus === 'ACCEPTED') {
           setStatus(res.status);
-          setDriverDetails(res.driverDetails);
+          setDriverDetails(res.driverDetails[0]);
         } else if (res.status === 'PENDING') {
           setStatus(res.status);
         } 
       })
-    }, 10000);
+    }, 5000);
 
     // Clean up the interval when the component unmounts or when the effect is re-executed
     return () => clearInterval(intervalId);
   }, []);
 
   const onPay = async () => {
+    console.log(driverDetails.DriverID, priceForTheRideInEvrs.toString(), response)
     const xrpAddress = await apiService.getDriverXRPAddress(driverDetails.DriverID);
     const x = new XummApiService();
     await x.init();
@@ -135,7 +136,7 @@ export default function ActiveRideDetailsPassenger({
             bgColor={AppTheme.specification.colors.primary}
             textColor={AppTheme.specification.colors.white}
             text="Pay Now"
-            onTap={() => {onPay}}
+            onTap={onPay}
           />
         }
       </View>
