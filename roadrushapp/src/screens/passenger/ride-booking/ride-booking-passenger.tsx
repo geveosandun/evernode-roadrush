@@ -46,15 +46,15 @@ export default function RideBookingPassenger({navigation, route}): React.JSX.Ele
       apiService.bookRide( passengerUserId, origin, destination, passengerName, originAddress, destinationAddress, distanceinKm, priceForTheRideInEvrs )
       .then((response: any) =>{
         console.log("Res** ", response);
-      });
-      navigation.navigate('activeridedetailspassenger', {
-        origin,
-        destination,
-        originAddress,
-        destinationAddress,
-        distanceinKm,
-        priceForTheRideInEvrs,
-        response
+        navigation.navigate('activeridedetailspassenger', {
+          origin,
+          destination,
+          originAddress,
+          destinationAddress,
+          distanceinKm,
+          priceForTheRideInEvrs,
+          response
+        });
       });
     }
   }

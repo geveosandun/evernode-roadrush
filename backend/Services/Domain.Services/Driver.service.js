@@ -196,27 +196,62 @@ export class DriverService {
 
     }
 
-    async getPassengerXRPAddress() {
+    async getDriverXRPAddress() {
         let resObj = {};
         let dbp = 0;
         console.log('msgs', this.#message);
 
         try {
             this.#dbContext.open();
-            let query = `SELECT ${Tables.USERS}.XRPAddress FROM ${Tables.USERS}, ${Tables.PASSANGERS} WHERE ${Tables.USERS}.UserID = ${Tables.PASSANGERS}.UserID AND ${Tables.PASSANGERS}.PassengerID = ?`;
-            let params = this.#message.Data.PassengerID;
+            let query = `SELECT ${Tables.USERS}.XRPAddress FROM ${Tables.USERS}, ${Tables.DRIVERS} WHERE ${Tables.USERS}.UserID = ${Tables.DRIVERS}.UserID AND ${Tables.DRIVERS}.DriverID = ?`;
+            let params = this.#message.Data.DriverID;
             const rows = await this.#dbContext.runSelectQuery(query, [params]);
             console.log('upt', rows);
             resObj.success = rows[0];
             console.log('res', resObj);
             return resObj;
         } catch (error) {
-            console.log('Error in retrieving passenger XRP address', error);
+            console.log('Error in retrieving driver XRP address', error);
             throw new ErrorResponseDto(
                 this.#message, dbp,
-                "Error occured in retrieving passenger XRP address",
+                "Error occured in retrieving driver XRP address",
                 error.message, ErrorCodes.DEFAULT,
-                new LoggingInfo(LogTypes.ERROR, LogMessages.ERROR.GET_PASSENGER_XRPADDRESS_ERROR, error.message, Date.now())
+                new LoggingInfo(LogTypes.ERROR, LogMessages.ERROR.GET_DRIVER_XRPADDRESS_ERROR, error.message, Date.now())
+            );
+        } finally {
+            this.#dbContext.close();
+        }
+    }
+
+    async endTrip() {
+        let resObj = {};
+        let dbp = 0;
+
+        try {
+            this.#dbContext.open();
+
+            const updatedRideRequest = await this.#dbContext.updateValue(Tables.RIDEREQUESTS, {RequestStatus: "FINISHED"}, {RideRequestID: this.#message.Data.RideRequestID});
+            dbp++;
+            console.log(updatedRideRequest);
+
+            const updatedRides = await this.#dbContext.updateValue(Tables.RIDES, {RideStatus: "FINISHED"}, {RideRequestID: this.#message.Data.RideRequestID});
+            dbp++;
+            console.log(updatedRides);
+
+            if (rowId.lastId > 0) {
+                console.log('successfully added transaction ', rowId.lastId);
+                resObj.success = "Trip Ended Successfully";
+            }
+            
+            return resObj;
+
+        } catch (error) {
+            console.log('error in try catch', error);
+            throw new ErrorResponseDto(
+                this.#message, dbp,
+                "Error occured end trip",
+                error.message, ErrorCodes.DEFAULT,
+                new LoggingInfo(LogTypes.ERROR, LogMessages.ERROR.END_TRIP_ERROR, error.message, Date.now())
             );
         } finally {
             this.#dbContext.close();

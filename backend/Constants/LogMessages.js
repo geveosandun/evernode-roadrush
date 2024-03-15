@@ -13,9 +13,10 @@ export const LogMessages = {
 		GET_DRIVER_NAME_ERROR: "Error occured in retrieving driver name",
 		GET_PASSENGER_NAME_ERROR: "Error occured in retrieving passenger name",
 		GET_CURRENT_RIDE_DETAILS: "Error in fetching current ride details",
-		GET_PASSENGER_XRPADDRESS_ERROR: "Error occured in getPassengerXRPAddress function",
+		GET_DRIVER_XRPADDRESS_ERROR: "Error occured in getDriverXRPAddress function",
 		ADD_TRANSACTION_ERROR: "Error occured in addTransaction function",
 		GET_TRANSACTION_ERROR: "Error occured in getTransactions function",
+		END_TRIP_ERROR: "Error occured in endTrip function",
 	},
 	SUCCESS: {
 		SUCCESS: "Success!",

@@ -122,7 +122,8 @@ async gerCurrentRideDetails(){
             const rideDetails = { isSuccess:true,status: rideRequestdataRow[0].RequestStatus, driverDetails: driversDetails }
             resObj.success = rideDetails;
         }else{
-            resObj.success = "PENDING";
+            const resData = {status: "PENDING"};
+            resObj.success = resData;
         }
   
         return resObj;

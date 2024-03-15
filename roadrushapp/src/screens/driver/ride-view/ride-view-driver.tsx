@@ -29,10 +29,12 @@ export default function RideViewDriver({navigation, route}): React.JSX.Element {
     try {
       console.log('pd', passengerData);
       
-      const xrpAddress = await _apiService.getPassengerXRPAddress(passengerData.item.PassengerID);
-      const x = new XummApiService();
-      await x.init();
-      await x.makePaymentRequest(xrpAddress, passengerData.item.Price.toString(), passengerData.item.RideRequestID);
+      // const xrpAddress = await _apiService.getPassengerXRPAddress(passengerData.item.PassengerID);
+      // const x = new XummApiService();
+      // await x.init();
+      // await x.makePaymentRequest(xrpAddress, passengerData.item.Price.toString(), passengerData.item.RideRequestID);
+      const res = await _apiService.endTrip(passengerData.item.RideRequestID);
+      console.log('returned', res);
     } catch (error) {
       console.log(error);
     }
