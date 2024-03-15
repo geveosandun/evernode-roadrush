@@ -23,7 +23,7 @@ export default function Trips({navigation, route}) {
       console.log("Res RideHistory: ", response);
       setRideHIstory(response);
     })
-  });
+  },[]);
 
   return (
     <AuthorizedLayout

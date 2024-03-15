@@ -12,6 +12,7 @@ export const LogMessages = {
 		GET_DRIVER_DETAILS_ERROR: "Error in fetching driver details",
 		GET_DRIVER_NAME_ERROR: "Error occured in retrieving driver name",
 		GET_PASSENGER_NAME_ERROR: "Error occured in retrieving passenger name",
+		GET_CURRENT_RIDE_DETAILS: "Error in fetching current ride details"
 	},
 	SUCCESS: {
 		SUCCESS: "Success!",

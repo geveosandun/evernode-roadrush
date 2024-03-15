@@ -54,10 +54,11 @@ export class PassengerService {
             dbp++
 
             const rowId = await this.#dbContext.insertValue(Tables.RIDEREQUESTS, inputData);
+            console.log("rowId****", rowId)
             dbp++
 
             if (rowId.lastId > 0) {
-                resObj.success = "Ride Booked Successfully";
+                resObj.success = rowId.lastId;
             }
 
             return resObj;
@@ -76,7 +77,7 @@ export class PassengerService {
 
     async getPassengerId(userId) {
         try{
-        let query = `SELECT PassengerID FROM ${Tables.PASSANGERS}
+        let query = `SELECT ${Tables.PASSANGERS}.PassengerID FROM ${Tables.PASSANGERS}
                         WHERE UserID = ${userId}`;
         const passengerId = await this.#dbContext.runSelectQuery(query);
         return passengerId;
@@ -85,4 +86,57 @@ export class PassengerService {
         throw error;
     }
 }
+
+async gerCurrentRideDetails(){
+    let resObj = {};
+    let dbp = 0;
+    try {
+        this.#dbContext.open();
+        const requestId = this.#message.Data.requestId;
+
+        let queryRideRequests = `SELECT ${Tables.RIDEREQUESTS}.RequestStatus, ${Tables.RIDEREQUESTS}.DriverID FROM ${Tables.RIDEREQUESTS}
+                    WHERE RideRequestID = ?`;
+        const rideRequestdataRow = await this.#dbContext.runSelectQuery(queryRideRequests, [requestId]);
+        console.log("Ride row****",rideRequestdataRow)
+        dbp++;
+
+        const driverId = rideRequestdataRow[0].DriverID;
+        console.log("Driver Id****",driverId)
+        if (driverId != null) {
+            const queryDriver = `SELECT ${Tables.DRIVERS}.*
+                                    FROM ${Tables.DRIVERS}
+                                    WHERE ${Tables.DRIVERS}.DriverID = ?`
+            const driverRow = await this.#dbContext.runSelectQuery(queryDriver, [driverId]);
+            console.log("Driver row****", driverRow)
+            dbp++;
+            const driversDetails = rows.map(row => new DriverDto(
+                driverRow.DriverID,
+                driverRow.UserID,
+                driverRow.DriverLicenseNumber,
+                driverRow.VehicleMake,
+                driverRow.VehicleModel,
+                driverRow.VehiclePlateNumber
+            )
+            );
+
+            const rideDetails = { isSuccess:true,status: rideRequestdataRow[0].RequestStatus, driverDetails: driversDetails }
+            resObj.success = rideDetails;
+        }else{
+            resObj.success = "PENDING";
+        }
+  
+        return resObj;
+    } catch (error) {
+        console.log('Error in fetching current ride details ', error);
+        throw new ErrorResponseDto(
+            this.#message, dbp,
+            "Error in fetching current ride details",
+            error.message, ErrorCodes.DEFAULT,
+            new LoggingInfo(LogTypes.ERROR, LogMessages.ERROR.GET_CURRENT_RIDE_DETAILS, error.message, Date.now())
+        );
+    } finally {
+        this.#dbContext.close();
+    }
+}
+
 }

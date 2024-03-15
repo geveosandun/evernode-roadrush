@@ -165,4 +165,27 @@ export default class ApiService {
     }
   }
 
+  public async gerCurrentRideDetails(requestId){
+    const message ={
+      Service: 'Passenger',
+      Action: 'GetCurrentRideDetails',
+      Data: {
+        requestId: requestId,
+      }
+    }
+
+    try {
+      console.log("MESSAGE ", message)
+      const response: any =
+        await HotPocketClientService.submitContractReadRequest(message);
+      if (response) {
+        console.log("RES",response)
+      }
+      return response;
+    } catch (error) {
+      console.log("Err ", error)
+      throw error;
+    }
+  }
+
 }
