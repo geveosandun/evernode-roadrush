@@ -199,13 +199,16 @@ export class DriverService {
     async getPassengerXRPAddress() {
         let resObj = {};
         let dbp = 0;
+        console.log('msgs', this.#message);
 
         try {
             this.#dbContext.open();
             let query = `SELECT ${Tables.USERS}.XRPAddress FROM ${Tables.USERS}, ${Tables.PASSANGERS} WHERE ${Tables.USERS}.UserID = ${Tables.PASSANGERS}.UserID AND ${Tables.PASSANGERS}.PassengerID = ?`;
             let params = this.#message.Data.PassengerID;
             const rows = await this.#dbContext.runSelectQuery(query, [params]);
+            console.log('upt', rows);
             resObj.success = rows[0];
+            console.log('res', resObj);
             return resObj;
         } catch (error) {
             console.log('Error in retrieving passenger XRP address', error);

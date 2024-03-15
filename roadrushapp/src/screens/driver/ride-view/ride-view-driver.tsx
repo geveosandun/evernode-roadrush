@@ -27,6 +27,8 @@ export default function RideViewDriver({navigation, route}): React.JSX.Element {
 
   const endTrip = async () => {
     try {
+      console.log('pd', passengerData);
+      
       const xrpAddress = await _apiService.getPassengerXRPAddress(passengerData.item.PassengerID);
       const x = new XummApiService();
       await x.init();

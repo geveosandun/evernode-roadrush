@@ -4,6 +4,6 @@ export const ServiceTypes = {
 	DRIVER: "Driver",
 	PASSENGER: "Passenger",
 	CONTRACT_UPDATE: "ContractUpdate",
-	USER: "User"
+	USER: "User",
 	TRANSACTION: "Transaction",
 };

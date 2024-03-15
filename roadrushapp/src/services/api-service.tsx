@@ -189,8 +189,6 @@ export default class ApiService {
     }
   }
 
-  }
-
   public async getPassengerXRPAddress(passengerId: any) {
     const message = {
       Service: 'Driver',
@@ -199,6 +197,8 @@ export default class ApiService {
         PassengerID: passengerId,
       }
     };
+    console.log('msg', message);
+    
 
     try {
       const response: any = await HotPocketClientService.submitContractReadRequest(message);
