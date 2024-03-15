@@ -112,6 +112,8 @@ export default class XummApiService {
    */
   async makePaymentRequest(passengerAddress: string, amount: string, rideRequestId: number) {
     // amount = 1 = 0.000001 XAH
+    console.log('payr', passengerAddress, amount, rideRequestId);
+    
 
     try {
       const Sdk = new XummSdkJwt(this.token);
