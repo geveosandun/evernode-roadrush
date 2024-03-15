@@ -4,6 +4,7 @@ import { SharedService } from "../Common.Services/SharedService";
 import { ErrorCodes } from '../../Constants/ErrorCodes';
 import { LogMessages } from '../../Constants/LogMessages';
 import { LogTypes } from '../../Constants/LogTypes';
+import { DriverDto } from "../../Dto/DriverDto";
 
 const settings = require("../../settings.json").settings;
 const { SqliteDatabase } = require("./../Common.Services/dbHandler").default;
@@ -109,20 +110,21 @@ async gerCurrentRideDetails(){
             const driverRow = await this.#dbContext.runSelectQuery(queryDriver, [driverId]);
             console.log("Driver row****", driverRow)
             dbp++;
-            const driversDetails = rows.map(row => new DriverDto(
-                driverRow.DriverID,
-                driverRow.UserID,
-                driverRow.DriverLicenseNumber,
-                driverRow.VehicleMake,
-                driverRow.VehicleModel,
-                driverRow.VehiclePlateNumber
+            const driversDetails = driverRow.map(row => new DriverDto(
+                row.DriverID,
+                row.UserID,
+                row.DriverLicenseNumber,
+                row.VehicleMake,
+                row.VehicleModel,
+                row.VehiclePlateNumber
             )
             );
 
             const rideDetails = { isSuccess:true,status: rideRequestdataRow[0].RequestStatus, driverDetails: driversDetails }
             resObj.success = rideDetails;
         }else{
-            resObj.success = "PENDING";
+            const resData = {status: "PENDING"};
+            resObj.success = resData;
         }
   
         return resObj;

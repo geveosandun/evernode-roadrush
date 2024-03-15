@@ -23,6 +23,7 @@ import {
 import RRButton from '../../../components/button/button';
 import AuthorizedLayoutWithoutScroll from '../../../layouts/authorized-layout-without-scroll';
 import ApiService from '../../../services/api-service';
+import XummApiService from '../../../services/xumm-api-service';
 
 export default function ActiveRideDetailsPassenger({
   navigation,
@@ -33,8 +34,41 @@ export default function ActiveRideDetailsPassenger({
   const apiService = ApiService.getInstance();
   const [status, setStatus]  = useState("REQUEST PROCESSING");
   const [driverDetails, setDriverDetails]  = useState({DriverID:'', UserID:'', DriverLicenseNumber:'', VehicleMake:'', VehicleModel:'', VehiclePlateNumber:''});
+  const [payNowEnabled, setPayNowEnabled] = useState(false);
  console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",route.params)
  console.log("#####", response)
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      // This function will run every 5 seconds
+      // Put your code here
+      console.log('This runs every 5 seconds', response);
+      apiService.gerCurrentRideDetails(response).then((res: any) => {
+        if (res.status === 'FINISHED') {
+          setStatus(res.status);
+          setPayNowEnabled(true);
+          setDriverDetails(res.driverDetails[0]);
+          clearInterval(intervalId);
+        } else if (res.staus === 'ACCEPTED') {
+          setStatus(res.status);
+          setDriverDetails(res.driverDetails[0]);
+        } else if (res.status === 'PENDING') {
+          setStatus(res.status);
+        } 
+      })
+    }, 5000);
+
+    // Clean up the interval when the component unmounts or when the effect is re-executed
+    return () => clearInterval(intervalId);
+  }, []);
+
+  const onPay = async () => {
+    console.log(driverDetails.DriverID, priceForTheRideInEvrs.toString(), response)
+    const xrpAddress = await apiService.getDriverXRPAddress(driverDetails.DriverID);
+    const x = new XummApiService();
+    await x.init();
+    await x.makePaymentRequest(xrpAddress, priceForTheRideInEvrs.toString(), response);
+  }
 
   return (
     <AuthorizedLayoutWithoutScroll
@@ -97,12 +131,14 @@ export default function ActiveRideDetailsPassenger({
            {priceForTheRideInEvrs} Evrs
           </Text>
         </View>
-          {/* <RRButton
-            bgColor={AppTheme.specification.colors.red}
+        {payNowEnabled &&
+          <RRButton
+            bgColor={AppTheme.specification.colors.primary}
             textColor={AppTheme.specification.colors.white}
-            text="Processing"
-            onTap={() => {}}
-          /> */}
+            text="Pay Now"
+            onTap={onPay}
+          />
+        }
       </View>
       <View style={styles.trackScreen}>
         <LiveMap navigation={navigation} origin={origin} destination={destination} ></LiveMap>

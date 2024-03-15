@@ -21,9 +21,12 @@ export class DriverController {
                     return await this.#service.acceptRide(this.#message.Data);
                 case 'GetDriversDetails':
                     return await this.#service.getDriversDetails();
-                case 'GetPassengerXRPAddress':
+                case 'GetDriverXRPAddress':
                     console.log('msgc', this.#message);
-                    return await this.#service.getPassengerXRPAddress();
+                    return await this.#service.getDriverXRPAddress();
+                case 'EndTrip':
+                    console.log('msgc', this.#message);
+                    return await this.#service.endTrip();
                 default:
                     await this.#activityLogger.writeLog(LogTypes.ERROR, LogMessages.ERROR.ACTION_NOT_FOUND,LogMessages.ERROR.ACTION_NOT_FOUND);
                     break;

@@ -189,12 +189,12 @@ export default class ApiService {
     }
   }
 
-  public async getPassengerXRPAddress(passengerId: any) {
+  public async getDriverXRPAddress(driverId: any) {
     const message = {
       Service: 'Driver',
-      Action: 'GetPassengerXRPAddress',
+      Action: 'GetDriverXRPAddress',
       Data: {
-        PassengerID: passengerId,
+        DriverID: driverId,
       }
     };
     console.log('msg', message);
@@ -239,6 +239,25 @@ export default class ApiService {
 
     try {
       const response: any = await HotPocketClientService.submitContractReadRequest(message);
+      return response;
+    } catch (error) {
+      console.log('err', error);
+      
+      throw error;
+    }
+  }
+
+  public async endTrip(rideRequestId: any) {
+    const message = {
+      Service: 'Driver',
+      Action: 'EndTrip',
+      Data: {
+        RideRequestID: rideRequestId
+      }
+    }
+
+    try {
+      const response: any = await HotPocketClientService.submitInputToContract(message);
       return response;
     } catch (error) {
       console.log('err', error);

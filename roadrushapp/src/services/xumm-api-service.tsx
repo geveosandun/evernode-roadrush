@@ -110,9 +110,8 @@ export default class XummApiService {
   /**
    * This will make a payment request in Xaman, user must approve it via Xaman app
    */
-  async makePaymentRequest(passengerAddress: string, amount: string, rideRequestId: number) {
+  async makePaymentRequest(driverAddress: string, amount: string, rideRequestId: number) {
     // amount = 1 = 0.000001 XAH
-    console.log('payr', passengerAddress, amount, rideRequestId);
     
 
     try {
@@ -121,12 +120,12 @@ export default class XummApiService {
       const pong = await Sdk.ping();
       console.log(pong.application);
 
-      const driverAddress = await AppSecureStorageService.getItem(LocalStorageKeys.xrpAddress);
+      const passengerAddress = await AppSecureStorageService.getItem(LocalStorageKeys.xrpAddress);
 
       const payload = Sdk.payload.createAndSubscribe(
         {
           TransactionType: 'Payment',
-          Account: passengerAddress,
+          // Account: passengerAddress,
           Destination: driverAddress,
           Amount: {
             currency: 'EVR',
