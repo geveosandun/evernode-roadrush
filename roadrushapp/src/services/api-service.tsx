@@ -1,3 +1,4 @@
+import { LocalStorageKeys } from '../helpers/constants';
 import HotPocketClientService from './hp-client-service';
 import AppSecureStorageService from './secure-storage-service';
 
@@ -188,4 +189,61 @@ export default class ApiService {
     }
   }
 
+  }
+
+  public async getPassengerXRPAddress(passengerId: any) {
+    const message = {
+      Service: 'Driver',
+      Action: 'GetPassengerXRPAddress',
+      Data: {
+        PassengerID: passengerId,
+      }
+    };
+
+    try {
+      const response: any = await HotPocketClientService.submitContractReadRequest(message);
+      return response.XRPAddress;
+    } catch (error) {
+      console.log('err', error);
+      
+      throw error;
+    }
+  }
+  
+  public async addTransaction(transaction: any) {
+    const message = {
+      Service: 'Transaction',
+      Action: 'Add',
+      Data: transaction
+    }
+
+    try {
+      const response: any = await HotPocketClientService.submitInputToContract(message);
+      return response;
+    } catch (error) {
+      console.log('err', error);
+      
+      throw error;
+    }
+  }
+
+  public async getTransactions() {
+    const xrpAddress = await AppSecureStorageService.getItem(LocalStorageKeys.xrpAddress);
+    const message = {
+      Service: 'Transaction',
+      Action: 'Get',
+      Data: {
+        XRPAddress: xrpAddress,
+      }
+    };
+
+    try {
+      const response: any = await HotPocketClientService.submitContractReadRequest(message);
+      return response;
+    } catch (error) {
+      console.log('err', error);
+      
+      throw error;
+    }
+  }
 }

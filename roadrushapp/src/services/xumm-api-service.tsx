@@ -1,8 +1,9 @@
 import axios from 'axios';
 import {Xumm} from 'xumm';
 import {XummSdkJwt} from 'xumm-sdk';
-import {LocalStorageKeys} from '../helpers/constants';
+import {EVRIssuer, LocalStorageKeys} from '../helpers/constants';
 import AppSecureStorageService from './secure-storage-service';
+import ApiService from './api-service';
 
 /**
  * Xumm API documentation: https://xumm.readme.io/reference
@@ -109,7 +110,7 @@ export default class XummApiService {
   /**
    * This will make a payment request in Xaman, user must approve it via Xaman app
    */
-  async makePaymentRequest(destinationRAddress: string, amount: string) {
+  async makePaymentRequest(passengerAddress: string, amount: string, rideRequestId: number) {
     // amount = 1 = 0.000001 XAH
 
     try {
@@ -118,21 +119,42 @@ export default class XummApiService {
       const pong = await Sdk.ping();
       console.log(pong.application);
 
+      const driverAddress = await AppSecureStorageService.getItem(LocalStorageKeys.xrpAddress);
+
       const payload = Sdk.payload.createAndSubscribe(
         {
           TransactionType: 'Payment',
-          Account: 'rJWsLwA4AMcpWH5dtxfzG6rMH9mam3yFjw',
-          Destination: destinationRAddress,
+          Account: passengerAddress,
+          Destination: driverAddress,
           Amount: {
             currency: 'EVR',
             value: amount,
-            issuer: 'rQwnhceqeCkw7NJQEL5vXD2qEGo9rmzXY7'
+            issuer: EVRIssuer.address
           },
         },
-        e => {
-          console.log(e.data);
+        async e => {
+          console.log('event data', e.data);
 
           // todo: save the payload uuid to database along with the transaction details
+          if (e.data.signed) {
+            const _apiService = ApiService.getInstance();
+            const reqObj = {
+              FromAddress: passengerAddress,
+              ToAddress: driverAddress,
+              Amount: amount,
+              TransactionStatus: "COMPLETED",
+              TransactionID: e.data.txid,
+              PayloadID: e.data.payload_uuidv4,
+              RideRequestID: rideRequestId
+            }
+            console.log('req', reqObj);
+            try {
+              const res = await _apiService.addTransaction(reqObj);
+              console.log('res', res);
+            } catch (error) {
+              console.log('err', error);
+            }
+          }
 
           if (typeof e.data.signed !== 'undefined') {
             return e.data;

@@ -196,4 +196,27 @@ export class DriverService {
 
     }
 
+    async getPassengerXRPAddress() {
+        let resObj = {};
+        let dbp = 0;
+
+        try {
+            this.#dbContext.open();
+            let query = `SELECT ${Tables.USERS}.XRPAddress FROM ${Tables.USERS}, ${Tables.PASSANGERS} WHERE ${Tables.USERS}.UserID = ${Tables.PASSANGERS}.UserID AND ${Tables.PASSANGERS}.PassengerID = ?`;
+            let params = this.#message.Data.PassengerID;
+            const rows = await this.#dbContext.runSelectQuery(query, [params]);
+            resObj.success = rows[0];
+            return resObj;
+        } catch (error) {
+            console.log('Error in retrieving passenger XRP address', error);
+            throw new ErrorResponseDto(
+                this.#message, dbp,
+                "Error occured in retrieving passenger XRP address",
+                error.message, ErrorCodes.DEFAULT,
+                new LoggingInfo(LogTypes.ERROR, LogMessages.ERROR.GET_PASSENGER_XRPADDRESS_ERROR, error.message, Date.now())
+            );
+        } finally {
+            this.#dbContext.close();
+        }
+    }
 }

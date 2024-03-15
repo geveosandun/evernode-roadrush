@@ -7,11 +7,14 @@ import AppSettings from '../../../helpers/app-settings';
 import RRButton from '../../../components/button/button';
 import LiveMap from '../../passenger/live-map/live-map';
 import AuthorizedLayoutWithoutScroll from '../../../layouts/authorized-layout-without-scroll';
+import XummApiService from '../../../services/xumm-api-service';
+import ApiService from '../../../services/api-service';
 
 export default function RideViewDriver({navigation, route}): React.JSX.Element {
+  const _apiService = ApiService.getInstance();
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
   const passengerData = route.params;
-  console.log("ITEM%%%%%%%", route.params)
+  console.log("passenger item", route.params)
   const [destination, setDestination] = useState({
     latitude: 6.836611,
     longitude: 81.003073,
@@ -21,6 +24,17 @@ export default function RideViewDriver({navigation, route}): React.JSX.Element {
     latitude: 6.841405,
     longitude: 81.004405,
   });
+
+  const endTrip = async () => {
+    try {
+      const xrpAddress = await _apiService.getPassengerXRPAddress(passengerData.item.PassengerID);
+      const x = new XummApiService();
+      await x.init();
+      await x.makePaymentRequest(xrpAddress, passengerData.item.Price.toString(), passengerData.item.RideRequestID);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <AuthorizedLayoutWithoutScroll
@@ -67,6 +81,7 @@ export default function RideViewDriver({navigation, route}): React.JSX.Element {
           showLeftArrow={false}
           showRightArrow={false}
           text="End Trip"
+          onTap={endTrip}
         />
       </View>
     </AuthorizedLayoutWithoutScroll>

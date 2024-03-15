@@ -3,25 +3,17 @@ import {Image, StyleSheet, Text, Linking, View} from 'react-native';
 import {jwtDecode, JwtPayload} from 'jwt-decode';
 import {LocalStorageKeys, ToastMessageTypes} from '../../helpers/constants';
 import {showToast} from '../../services/toast-service';
-import {Wallet} from 'xrpl';
 import AnonymousLayout from '../../layouts/anonymous-layout';
 import AppSecureStorageService from '../../services/secure-storage-service';
 import AppSettings from '../../helpers/app-settings';
 import AuthService from '../../services/auth-service';
 import React, {useState} from 'react';
 import RRButton from '../../components/button/button';
-import XummApiService from '../../services/xumm-api-service';
 
 export function Login({navigation}): React.JSX.Element {
   const _authService = AuthService.getInstance();
 
   const [showWaitIndicator, setShowWaitIndicator] = useState(false);
-  const [walletSecret, setWalletSecret] = useState('');
-
-  const UrlConstants = {
-    XRPL_URL: 'wss://xahau-test.net/',
-  };
-  const xrplClient = new xrpl.Client(UrlConstants.XRPL_URL);
 
   Linking.addEventListener('url', async (event: {url: string}) => {
     // console.log('URL: ' + event.url);
@@ -35,15 +27,12 @@ export function Login({navigation}): React.JSX.Element {
     _authService.submitLoginRequest(xrpaddress)
     .then(async (response: any) => {
       if (response) {
-        const x = new XummApiService();
-        await x.init();
         showToast('Logged in successfully!', ToastMessageTypes.success);
         await AppSecureStorageService.setItem(LocalStorageKeys.xummJwtToken, token);
-        await AppSecureStorageService.setItem(LocalStorageKeys.xrpAddress, xrpaddress);
+        await AppSecureStorageService.setItem(LocalStorageKeys.xrpAddress, xrpaddress)
         navigation.replace('usermodeselection');
       } else {
-        //Can implement routing to a register page
-        //When implementing registration initiate a set trustline request for the account for EVRs.
+        //TODO: Implement regiter process and create a trustline for EVRs.
         showToast('Invalid Login', ToastMessageTypes.error);
       }
     })
@@ -53,60 +42,13 @@ export function Login({navigation}): React.JSX.Element {
     .finally(() => {
       setShowWaitIndicator(false);
     });
-
-    
-
-    // todo: save the rAddress to database
-
-    // test(token);
   });
 
-  const test = async (jwt?: string) => {
-    
-
-    // await x.makePaymentRequest('rM9J9GskMWkDEU5yarJzYkqgXPwLQw4QqQ', '1');
-
-    showToast('Logged in successfully!', ToastMessageTypes.success);
-    navigation.replace('usermodeselection');
-  };
-
   const xummLogin = async () => {
+    setShowWaitIndicator(true);
     Linking.openURL(
       `https://oauth2.xumm.app/auth?client_id=${AppSettings.xummApiKey}&redirect_uri=roadrush://login&scope=token&response_type=token&response_mode=query`,
     );
-  };
-
-  const submitLogin = async () => {
-    if (walletSecret !== '') {
-      setShowWaitIndicator(true);
-      await xrplClient.connect();
-
-      const wallet = Wallet.fromSeed(walletSecret);
-      if (wallet) {
-        _authService
-          .submitLoginRequest(wallet.publicKey)
-          .then((response: any) => {
-            if (response) {
-              showToast('Logged in successfully!', ToastMessageTypes.success);
-              navigation.replace('usermodeselection');
-            } else {
-              //Can implement routing to a register page
-              showToast('Invalid Login', ToastMessageTypes.error);
-            }
-          })
-          .catch(error => {
-            console.log('Error', error);
-          })
-          .finally(() => {
-            setShowWaitIndicator(false);
-          });
-      } else {
-        console.log('error', wallet);
-        showToast('Invalid Login', ToastMessageTypes.error);
-      }
-    } else {
-      showToast('Please provide a secret', ToastMessageTypes.error);
-    }
   };
 
   return (

@@ -14,6 +14,9 @@ import AppSettings from '../../../helpers/app-settings';
 import ApiService from '../../../services/api-service';
 import HotPocketClientService from '../../../services/hp-client-service';
 import AppSecureStorageService from '../../../services/secure-storage-service';
+import XRPLService from '../../../services/xrpl-service';
+import { showToast } from '../../../services/toast-service';
+import { ToastMessageTypes } from '../../../helpers/constants';
 
 export default function RideBookingPassenger({navigation, route}): React.JSX.Element {
   const apiService = ApiService.getInstance();
@@ -31,13 +34,19 @@ export default function RideBookingPassenger({navigation, route}): React.JSX.Ele
   //  },[])
 
   async function BookRide(){
-    let loggedInUserDetails = await AppSecureStorageService.getItem('user');
-    let userDetailsJson = JSON.parse(loggedInUserDetails);
-    let passengerUserId = userDetailsJson.UserID;
-    let passengerName = userDetailsJson.UserName;
-    apiService.bookRide( passengerUserId, origin, destination, passengerName, originAddress, destinationAddress, distanceinKm, priceForTheRideInEvrs )
-    .then((response: any) =>{
-      console.log("Res** ", response);
+    const xrplService = new XRPLService();
+    const trustline: any = await xrplService.getTrustlineBalance();
+    if (parseFloat(trustline.balance) < priceForTheRideInEvrs) {
+      showToast("You don't have enough EVRs. Please topup your account", ToastMessageTypes.error);
+    } else {
+      let loggedInUserDetails = await AppSecureStorageService.getItem('user');
+      let userDetailsJson = JSON.parse(loggedInUserDetails);
+      let passengerUserId = userDetailsJson.UserID;
+      let passengerName = userDetailsJson.UserName;
+      apiService.bookRide( passengerUserId, origin, destination, passengerName, originAddress, destinationAddress, distanceinKm, priceForTheRideInEvrs )
+      .then((response: any) =>{
+        console.log("Res** ", response);
+      });
       navigation.navigate('activeridedetailspassenger', {
         origin,
         destination,
@@ -46,9 +55,8 @@ export default function RideBookingPassenger({navigation, route}): React.JSX.Ele
         distanceinKm,
         priceForTheRideInEvrs,
         response
-        })
-    })
-    ;
+      });
+    }
   }
 
   return (
@@ -105,9 +113,8 @@ export default function RideBookingPassenger({navigation, route}): React.JSX.Ele
             {/* <Text style={{marginHorizontal: 10}}>Cameron Williamson</Text> */}
             <TouchableOpacity
               style={styles.bookBtn}
-              onPress={() => {
-                BookRide();
-            }}>
+              onPress={async () => {
+                await BookRide();}}>
               <Text style={{color: AppTheme.specification.colors.white}}>
                 Book Now
               </Text>
