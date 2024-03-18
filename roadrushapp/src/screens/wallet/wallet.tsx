@@ -1,16 +1,18 @@
-import {StyleSheet, View, Text, Image} from 'react-native';
+import {StyleSheet, View, Text, Image, ScrollView} from 'react-native';
 import {BottomNavigationButtons} from '../../components/bottom-navigation-bar/bottom-navigation-bar';
-import AuthorizedLayout from '../../layouts/authorized-layout';
 import {useEffect, useState} from 'react';
 import RRButton from '../../components/button/button';
 import AuthService from '../../services/auth-service';
 import XRPLService from '../../services/xrpl-service';
 import ApiService from '../../services/api-service';
 import AppTheme from '../../helpers/theme';
+import AuthorizedLayoutWithoutScroll from '../../layouts/authorized-layout-without-scroll';
+import DateService from '../../services/date-service';
 
 export default function Wallet({navigation}) {
   const _authService = AuthService.getInstance();
   const _xrplService = new XRPLService();
+  const _dateService = new DateService();
   const _apiService = ApiService.getInstance();
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(true);
   const [walletBalance, setWalletBalance] = useState(0);
@@ -44,46 +46,47 @@ export default function Wallet({navigation}) {
   }, []);
 
   return (
-    <AuthorizedLayout
+    <AuthorizedLayoutWithoutScroll
       navigation={navigation}
       showWaitIndicator={showLoadingIndicator}
       showBottomNavigation={true}
       selectedBottomNavigationTab={BottomNavigationButtons.Account}
       title="My Wallet">
-      <View style={styles.topContainer}>
-        <Image
-          source={require('../../assets/images/profile_picture.png')}
-          style={styles.image}></Image>
-        <Text style={{fontSize: 25, marginTop: 25}}> John Doe</Text>
+      <View style={{flex: 1, marginTop: 10}}>
+        <View style={styles.walletContainer}>
+          <Text style={{fontSize: 20}}>Your Balance is</Text>
+          <Text style={{fontSize: 50, color: AppTheme.specification.colors.primary}}>
+            {walletBalance} EVR
+          </Text>
+        </View>
+        <View style={styles.historyContainer}>
+          <Text style={{marginBottom: 20, fontSize: 20, fontWeight: 'bold'}}>
+            Wallet History
+          </Text>
+          <ScrollView>
+          {transactions.length > 0 &&
+            transactions.map((item: any, index: any) => (
+              <View key={index} style={styles.historyItem}>
+                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                  <Text
+                    style={
+                      item.Type === 'SEND'
+                        ? styles.historyPayment
+                        : styles.historyReceived
+                    }>
+                    {item.Amount}
+                  </Text>
+                  <Text>{_dateService.getThemedTimeStamp(item.CreatedDate)}</Text>
+                </View>
+                <Text style={styles.historyData}>
+                  {item.Type === 'SEND' ? 'To: ' + item.ToAddress : 'From: ' + item.FromAddress}
+                </Text>
+              </View>
+            ))}
+            </ScrollView>
+        </View>
       </View>
-      <View style={styles.walletContainer}>
-        <Text style={{fontSize: 20}}>Your Balance is</Text>
-        <Text style={{fontSize: 50, color: '#ab0a0a'}}>
-          {walletBalance} EVR
-        </Text>
-      </View>
-      <View style={styles.historyContainer}>
-        <Text style={{marginBottom: 10, fontSize: 20, fontWeight: 'bold'}}>
-          Wallet History
-        </Text>
-        {transactions.length > 0 &&
-          transactions.map((item: any, index: any) => (
-            <View key={index} style={styles.historyItem}>
-              <Text
-                style={
-                  item.Type === 'SEND'
-                    ? styles.historyPayment
-                    : styles.historyReceived
-                }>
-                {item.Amount}
-              </Text>
-              <Text style={styles.historyData}>
-                {item.Type === 'SEND' ? item.ToAddress : item.FromAddress}
-              </Text>
-            </View>
-          ))}
-      </View>
-      <View>
+      <View style={{}}>
         <RRButton
           showLeftArrow={false}
           showRightArrow={false}
@@ -91,24 +94,25 @@ export default function Wallet({navigation}) {
           onTap={handleClick}
         />
       </View>
-    </AuthorizedLayout>
+    </AuthorizedLayoutWithoutScroll>
   );
 }
 
 const styles = StyleSheet.create({
-  topContainer: {
-    flex: 0.2,
-    flexDirection: 'row',
-    margin: 10,
-  },
   walletContainer: {
-    flex: 0.2,
+    // flex: 0.2,
     margin: 20,
-    backgroundColor: '#dee0de',
-    padding: 10,
+    borderColor: AppTheme.specification.colors.primary,
+    borderWidth: 1,
+    borderRadius: 12,
+    elevation: 6,
+    backgroundColor: AppTheme.specification.colors.white,
+    padding: 15,
+    height: 120,
+    alignItems: 'center'
   },
   historyContainer: {
-    flex: 0.5,
+    flex: 1,
     margin: 20,
   },
   image: {
@@ -132,6 +136,6 @@ const styles = StyleSheet.create({
     color: AppTheme.specification.colors.primary,
   },
   historyItem: {
-    marginBottom: 3,
+    marginVertical: 10,
   },
 });

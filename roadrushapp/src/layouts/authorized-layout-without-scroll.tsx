@@ -52,10 +52,12 @@ export default function AuthorizedLayoutWithoutScroll({
           </View>
 
           {showBottomNavigation && (
+            <View style={{height: 80}}>
             <RRBottomNavigationBar
               selectedTab={selectedBottomNavigationTab}
               navigation={navigation}
             />
+            </View>
           )}
         </LinearGradient>
       </View>

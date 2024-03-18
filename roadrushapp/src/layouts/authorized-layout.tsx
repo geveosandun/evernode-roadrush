@@ -51,10 +51,12 @@ export default function AuthorizedLayout({
           </ScrollView>
 
           {showBottomNavigation && (
+            <View style={{height: 80}}>
             <RRBottomNavigationBar
               selectedTab={selectedBottomNavigationTab}
               navigation={navigation}
             />
+            </View>
           )}
         </LinearGradient>
       </View>
@@ -67,9 +69,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollView: {
-    // flex: 1,
+    flex: 1,
     // flexDirection: 'column',
-    flexGrow: 1,
+    // flexGrow: 1,
     marginBottom: 75,
   },
   scrollViewContentContainer: {
