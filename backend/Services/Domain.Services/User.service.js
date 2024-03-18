@@ -72,7 +72,7 @@ export class UserService {
                 query = `SELECT ${Tables.RIDEREQUESTS}.*
                     FROM ${Tables.RIDEREQUESTS}
                     JOIN ${Tables.DRIVERS} ON ${Tables.RIDEREQUESTS}.DriverID = ${Tables.DRIVERS}.DriverID
-                    WHERE ${Tables.DRIVERS}.UserID = ? AND ${Tables.RIDEREQUESTS}.RequestStatus == "COMMITTED"
+                    WHERE ${Tables.DRIVERS}.UserID = ? AND ${Tables.RIDEREQUESTS}.RequestStatus == "ACCEPTED"
                     ORDER BY ${Tables.RIDEREQUESTS}.RideDateTime DESC`;
             } else if (loggedInAs == "passenger") {
                 query = `SELECT ${Tables.RIDEREQUESTS}.*
