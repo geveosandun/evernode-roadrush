@@ -13,12 +13,13 @@ export default function Trips({navigation, route}) {
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
   const data = route.params;
   const [rideHistory, setRideHIstory] = useState([]);
-  const ongoingTrip = data.ongoingTrips[0];
+  const ongoingTrip = data.ongoingTrips[0]|| {};
   const user = data.user;
   const loggedInAs = data.loggedInAs;
 
 
   useEffect(() => {
+    
     // HotPocketClientService.getInstance().then(ins => {
     //   console.log(ins);
     // });
@@ -36,6 +37,7 @@ export default function Trips({navigation, route}) {
       showBottomNavigation={true}
       selectedBottomNavigationTab={BottomNavigationButtons.Trips}
       title="Ride History">
+        {ongoingTrip.PickUpAddress != null &&
       <View style={styles.topContainer}>
         <Text style={{fontSize: 18, marginRight: 10, color:'black'}}>
           Ongoing ride from {ongoingTrip.PickUpAddress} to{' '}
@@ -70,6 +72,7 @@ export default function Trips({navigation, route}) {
         </Pressable>
         </View>
       </View>
+      }
       <Text style={styles.historyText}>History</Text>
       {rideHistory &&
         rideHistory.map((item, index) => (
@@ -92,7 +95,7 @@ export default function Trips({navigation, route}) {
 
 const styles = StyleSheet.create({
   topContainer: {
-    flex: 0.2,
+    flex: 0.1,
     //flexDirection: 'row',
     margin: 10,
     padding: 10,
