@@ -35,7 +35,7 @@ export default function UserModeSelection({navigation}): React.JSX.Element {
       case 'passenger':
         apiService.getUserOngoingRides(activeUserId).then((response: any) => {
           console.log('Res P ', response);
-          if (response) {
+          if (response.length >0) {
             navigation.navigate('trips', {
               userId: activeUserId,
               ongoingTrips: response,
@@ -51,7 +51,7 @@ export default function UserModeSelection({navigation}): React.JSX.Element {
       case 'driver':
         apiService.getUserOngoingRides(activeUserId).then((response: any) => {
           console.log('Res D ', response);
-          if (response) {
+          if (response.length >0) {
             navigation.navigate('trips',{userId:activeUserId,ongoingTrips:response, user:user,  loggedInAs:'driver'})
           } else {
             navigation.navigate('driverhome', {user});
