@@ -33,12 +33,12 @@ export class UserService {
                 query = `SELECT ${Tables.RIDES}.*
                     FROM ${Tables.RIDES}
                     JOIN ${Tables.DRIVERS} ON ${Tables.RIDES}.DriverID = ${Tables.DRIVERS}.DriverID
-                    WHERE ${Tables.DRIVERS}.UserID = ? AND ${Tables.RIDES}.RideStatus == "COMPLETED OR ${Tables.RIDES}.RideStatus == "FINISHED`;
+                    WHERE ${Tables.DRIVERS}.UserID = ? AND (${Tables.RIDES}.RideStatus == "COMPLETED OR ${Tables.RIDES}.RideStatus == "FINISHED)`;
             } else if (loggedInAs == "passenger") {
                 query = `SELECT ${Tables.RIDES}.*
                     FROM ${Tables.RIDES}
                     JOIN ${Tables.PASSENGERS} ON ${Tables.RIDES}.PassengerID = ${Tables.PASSENGERS}.PassengerID
-                    WHERE ${Tables.PASSENGERS}.UserID = ? AND ${Tables.RIDES}.RideStatus == "COMPLETED ${Tables.RIDES}.RideStatus == "FINISHED`;
+                    WHERE ${Tables.PASSENGERS}.UserID = ? AND (${Tables.RIDES}.RideStatus == "COMPLETED ${Tables.RIDES}.RideStatus == "FINISHED)`;
             }
             const rows = await this.#dbContext.runSelectQuery(query, [userId]);
             console.log("Ride history:  ", rows)
