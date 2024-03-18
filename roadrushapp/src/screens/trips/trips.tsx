@@ -4,15 +4,19 @@ import AuthorizedLayout from '../../layouts/authorized-layout';
 import {useEffect, useState} from 'react';
 import ApiService from '../../services/api-service';
 import HotPocketClientService from '../../services/hp-client-service';
+import { compareAsc, format } from "date-fns";
+import DateService from '../../services/date-service';
 
 export default function Trips({navigation, route}) {
   const apiService = ApiService.getInstance();
+  const dateService = DateService.getInstance();
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
   const data = route.params;
   const [rideHistory, setRideHIstory] = useState([]);
   const ongoingTrip = data.ongoingTrips[0];
   const user = data.user;
   const loggedInAs = data.loggedInAs;
+
 
   useEffect(() => {
     // HotPocketClientService.getInstance().then(ins => {
@@ -33,10 +37,11 @@ export default function Trips({navigation, route}) {
       selectedBottomNavigationTab={BottomNavigationButtons.Trips}
       title="Ride History">
       <View style={styles.topContainer}>
-        <Text style={{fontSize: 20, marginRight: 10}}>
+        <Text style={{fontSize: 18, marginRight: 10, color:'black'}}>
           Ongoing ride from {ongoingTrip.PickUpAddress} to{' '}
           {ongoingTrip.DestinationAddress}{' '}
         </Text>
+        <View>
         <Pressable
           style={styles.button}
           onPress={() => {
@@ -51,30 +56,34 @@ export default function Trips({navigation, route}) {
                 rideRequestID: ongoingTrip.RideRequestID,
               });
             } else if (loggedInAs == 'driver') {
-              navigation.navigate('rideviewdriver', {
+              navigation.navigate('rideviewdriver', {item:{
                 PickUpAddress: ongoingTrip.PickUpAddress,
                 DestinationAddress: ongoingTrip.DestinationAddress,
                 Distance: ongoingTrip.Distance,
                 Price: ongoingTrip.Price,
                 RideRequestID: ongoingTrip.RideRequestID,
                 CreatedBy: ongoingTrip.CreatedBy,
-              });
+              }});
             }
           }}>
           <Text style={styles.buttonText}>View</Text>
         </Pressable>
+        </View>
       </View>
-
+      <Text style={styles.historyText}>History</Text>
       {rideHistory &&
         rideHistory.map((item, index) => (
           <View key={index} style={styles.historyItem}>
-            <Text style={styles.historyData}>
-              Distance : {item.Distance}km Price: {item.FareAmount} Evrs{' '}
+             <Text style={styles.historyData}>             
+               Date: {dateService.getThemedTimeStamp(item.UpdatedDate)}
             </Text>
             <Text style={styles.historyData}>
-              {' '}
-              Status: {item.RideStatus} Date: {item.UpdatedDate}
+              Distance : {item.Distance}km Price: {item.FareAmount} Evrs 
             </Text>
+            <Text style={styles.historyData}>
+               Status: {item.RideStatus == "FINISHED" ? "Payment Pending": "Completed"}
+            </Text>
+           
           </View>
         ))}
     </AuthorizedLayout>
@@ -83,11 +92,13 @@ export default function Trips({navigation, route}) {
 
 const styles = StyleSheet.create({
   topContainer: {
-    flex: 0.1,
-    flexDirection: 'row',
+    flex: 0.2,
+    //flexDirection: 'row',
     margin: 10,
     padding: 10,
-    backgroundColor: '#F0ED5C',
+    backgroundColor: '#d5eda6',
+    borderRadius:15,
+    elevation: 6
   },
   image: {
     width: 75,
@@ -96,23 +107,35 @@ const styles = StyleSheet.create({
   },
   historyData: {
     fontSize: 16,
-    marginBottom: 5,
+    marginBottom: 2,
     color: 'black',
   },
   historyItem: {
-    margin: 5,
-    backgroundColor: '#dee0de',
+    borderRadius:10,
+    elevation: 6,
+    margin: 10,
+    padding:10,
+    backgroundColor: '#f2f5f4',
   },
   button: {
-    position: 'absolute',
+   //position: 'absolute',
     bottom: 10,
     right: 10,
     backgroundColor: 'green',
     padding: 10,
     borderRadius: 10,
+    marginTop:15,
+    alignSelf: 'center',
+    width:100,
+    alignItems: 'center'
   },
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
   },
+  historyText:{
+    margin:10,
+    fontSize:20,
+    fontWeight:'bold'
+  }
 });
