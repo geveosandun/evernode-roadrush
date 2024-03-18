@@ -31,10 +31,9 @@ export default function RRBottomNavigationBar({
       switch (tappedTab) {
         case BottomNavigationButtons.Trips:
           let activeUser = await AppSecureStorageService.getItem('user');
-          console.log("#######",activeUser)
           let activeUserId = JSON.parse(activeUser).UserID;
-         console.log("#######",activeUserId)
-          navigation.navigate('trips',{userId:activeUserId});
+          let loggedInAs = await AppSecureStorageService.getItem('loggedInAs');
+          navigation.navigate('trips',{userId:activeUserId,ongoingTrips:{}, user:activeUser,  loggedInAs:loggedInAs});
           break;
 
         case BottomNavigationButtons.Account:
