@@ -13,29 +13,16 @@ export default function Wallet({navigation}) {
   const _xrplService = new XRPLService();
   const _apiService = ApiService.getInstance();
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(true);
-  const [walletHistory, setWalletHistory] = useState([
-    '0.34 EVRs transfred to *******98 on 09/02/2024',
-    '0.35 EVRs transfred to *******45 on 09/02/2024',
-    '4.7 EVRs transfred to *******96 on 09/02/2024',
-    '7.9 EVRs transfred to *******11 on 09/02/2024',
-    '7.9 EVRs transfred to *******11 on 09/02/2024',
-    '10.34 EVRs transfred to *******93 on 09/02/2024',
-  ]);
   const [walletBalance, setWalletBalance] = useState(0);
   const [transactions, setTransactions] = useState([]);
 
-  async function onBottomNavigationTapped(tab: BottomNavigationButtons) {
-    console.log(tab);
-    return true;
-  }
-
   const handleClick = () => {
     _authService.submitLogoutRequest().then((resposne: any) => {
-        if (resposne) {
-            navigation.navigate("login");
-        }
-    })
-  }
+      if (resposne) {
+        navigation.navigate('login');
+      }
+    });
+  };
 
   useEffect(() => {
     _xrplService.getTrustlineBalance().then((res: any) => {
@@ -43,18 +30,17 @@ export default function Wallet({navigation}) {
       setShowLoadingIndicator(false);
     });
     _apiService.getTransactions().then((res: any) => {
-      res.Payments.map((obj: any) => obj.Type = 'SEND');
-      res.Received.map((obj: any) => obj.Type = 'RECEIVED');
+      res.Payments.map((obj: any) => (obj.Type = 'SEND'));
+      res.Received.map((obj: any) => (obj.Type = 'RECEIVED'));
       let newArray = [...res.Payments, ...res.Received];
       newArray.sort((a: any, b: any) => {
         const dateA = new Date(a.CreatedDate).getTime();
         const dateB = new Date(b.CreatedDate).getTime();
         return dateB - dateA;
-      })
+      });
       setTransactions(newArray);
       console.log(newArray);
-      
-    })
+    });
   }, []);
 
   return (
@@ -63,7 +49,7 @@ export default function Wallet({navigation}) {
       showWaitIndicator={showLoadingIndicator}
       showBottomNavigation={true}
       selectedBottomNavigationTab={BottomNavigationButtons.Account}
-      title='My Wallet'>
+      title="My Wallet">
       <View style={styles.topContainer}>
         <Image
           source={require('../../assets/images/profile_picture.png')}
@@ -72,32 +58,38 @@ export default function Wallet({navigation}) {
       </View>
       <View style={styles.walletContainer}>
         <Text style={{fontSize: 20}}>Your Balance is</Text>
-        <Text style={{fontSize: 50, color: '#ab0a0a'}}>{walletBalance} EVR</Text>
+        <Text style={{fontSize: 50, color: '#ab0a0a'}}>
+          {walletBalance} EVR
+        </Text>
       </View>
       <View style={styles.historyContainer}>
         <Text style={{marginBottom: 10, fontSize: 20, fontWeight: 'bold'}}>
           Wallet History
         </Text>
-        {/* {walletHistory.map((item, index) => (
-          <View key={index} style={styles.historyItem}>
-            <Text key={index} style={styles.historyData}>
-              {item}
-            </Text>
-          </View>
-        ))} */}
-        {transactions.length > 0 && transactions.map((item: any, index: any) => (
-          <View key={index} style={styles.historyItem}>
-            <Text style={item.Type === 'SEND' ? styles.historyPayment : styles.historyReceived}>
-              {item.Amount}
-            </Text>
-            <Text style={styles.historyData}>
-              {item.Type === 'SEND' ? item.ToAddress : item.FromAddress}
-            </Text>
-          </View>
-        ))}
+        {transactions.length > 0 &&
+          transactions.map((item: any, index: any) => (
+            <View key={index} style={styles.historyItem}>
+              <Text
+                style={
+                  item.Type === 'SEND'
+                    ? styles.historyPayment
+                    : styles.historyReceived
+                }>
+                {item.Amount}
+              </Text>
+              <Text style={styles.historyData}>
+                {item.Type === 'SEND' ? item.ToAddress : item.FromAddress}
+              </Text>
+            </View>
+          ))}
       </View>
       <View>
-        <RRButton showLeftArrow={false} showRightArrow={false} text="Logout" onTap={handleClick}/>
+        <RRButton
+          showLeftArrow={false}
+          showRightArrow={false}
+          text="Logout"
+          onTap={handleClick}
+        />
       </View>
     </AuthorizedLayout>
   );
@@ -141,6 +133,5 @@ const styles = StyleSheet.create({
   },
   historyItem: {
     marginBottom: 3,
-    // flexDirection: "row",
   },
 });

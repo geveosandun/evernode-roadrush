@@ -33,12 +33,12 @@ export class UserService {
                 query = `SELECT ${Tables.RIDES}.*
                     FROM ${Tables.RIDES}
                     JOIN ${Tables.DRIVERS} ON ${Tables.RIDES}.DriverID = ${Tables.DRIVERS}.DriverID
-                    WHERE ${Tables.DRIVERS}.UserID = ?`;
+                    WHERE ${Tables.DRIVERS}.UserID = ? AND ${Tables.RIDES}.RideStatus == "COMPLETED`;
             } else if (loggedInAs == "passenger") {
                 query = `SELECT ${Tables.RIDES}.*
                     FROM ${Tables.RIDES}
-                    JOIN ${Tables.PASSANGERS} ON ${Tables.RIDES}.PassengerID = ${Tables.PASSANGERS}.PassengerID
-                    WHERE ${Tables.PASSANGERS}.UserID = ?`;
+                    JOIN ${Tables.PASSENGERS} ON ${Tables.RIDES}.PassengerID = ${Tables.PASSENGERS}.PassengerID
+                    WHERE ${Tables.PASSENGERS}.UserID = ? AND ${Tables.RIDES}.RideStatus == "COMPLETED`;
             }
             const rows = await this.#dbContext.runSelectQuery(query, [userId]);
             console.log("Ride history:  ", rows)
@@ -69,16 +69,16 @@ export class UserService {
             const loggedInAs = data.loggedInAs;
 
             if (loggedInAs == "driver") {
-                query = `SELECT ${Tables.RIDES}.*
-                    FROM ${Tables.RIDES}
-                    JOIN ${Tables.DRIVERS} ON ${Tables.RIDES}.DriverID = ${Tables.DRIVERS}.DriverID
-                    WHERE ${Tables.DRIVERS}.UserID = ? AND ${Tables.RIDES}.RideStatus == "COMMITTED"
-                    ORDER BY ${Tables.RIDES}.RideDateTime DESC`;
+                query = `SELECT ${Tables.RIDEREQUESTS}.*
+                    FROM ${Tables.RIDEREQUESTS}
+                    JOIN ${Tables.DRIVERS} ON ${Tables.RIDEREQUESTS}.DriverID = ${Tables.DRIVERS}.DriverID
+                    WHERE ${Tables.DRIVERS}.UserID = ? AND ${Tables.RIDEREQUESTS}.RideStatus == "COMMITTED"
+                    ORDER BY ${Tables.RIDEREQUESTS}.RideDateTime DESC`;
             } else if (loggedInAs == "passenger") {
                 query = `SELECT ${Tables.RIDEREQUESTS}.*
                     FROM ${Tables.RIDEREQUESTS}
-                    JOIN ${Tables.PASSANGERS} ON ${Tables.RIDEREQUESTS}.PassengerID = ${Tables.PASSANGERS}.PassengerID
-                    WHERE ${Tables.PASSANGERS}.UserID = ?  AND ${Tables.RIDEREQUESTS}.RequestStatus == "ACCEPTED"
+                    JOIN ${Tables.PASSENGERS} ON ${Tables.RIDEREQUESTS}.PassengerID = ${Tables.PASSENGERS}.PassengerID
+                    WHERE ${Tables.PASSENGERS}.UserID = ?  AND ${Tables.RIDEREQUESTS}.RequestStatus == "ACCEPTED"
                     ORDER BY ${Tables.RIDEREQUESTS}.RideDateTime DESC`;
             }
             const rows = await this.#dbContext.runSelectQuery(query, [userId]);

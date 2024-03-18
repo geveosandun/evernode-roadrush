@@ -6,18 +6,16 @@ import HotPocketClientService from '../../services/hp-client-service';
 
 export default function SplashScreen({navigation}) {
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
-  
+
   useEffect(() => {
     HotPocketClientService.getInstance().then(ins => {
       console.log(ins);
     });
 
-    AuthService.checkAuthentication().then( loggedIn => {
+    AuthService.checkAuthentication().then(loggedIn => {
       if (loggedIn) {
         setTimeout(() => {
-        
-        navigation.replace('usermodeselection');
-
+          navigation.replace('usermodeselection');
         }, 2000);
       } else {
         navigation.replace('login');
@@ -51,11 +49,7 @@ export default function SplashScreen({navigation}) {
           style={styles.tinyLogo}
           source={require('../../assets/images/logo.png')}
         />
-        <View style={styles.geveoLogo}/>
-        {/* <Image
-          style={styles.geveoLogo}
-          source={require('../../assets/images/geveo.png')}
-        /> */}
+        <View style={styles.geveoLogo} />
         <View style={{alignSelf: 'center'}}>
           <Text style={styles.versionText}>Version 0.0.1</Text>
         </View>

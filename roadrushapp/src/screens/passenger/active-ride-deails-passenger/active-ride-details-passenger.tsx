@@ -1,10 +1,4 @@
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Pressable,StyleSheet,Text,TouchableOpacity,View,} from 'react-native';
 import AppTheme from '../../../helpers/theme';
 import React, {useEffect, useState} from 'react';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
@@ -27,35 +21,40 @@ import XummApiService from '../../../services/xumm-api-service';
 
 export default function ActiveRideDetailsPassenger({
   navigation,
-  route
+  route,
 }): React.JSX.Element {
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
-  const {origin, destination, originAddress, destinationAddress, distanceinKm, priceForTheRideInEvrs, response} = route.params;
+  const data = route.params;
   const apiService = ApiService.getInstance();
-  const [status, setStatus]  = useState("REQUEST PROCESSING");
-  const [driverDetails, setDriverDetails]  = useState({DriverID:'', UserID:'', DriverLicenseNumber:'', VehicleMake:'', VehicleModel:'', VehiclePlateNumber:''});
+  const [status, setStatus] = useState('REQUEST PROCESSING');
+  const [driverDetails, setDriverDetails] = useState({
+    DriverID: '',
+    UserID: '',
+    DriverLicenseNumber: '',
+    VehicleMake: '',
+    VehicleModel: '',
+    VehiclePlateNumber: '',
+  });
   const [payNowEnabled, setPayNowEnabled] = useState(false);
- console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&",route.params)
- console.log("#####", response)
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       // This function will run every 5 seconds
       // Put your code here
-      console.log('This runs every 5 seconds', response);
-      apiService.gerCurrentRideDetails(response).then((res: any) => {
+      console.log('This runs every 5 seconds', data.requestId);
+      apiService.gerCurrentRideDetails(data.requestId).then((res: any) => {
         if (res.status === 'FINISHED') {
           setStatus(res.status);
           setPayNowEnabled(true);
           setDriverDetails(res.driverDetails[0]);
           clearInterval(intervalId);
-        } else if (res.staus === 'ACCEPTED') {
+        } else if (res.status === 'ACCEPTED') {
           setStatus(res.status);
           setDriverDetails(res.driverDetails[0]);
         } else if (res.status === 'PENDING') {
           setStatus(res.status);
-        } 
-      })
+        }
+      });
     }, 5000);
 
     // Clean up the interval when the component unmounts or when the effect is re-executed
@@ -63,12 +62,22 @@ export default function ActiveRideDetailsPassenger({
   }, []);
 
   const onPay = async () => {
-    console.log(driverDetails.DriverID, priceForTheRideInEvrs.toString(), response)
-    const xrpAddress = await apiService.getDriverXRPAddress(driverDetails.DriverID);
+    console.log(
+      driverDetails.DriverID,
+      data.priceForTheRideInEvrs.toString(),
+      data.requestId,
+    );
+    const xrpAddress = await apiService.getDriverXRPAddress(
+      driverDetails.DriverID,
+    );
     const x = new XummApiService();
     await x.init();
-    await x.makePaymentRequest(xrpAddress, priceForTheRideInEvrs.toString(), response);
-  }
+    await x.makePaymentRequest(
+      xrpAddress,
+      data.priceForTheRideInEvrs.toString(),
+      data.requestId,
+    );
+  };
 
   return (
     <AuthorizedLayoutWithoutScroll
@@ -78,30 +87,7 @@ export default function ActiveRideDetailsPassenger({
       title="Your Ride Details"
       selectedBottomNavigationTab={BottomNavigationButtons.Trips}>
       <View style={styles.mainContainer}>
-        <View style={styles.refreshIcon}>
-          {/* <Pressable
-          onPress={()=>{
-            apiService.gerCurrentRideDetails(response)
-            .then((response:any)=>{
-              console.log("RESSSSSSSS",response)
-              if(response == "PENDING")  {
-                  setStatus(response);
-              }  else if(response.isSuccess == true) {
-                setStatus(response.status);
-                setDriverDetails(response.driverDetails);
-              } else{
-                setStatus("Error Occured")
-              }     
-             })
-                      }}>
-        <FontAwesomeIcon
-              icon={faRefresh}
-              color={AppTheme.specification.colors.secondary}
-              size={20}
-              
-            />
-            </Pressable> */}
-        </View>
+        <View style={styles.refreshIcon}></View>
         <View style={styles.locationDetails}>
           <View style={styles.locationIconContainer}>
             <FontAwesomeIcon
@@ -117,36 +103,44 @@ export default function ActiveRideDetailsPassenger({
             />
           </View>
           <View style={styles.locationDetailsContainer}>
-            <Text style={{marginBottom: 20}}>{originAddress}</Text>
+            <Text style={{marginBottom: 20}}>{data.originAddress}</Text>
             <View style={styles.horizontalDashedLine}></View>
-            <Text>{destinationAddress}</Text>
+            <Text>{data.destinationAddress}</Text>
           </View>
         </View>
         <View style={styles.rideFeeContainer}>
-          {/* <Text style={{marginRight: 20, marginLeft: 15}}>
-            Audi e-tron Sportback
-          </Text> */}
-          <Text style={{marginRight: 57, marginLeft: 20}}>{distanceinKm} km</Text>
-          <Text style={{color: AppTheme.specification.colors.red, marginLeft:170}}>
-           {priceForTheRideInEvrs} Evrs
+          <Text style={{marginRight: 57, marginLeft: 20}}>
+            {data.distanceinKm} km
+          </Text>
+          <Text
+            style={{color: AppTheme.specification.colors.red, marginLeft: 170}}>
+            {data.priceForTheRideInEvrs} Evrs
           </Text>
         </View>
-        {payNowEnabled &&
+        {payNowEnabled && (
           <RRButton
             bgColor={AppTheme.specification.colors.primary}
             textColor={AppTheme.specification.colors.white}
             text="Pay Now"
             onTap={onPay}
           />
-        }
+        )}
       </View>
       <View style={styles.trackScreen}>
-        <LiveMap navigation={navigation} origin={origin} destination={destination} ></LiveMap>
+        <LiveMap
+          navigation={navigation}
+          origin={data.origin}
+          destination={data.destination}></LiveMap>
       </View>
       <View style={styles.driverDetails}>
-        <Text style={{marginLeft: 5, color:'white'}}> {status}</Text>
-        {driverDetails &&
-        <Text>Driver: {driverDetails.DriverID} Vehicle: {driverDetails.VehicleMake} {driverDetails.VehicleModel} Plate number: {driverDetails.VehiclePlateNumber}</Text>}
+        <Text style={{marginLeft: 5, color: 'white'}}> {status}</Text>
+        {driverDetails && (
+          <Text>
+            Driver: {driverDetails.DriverID} Vehicle:{' '}
+            {driverDetails.VehicleMake} {driverDetails.VehicleModel} Plate
+            number: {driverDetails.VehiclePlateNumber}
+          </Text>
+        )}
       </View>
     </AuthorizedLayoutWithoutScroll>
   );
@@ -159,14 +153,14 @@ const styles = StyleSheet.create({
   trackScreen: {
     flex: 1,
     marginTop: 2,
-    borderTopColor:AppTheme.specification.colors.mediumGrey,
-    borderTopWidth:1
+    borderTopColor: AppTheme.specification.colors.mediumGrey,
+    borderTopWidth: 1,
   },
   driverDetails: {
     alignItems: 'center',
     flex: 0.1,
     flexDirection: 'row',
-    backgroundColor: 'black'
+    backgroundColor: 'black',
   },
   heading: {
     flexDirection: 'row',
@@ -255,9 +249,9 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
-  refreshIcon:{
-    marginTop:5,
+  refreshIcon: {
+    marginTop: 5,
     marginRight: 5,
-   alignItems:'flex-end'
-  }
+    alignItems: 'flex-end',
+  },
 });

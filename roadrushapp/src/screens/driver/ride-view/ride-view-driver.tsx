@@ -1,20 +1,15 @@
 import {StyleSheet, View, Text} from 'react-native';
-import AuthorizedLayout from '../../../layouts/authorized-layout';
 import {useState} from 'react';
-import MapView, {Marker} from 'react-native-maps';
-import MapViewDirections from 'react-native-maps-directions';
-import AppSettings from '../../../helpers/app-settings';
 import RRButton from '../../../components/button/button';
 import LiveMap from '../../passenger/live-map/live-map';
 import AuthorizedLayoutWithoutScroll from '../../../layouts/authorized-layout-without-scroll';
-import XummApiService from '../../../services/xumm-api-service';
 import ApiService from '../../../services/api-service';
 
 export default function RideViewDriver({navigation, route}): React.JSX.Element {
   const _apiService = ApiService.getInstance();
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
   const passengerData = route.params;
-  console.log("passenger item", route.params)
+  console.log('passenger item', route.params);
   const [destination, setDestination] = useState({
     latitude: 6.836611,
     longitude: 81.003073,
@@ -27,18 +22,12 @@ export default function RideViewDriver({navigation, route}): React.JSX.Element {
 
   const endTrip = async () => {
     try {
-      console.log('pd', passengerData);
-      
-      // const xrpAddress = await _apiService.getPassengerXRPAddress(passengerData.item.PassengerID);
-      // const x = new XummApiService();
-      // await x.init();
-      // await x.makePaymentRequest(xrpAddress, passengerData.item.Price.toString(), passengerData.item.RideRequestID);
       const res = await _apiService.endTrip(passengerData.item.RideRequestID);
       console.log('returned', res);
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <AuthorizedLayoutWithoutScroll
@@ -47,30 +36,18 @@ export default function RideViewDriver({navigation, route}): React.JSX.Element {
       showBottomNavigation={true}
       title="Current Ride">
       <View style={styles.container}>
-        {/* <MapView
-          style={styles.map}
-          initialRegion={{
-            latitude: 6.838545,
-            longitude: 81.007132,
-            latitudeDelta: 0.015,
-            longitudeDelta: 0.0121,
-          }}>
-          <MapViewDirections
-            origin={origin}
-            destination={destination}
-            apikey={AppSettings.googleApiKey}
-            strokeWidth={5}
-            strokeColor="blue"
-            mode={'TRANSIT'}
-          />
-          <Marker coordinate={origin} title="Starting Point" />
-          <Marker coordinate={destination} title="Destination Point" />
-        </MapView> */}
-        <LiveMap navigation={navigation} origin={origin} destination={destination} ></LiveMap>
+        <LiveMap
+          navigation={navigation}
+          origin={origin}
+          destination={destination}></LiveMap>
       </View>
       <View style={styles.detailsContainer}>
-        <Text style={{marginTop: 20}}>Passanger : {passengerData.item.CreatedBy} </Text>
-        <Text>Pick Up  : {passengerData.item.PickUpAddress} </Text>
+        {passengerData.item.CreatedBy != null && (
+          <Text style={{marginTop: 20}}>
+            Passanger : {passengerData.item.CreatedBy}{' '}
+          </Text>
+        )}
+        <Text>Pick Up : {passengerData.item.PickUpAddress} </Text>
         <Text>Drop Down : {passengerData.item.DestinationAddress} </Text>
         <Text>Ride Distance : {passengerData.item.Distance} km</Text>
         <Text>Amount : {passengerData.item.Price} Evrs</Text>

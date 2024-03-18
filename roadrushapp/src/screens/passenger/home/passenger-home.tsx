@@ -1,23 +1,19 @@
 import React, {useEffect, useState} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
-import RRBottomNavigationBar, {
-  BottomNavigationButtons,
-} from '../../../components/bottom-navigation-bar/bottom-navigation-bar';
+import {BottomNavigationButtons} from '../../../components/bottom-navigation-bar/bottom-navigation-bar';
 import GoogleMapSearch from '../../../components/google-map-search/google-map-search';
-import AuthorizedLayout from '../../../layouts/authorized-layout';
 import AuthorizedLayoutWithoutScroll from '../../../layouts/authorized-layout-without-scroll';
 import HotPocketClientService from '../../../services/hp-client-service';
 
 export function PassengerHome({navigation, route}): React.JSX.Element {
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
   const user = route.params;
-  console.log("User*** ", user);
   useEffect(() => {
     HotPocketClientService.getInstance().then(ins => {
       console.log(ins);
     });
   });
-  
+
   async function onBottomNavigationTapped(tab: BottomNavigationButtons) {
     console.log(tab);
     return true;

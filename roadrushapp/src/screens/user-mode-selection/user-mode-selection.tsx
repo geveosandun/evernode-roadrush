@@ -11,15 +11,14 @@ import ApiService from '../../services/api-service';
 export default function UserModeSelection({navigation}): React.JSX.Element {
   const apiService = ApiService.getInstance();
   const [user, setUser] = useState();
-  let userId = "";
+  let userId = '';
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         let activeUser = await AppSecureStorageService.getItem('user');
-         userId = JSON.parse(activeUser).UserID;
         setUser(JSON.parse(activeUser));
-        
+
         console.log('USER', JSON.parse(activeUser)); // Log the parsed user directly
       } catch (error) {
         console.error('Error fetching user:', error);
@@ -28,24 +27,37 @@ export default function UserModeSelection({navigation}): React.JSX.Element {
     fetchUser();
   }, []);
 
-  function gotoHomeScreen(mode: string) {
+  async function gotoHomeScreen(mode: string) {
+    let activeUser = await AppSecureStorageService.getItem('user');
+    let activeUserId = JSON.parse(activeUser).UserID;
+    console.log('UID***', activeUserId);
     switch (mode) {
       case 'passenger':
-        apiService.getUserOngoingRides(userId)
-        .then((response:any)=>{
-          console.log("Res P ",response);
-          navigation.navigate('passengerhome', {user});
-        })        
+        apiService.getUserOngoingRides(activeUserId).then((response: any) => {
+          console.log('Res P ', response);
+          if (response) {
+            navigation.navigate('trips', {
+              userId: activeUserId,
+              ongoingTrips: response,
+              user: user,
+              loggedInAs: 'passenger',
+            });
+          } else {
+            navigation.navigate('passengerhome', {user});
+          }
+        });
         break;
 
       case 'driver':
-        apiService.getUserOngoingRides(userId)
-        .then((response:any)=>{
-          console.log("Res D ",response);
-          navigation.navigate('driverhome', {user});
-        })      
+        apiService.getUserOngoingRides(activeUserId).then((response: any) => {
+          console.log('Res D ', response);
+          if (response) {
+            navigation.navigate('trips',{userId:activeUserId,ongoingTrips:response, user:user,  loggedInAs:'driver'})
+          } else {
+            navigation.navigate('driverhome', {user});
+          }
+        });
         break;
-
       default:
         showToast('Invalid user mode selected.', ToastMessageTypes.error);
         break;
@@ -59,7 +71,7 @@ export default function UserModeSelection({navigation}): React.JSX.Element {
           showRightArrow={true}
           text="Login as a Passenger"
           onTap={() => {
-            AppSecureStorageService.setItem('loggedInAs','passenger');
+            AppSecureStorageService.setItem('loggedInAs', 'passenger');
             gotoHomeScreen('passenger');
           }}
         />
@@ -68,17 +80,10 @@ export default function UserModeSelection({navigation}): React.JSX.Element {
           showRightArrow={true}
           text="Login as a Driver"
           onTap={() => {
-            AppSecureStorageService.setItem('loggedInAs','driver');
+            AppSecureStorageService.setItem('loggedInAs', 'driver');
             gotoHomeScreen('driver');
           }}
         />
-        {/* <Link to={'/passengerhome'} style={styles.linkButton}>
-          <Text>Passenger</Text>
-        </Link>
-
-        <Link to={'/driverhome'} style={styles.linkButton}>
-          <Text>Driver</Text>
-        </Link> */}
       </View>
     </AuthorizedLayout>
   );

@@ -23,25 +23,31 @@ export function Login({navigation}): React.JSX.Element {
     // console.log('Token: ' + token);
 
     let jwtDecoded = jwtDecode<JwtPayload>(token);
-    let xrpaddress = jwtDecoded.sub
-    _authService.submitLoginRequest(xrpaddress)
-    .then(async (response: any) => {
-      if (response) {
-        showToast('Logged in successfully!', ToastMessageTypes.success);
-        await AppSecureStorageService.setItem(LocalStorageKeys.xummJwtToken, token);
-        await AppSecureStorageService.setItem(LocalStorageKeys.xrpAddress, xrpaddress)
-        navigation.replace('usermodeselection');
-      } else {
-        //TODO: Implement regiter process and create a trustline for EVRs.
-        showToast('Invalid Login', ToastMessageTypes.error);
-      }
-    })
-    .catch(error => {
-      console.log('Error', error);
-    })
-    .finally(() => {
-      setShowWaitIndicator(false);
-    });
+    let xrpaddress = jwtDecoded.sub;
+    _authService
+      .submitLoginRequest(xrpaddress)
+      .then(async (response: any) => {
+        if (response) {
+          showToast('Logged in successfully!', ToastMessageTypes.success);
+          await AppSecureStorageService.setItem(
+            LocalStorageKeys.xummJwtToken,
+            token,
+          );
+          await AppSecureStorageService.setItem(
+            LocalStorageKeys.xrpAddress,
+            xrpaddress,
+          );
+          navigation.replace('usermodeselection');
+        } else {
+          showToast('Invalid Login', ToastMessageTypes.error);
+        }
+      })
+      .catch(error => {
+        console.log('Error', error);
+      })
+      .finally(() => {
+        setShowWaitIndicator(false);
+      });
   });
 
   const xummLogin = async () => {
@@ -65,14 +71,7 @@ export function Login({navigation}): React.JSX.Element {
         text="Login with Xaman"
         showRightArrow={true}
       />
-
       <View style={styles.geveoLogo} />
-
-      {/* <Image
-        style={styles.geveoLogo}
-        source={require('../../assets/images/geveo.png')}
-      /> */}
-
       <Text style={styles.versionText}>Version 0.0.1</Text>
     </AnonymousLayout>
   );

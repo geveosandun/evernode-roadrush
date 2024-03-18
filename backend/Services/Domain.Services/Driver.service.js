@@ -68,8 +68,8 @@ export class DriverService {
             let query = `
             SELECT ${Tables.RIDEREQUESTS}.*
             FROM ${Tables.RIDEREQUESTS}
-            JOIN ${Tables.PASSANGERS} ON ${Tables.RIDEREQUESTS}.PassengerID = ${Tables.PASSANGERS}.PassengerID
-            WHERE ${Tables.PASSANGERS}.UserID != ? AND ${Tables.RIDEREQUESTS}.RequestStatus = 'PENDING'
+            JOIN ${Tables.PASSENGERS} ON ${Tables.RIDEREQUESTS}.PassengerID = ${Tables.PASSENGERS}.PassengerID
+            WHERE ${Tables.PASSENGERS}.UserID != ? AND ${Tables.RIDEREQUESTS}.RequestStatus = 'PENDING'
         `;
 
         // Execute the query with driverUserId as parameter
@@ -176,8 +176,8 @@ export class DriverService {
             let query = `
             SELECT ${Tables.USERS}.UserName
             FROM ${Tables.USERS}
-            JOIN ${Tables.PASSANGERS} ON ${Tables.USERS}.UserID = ${Tables.PASSANGERS}.UserID
-            WHERE ${Tables.PASSANGERS}.PassengerID = ?
+            JOIN ${Tables.PASSENGERS} ON ${Tables.USERS}.UserID = ${Tables.PASSENGERS}.UserID
+            WHERE ${Tables.PASSENGERS}.PassengerID = ?
         `;
         dbp++;
         // Execute the query with driverUserId as parameter

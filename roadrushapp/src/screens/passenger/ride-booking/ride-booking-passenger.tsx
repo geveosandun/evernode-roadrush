@@ -7,7 +7,7 @@ import {
   faLocationCrosshairs,
   faLocationDot,
 } from '@fortawesome/free-solid-svg-icons';
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import {BottomNavigationButtons} from '../../../components/bottom-navigation-bar/bottom-navigation-bar';
 import {getDistance, getPreciseDistance} from 'geolib';
 import AppSettings from '../../../helpers/app-settings';
@@ -15,47 +15,54 @@ import ApiService from '../../../services/api-service';
 import HotPocketClientService from '../../../services/hp-client-service';
 import AppSecureStorageService from '../../../services/secure-storage-service';
 import XRPLService from '../../../services/xrpl-service';
-import { showToast } from '../../../services/toast-service';
-import { ToastMessageTypes } from '../../../helpers/constants';
+import {showToast} from '../../../services/toast-service';
+import {ToastMessageTypes} from '../../../helpers/constants';
 
-export default function RideBookingPassenger({navigation, route}): React.JSX.Element {
+export default function RideBookingPassenger({
+  navigation,
+  route,
+}): React.JSX.Element {
   const apiService = ApiService.getInstance();
-  const {  origin, destination, originAddress, destinationAddress } = route.params;
-  var distanceinKm = getPreciseDistance(origin, destination)/1000;
-  var priceForTheRideInEvrs = AppSettings.pricePerKm * distanceinKm  
-  const [driversList, setDriversList] = useState([]);
-  const [rideRequetId, setRideRequestId] = useState("");
-  //  useEffect(() =>{
-  //     apiService.getDriversDetails()
-  //     .then((response: any) =>{
-  //         console.log("RESPONSE ", response);
-  //         setDriversList(response);
-  //     })
-  //  },[])
+  const {origin, destination, originAddress, destinationAddress} = route.params;
+  var distanceinKm = getPreciseDistance(origin, destination) / 1000;
+  var priceForTheRideInEvrs = AppSettings.pricePerKm * distanceinKm;
 
-  async function BookRide(){
+  async function BookRide() {
     const xrplService = new XRPLService();
     const trustline: any = await xrplService.getTrustlineBalance();
     if (parseFloat(trustline.balance) < priceForTheRideInEvrs) {
-      showToast("You don't have enough EVRs. Please topup your account", ToastMessageTypes.error);
+      showToast(
+        "You don't have enough EVRs. Please topup your account",
+        ToastMessageTypes.error,
+      );
     } else {
       let loggedInUserDetails = await AppSecureStorageService.getItem('user');
       let userDetailsJson = JSON.parse(loggedInUserDetails);
       let passengerUserId = userDetailsJson.UserID;
       let passengerName = userDetailsJson.UserName;
-      apiService.bookRide( passengerUserId, origin, destination, passengerName, originAddress, destinationAddress, distanceinKm, priceForTheRideInEvrs )
-      .then((response: any) =>{
-        console.log("Res** ", response);
-        navigation.navigate('activeridedetailspassenger', {
-          origin,
-          destination,
+      apiService
+        .bookRide(
+          passengerUserId,
+          JSON.stringify(origin),
+          JSON.stringify(destination),
+          passengerName,
           originAddress,
           destinationAddress,
           distanceinKm,
           priceForTheRideInEvrs,
-          response
+        )
+        .then((response: any) => {
+          console.log('Res** ', response);
+          navigation.navigate('activeridedetailspassenger', {
+            origin: origin,
+            destination: destination,
+            originAddress: originAddress,
+            destinationAddress: destinationAddress,
+            distanceinKm: distanceinKm,
+            priceForTheRideInEvrs: priceForTheRideInEvrs,
+            requestId: response,
+          });
         });
-      });
     }
   }
 
@@ -87,11 +94,10 @@ export default function RideBookingPassenger({navigation, route}): React.JSX.Ele
             <Text>{destinationAddress}</Text>
           </View>
         </View>
-      
-          <View style={styles.rideDetails}>
+
+        <View style={styles.rideDetails}>
           <View style={styles.carIconContainer}>
             <FontAwesomeIcon icon={faCarSide} size={120} />
-            {/* <Text>{item.VehicleMake} {item.VehicleModel}</Text> */}
           </View>
           <View style={styles.rideFeeContainer}>
             <Text>{distanceinKm} km</Text>
@@ -104,17 +110,11 @@ export default function RideBookingPassenger({navigation, route}): React.JSX.Ele
             </Text>
           </View>
           <View style={styles.driverDetailsContainer}>
-            {/* <Image
-              style={styles.profileImage}
-              resizeMethod="resize"
-              resizeMode="contain"
-              source={require('../../../assets/images/profile_picture.png')}
-            /> */}
-            {/* <Text style={{marginHorizontal: 10}}>Cameron Williamson</Text> */}
             <TouchableOpacity
               style={styles.bookBtn}
               onPress={async () => {
-                await BookRide();}}>
+                await BookRide();
+              }}>
               <Text style={{color: AppTheme.specification.colors.white}}>
                 Book Now
               </Text>
@@ -150,7 +150,6 @@ const styles = StyleSheet.create({
     margin: 2,
     borderWidth: 0.5,
     borderRadius: 15,
-    //  borderColor: AppTheme.colors.primary,
     padding: 15,
     elevation: 3,
     backgroundColor: AppTheme.specification.colors.white,
@@ -198,18 +197,14 @@ const styles = StyleSheet.create({
   },
   profileImage: {
     borderRadius: 100,
-    //borderColor: AppTheme.specification.colors.white,
-    //borderWidth: 2,
     width: 50,
     height: 50,
-    //marginLeft: -50,
-    marginRight:20
-   // backgroundColor: AppTheme.specification.colors.mediumGrey,
+    marginRight: 20,
   },
   bookBtn: {
     padding: 10,
     backgroundColor: AppTheme.specification.colors.primary,
     borderRadius: 10,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
 });

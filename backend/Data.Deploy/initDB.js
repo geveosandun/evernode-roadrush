@@ -93,7 +93,7 @@ export class DBInitializer {
 				FOREIGN KEY (UserID) REFERENCES Users(UserID)
 			)`)
 
-			await this.#runQuery(`CREATE TABLE IF NOT EXISTS ${Tables.PASSANGERS}(
+			await this.#runQuery(`CREATE TABLE IF NOT EXISTS ${Tables.PASSENGERS}(
 				PassengerID INTEGER PRIMARY KEY,
 				UserID INTEGER,
 				PaymentMethod TEXT,

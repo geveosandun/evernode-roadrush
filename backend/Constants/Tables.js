@@ -4,7 +4,7 @@ export const Tables = {
 	ACTIVITYLOG: "ActivityLog",
 	USERS: "Users",
 	DRIVERS: "Drivers",
-	PASSANGERS: "Passengers",
+	PASSENGERS: "Passengers",
 	RIDES: "Rides", 
 	WALLETS: "Wallet",
 	PAYMENTS: "Payments",

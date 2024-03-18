@@ -30,7 +30,7 @@ export default class ApiService {
       }
       return response;
     } catch (error) {
-      throw error;
+      console.log("Error in getting driver details.")
     }
   }
 
@@ -76,11 +76,11 @@ export default class ApiService {
       const response: any =
         await HotPocketClientService.submitInputToContract(message);
       if (response) {
-        console.log("RES",response)
+        console.log("RESPONSE",response)
       }
       return response;
     } catch (error) {
-      console.log("Err ", error)
+      console.log("Error in booking the ride. ", error)
       throw error;
     }
   }
@@ -99,11 +99,11 @@ export default class ApiService {
       const response: any =
         await HotPocketClientService.submitContractReadRequest(message);
       if (response) {
-        console.log("RES",response)
+        console.log("RESPONSE",response)
       }
       return response;
     } catch (error) {
-      console.log("Err ", error)
+      console.log("Error in getting the ride request. ", error)
       throw error;
     }
   }
@@ -130,11 +130,11 @@ export default class ApiService {
       const response: any =
         await HotPocketClientService.submitInputToContract(message);
       if (response) {
-        console.log("RES",response)
+        console.log("RESPONSE",response)
       }
       return response;
     } catch (error) {
-      console.log("Err ", error)
+      console.log("Error in accepting the ride. ", error)
       throw error;
     }
   }
@@ -142,7 +142,6 @@ export default class ApiService {
   
   public async getRideHistory(userId){
     const loggedInAs = await AppSecureStorageService.getItem('loggedInAs');
-    console.log("LOgged IN AS  *****",loggedInAs)
     const message ={
       Service: 'User',
       Action: 'GetRideHistory',
@@ -157,11 +156,11 @@ export default class ApiService {
       const response: any =
         await HotPocketClientService.submitContractReadRequest(message);
       if (response) {
-        console.log("RES",response)
+        console.log("RESPONSE",response)
       }
       return response;
     } catch (error) {
-      console.log("Err ", error)
+      console.log("Error in getting the ride history. ", error)
       throw error;
     }
   }
@@ -180,11 +179,11 @@ export default class ApiService {
       const response: any =
         await HotPocketClientService.submitContractReadRequest(message);
       if (response) {
-        console.log("RES",response)
+        console.log("RESPONSE",response)
       }
       return response;
     } catch (error) {
-      console.log("Err ", error)
+      console.log("Error in getting current ride details. ", error)
       throw error;
     }
   }
@@ -204,7 +203,7 @@ export default class ApiService {
       const response: any = await HotPocketClientService.submitContractReadRequest(message);
       return response.XRPAddress;
     } catch (error) {
-      console.log('err', error);
+      console.log('Error in getting the driver xrp address.', error);
       
       throw error;
     }
@@ -221,7 +220,7 @@ export default class ApiService {
       const response: any = await HotPocketClientService.submitInputToContract(message);
       return response;
     } catch (error) {
-      console.log('err', error);
+      console.log('Error in adding transaction.', error);
       
       throw error;
     }
@@ -241,13 +240,14 @@ export default class ApiService {
       const response: any = await HotPocketClientService.submitContractReadRequest(message);
       return response;
     } catch (error) {
-      console.log('err', error);
+      console.log('Error in getting transactions.', error);
       
       throw error;
     }
   }
 
   public async getUserOngoingRides(userId) {
+  
     const loggedInAs = await AppSecureStorageService.getItem('loggedInAs')
     const message = {
       Service: 'User',
@@ -262,7 +262,7 @@ export default class ApiService {
       const response: any = await HotPocketClientService.submitContractReadRequest(message);
       return response;
     } catch (error) {
-      console.log('err', error);
+      console.log('Error in getting user ongoin rides.', error);
       
       throw error;
     }
@@ -281,7 +281,7 @@ export default class ApiService {
       const response: any = await HotPocketClientService.submitInputToContract(message);
       return response;
     } catch (error) {
-      console.log('err', error);
+      console.log('Error in end trip.', error);
       
       throw error;
     }
