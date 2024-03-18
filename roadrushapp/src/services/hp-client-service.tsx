@@ -14,7 +14,6 @@ export default class HotPocketClientService {
   constructor() {}
 
   static async getInstance() {
-    // HotPocketClientService.HotPocketClient = null;
     if (HotPocketClientService.HotPocketClient) {
       HotPocketClientService.applyDefaultEvents();
       await HotPocketClientService.HotPocketClient.connect();
@@ -159,21 +158,6 @@ export default class HotPocketClientService {
     console.log("HotPocket Connected.");
 
     const stat = await HotPocketClientService.HotPocketClient.getStatus();
-    // console.log("stat ", stat);
-    // const inpString1 = JSON.stringify({cc:"message"});
-    // const response =
-    //   await HotPocketClientService.HotPocketClient.submitContractReadRequest(
-    //     inpString1
-    //   );
-    // console.log("read req ", response);
-    // const inpString = JSON.stringify({cc:"message"});
-    // const input =
-    //   await HotPocketClientService.HotPocketClient.submitContractInput(
-    //     inpString
-    //   );
-    // console.log("input ", input);
-    // const submissionResult = await input.submissionStatus;
-    // console.log("submissionResult ", submissionResult);
   }
 
   static async submitInputToContract(message: any) {

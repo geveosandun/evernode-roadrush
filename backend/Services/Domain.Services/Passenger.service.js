@@ -31,7 +31,7 @@ export class PassengerService {
             console.log("DATA ", data);
             let userId = data.passengerUserId;
             console.log("***", userId)
-            let query = `SELECT PassengerID FROM ${Tables.PASSANGERS}
+            let query = `SELECT PassengerID FROM ${Tables.PASSENGERS}
                         WHERE UserID = ?`;
             const dataRow = await this.#dbContext.runSelectQuery(query,[userId]);
             console.log("ID ",dataRow[0].PassengerID);
@@ -78,7 +78,7 @@ export class PassengerService {
 
     async getPassengerId(userId) {
         try{
-        let query = `SELECT ${Tables.PASSANGERS}.PassengerID FROM ${Tables.PASSANGERS}
+        let query = `SELECT ${Tables.PASSENGERS}.PassengerID FROM ${Tables.PASSENGERS}
                         WHERE UserID = ${userId}`;
         const passengerId = await this.#dbContext.runSelectQuery(query);
         return passengerId;

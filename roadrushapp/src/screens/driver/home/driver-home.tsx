@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {Text, View, StyleSheet} from 'react-native';
-import {BottomNavigationButtons} from '../../../components/bottom-navigation-bar/bottom-navigation-bar';
 import RRButton from '../../../components/button/button';
 import AuthorizedLayout from '../../../layouts/authorized-layout';
 import ApiService from '../../../services/api-service';
@@ -12,32 +11,20 @@ export function DriverHome({navigation, route}): React.JSX.Element {
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
 
   const [requests, setRequests] = useState([]);
-  const [userId, setUserId] = useState("");
+  const [userId, setUserId] = useState('');
 
   useEffect(() => {
-    //let userDetails = JSON.parse(user);
     HotPocketClientService.getInstance().then(ins => {
       console.log(ins);
     });
-    console.log("User#### ", user.user.UserID)
     setUserId(user.user.UserID);
-    console.log("##############", userId)
-    apiService.getRideRequests(user.user.UserID)
-    .then((response: any) =>{
-      console.log("Res driver home: ", response);
+    apiService.getRideRequests(user.user.UserID).then((response: any) => {
       setRequests(response);
-    })
-   
-
+    });
   }, []);
 
   function acceptRide(rideDetails, userId) {
     apiService.acceptRide(rideDetails, userId);
-  }
-
-  async function onBottomNavigationTapped(tab: BottomNavigationButtons) {
-    console.log(tab);
-    return true;
   }
 
   return (
@@ -62,7 +49,9 @@ export function DriverHome({navigation, route}): React.JSX.Element {
                 <Text style={styles.itemText}>
                   Distance: {item.Distance} km{' '}
                 </Text>
-                <Text style={styles.itemTextRightAlign}>Price: {item.Price} Evrs</Text>
+                <Text style={styles.itemTextRightAlign}>
+                  Price: {item.Price} Evrs
+                </Text>
               </View>
               <RRButton
                 text="Accept"
@@ -73,8 +62,7 @@ export function DriverHome({navigation, route}): React.JSX.Element {
               />
             </View>
           </View>
-        ))
-        }
+        ))}
       </View>
     </AuthorizedLayout>
   );
@@ -103,15 +91,14 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 16,
-    
   },
   itemTextRightAlign: {
     fontSize: 16,
-    textAlign:'right'
+    textAlign: 'right',
   },
-  rideData:{
+  rideData: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
-  }
+  },
 });

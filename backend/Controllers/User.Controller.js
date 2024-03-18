@@ -16,6 +16,8 @@ export class UserController {
             switch (this.#message.Action) {
                 case 'GetRideHistory':
                     return await this.#service.getRideHistory( this.#message.Data);
+                case 'GetUserOngoingRides':
+                    return await this.#service.getUserOngoingRides( this.#message.Data);
                 default:
                     await this.#activityLogger.writeLog(LogTypes.ERROR, LogMessages.ERROR.ACTION_NOT_FOUND,LogMessages.ERROR.ACTION_NOT_FOUND);
                     break;
