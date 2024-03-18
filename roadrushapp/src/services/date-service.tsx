@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { format, parseISO } from 'date-fns';
 
 export default class DateService {
     private static instance: DateService;
@@ -17,5 +17,12 @@ export default class DateService {
      */
     public getThemedDate(date: any) {
         return format(new Date(date), 'dd MMM yyyy');
+    }
+
+    public getThemedTimeStamp(date: any) {
+        const parsedTimeStamp = parseISO(date);
+        const formattedDate = format(parsedTimeStamp, 'dd MMM yyyy');
+        const formattedTime = format(parsedTimeStamp, 'h:mm a');
+        return `${formattedDate} ${formattedTime}`;
     }
 }

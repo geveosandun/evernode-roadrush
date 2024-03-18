@@ -32,12 +32,12 @@ export class UserService {
                 query = `SELECT ${Tables.RIDES}.*
                     FROM ${Tables.RIDES}
                     JOIN ${Tables.DRIVERS} ON ${Tables.RIDES}.DriverID = ${Tables.DRIVERS}.DriverID
-                    WHERE ${Tables.DRIVERS}.UserID = ? AND ${Tables.RIDES}.RideStatus == "COMPLETED`;
+                    WHERE ${Tables.DRIVERS}.UserID = ? AND (${Tables.RIDES}.RideStatus == "COMPLETED" OR ${Tables.RIDES}.RideStatus == "FINISHED")`;
             } else if (loggedInAs == "passenger") {
                 query = `SELECT ${Tables.RIDES}.*
                     FROM ${Tables.RIDES}
                     JOIN ${Tables.PASSENGERS} ON ${Tables.RIDES}.PassengerID = ${Tables.PASSENGERS}.PassengerID
-                    WHERE ${Tables.PASSENGERS}.UserID = ? AND ${Tables.RIDES}.RideStatus == "COMPLETED`;
+                    WHERE ${Tables.PASSENGERS}.UserID = ? AND (${Tables.RIDES}.RideStatus == "COMPLETED" ${Tables.RIDES}.RideStatus == "FINISHED")`;
             }
             const rows = await this.#dbContext.runSelectQuery(query, [userId]);
             console.log("Ride history:  ", rows)
@@ -71,7 +71,7 @@ export class UserService {
                 query = `SELECT ${Tables.RIDEREQUESTS}.*
                     FROM ${Tables.RIDEREQUESTS}
                     JOIN ${Tables.DRIVERS} ON ${Tables.RIDEREQUESTS}.DriverID = ${Tables.DRIVERS}.DriverID
-                    WHERE ${Tables.DRIVERS}.UserID = ? AND ${Tables.RIDEREQUESTS}.RideStatus == "COMMITTED"
+                    WHERE ${Tables.DRIVERS}.UserID = ? AND ${Tables.RIDEREQUESTS}.RequestStatus == "ACCEPTED"
                     ORDER BY ${Tables.RIDEREQUESTS}.RideDateTime DESC`;
             } else if (loggedInAs == "passenger") {
                 query = `SELECT ${Tables.RIDEREQUESTS}.*

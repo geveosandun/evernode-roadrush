@@ -42,11 +42,9 @@ export default function RideViewDriver({navigation, route}): React.JSX.Element {
           destination={destination}></LiveMap>
       </View>
       <View style={styles.detailsContainer}>
-        {passengerData.item.CreatedBy != null && (
           <Text style={{marginTop: 20}}>
             Passanger : {passengerData.item.CreatedBy}{' '}
           </Text>
-        )}
         <Text>Pick Up : {passengerData.item.PickUpAddress} </Text>
         <Text>Drop Down : {passengerData.item.DestinationAddress} </Text>
         <Text>Ride Distance : {passengerData.item.Distance} km</Text>

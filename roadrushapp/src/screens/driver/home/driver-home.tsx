@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 5,
     padding: 10,
-    backgroundColor: '#e6e8e7',
+    backgroundColor: '#f2f5f4',
     borderRadius: 5,
   },
   textContainer: {
