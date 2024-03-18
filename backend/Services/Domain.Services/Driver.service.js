@@ -61,7 +61,6 @@ export class DriverService {
     async getRideRequests(driverUserId) {
         let resObj = {};
         let dbp = 0;
-        console.log( "Driver userId: ", driverUserId);
         try {
             this.#dbContext.open();
             dbp++;
@@ -94,14 +93,11 @@ export class DriverService {
     async acceptRide(rideDetails) {
         let resObj = {};
         let dbp = 0;
-        console.log("DATA ",rideDetails);
         try {
             this.#dbContext.open()
             const driverId = await this.getDriverIDByUserId(rideDetails.driverUserID);
-            console.log("DID####", driverId)
             dbp++;
             const updatedRows = await this.#dbContext.updateValue(Tables.RIDEREQUESTS, { DriverID: driverId , RequestStatus: "ACCEPTED",}, {RideRequestID: rideDetails.rideRequestId});
-            console.log("RideRequest record updated", updatedRows);
             dbp++
             const inputData = {
                 DriverID: driverId,
@@ -114,9 +110,7 @@ export class DriverService {
 				RideDateTime: rideDetails.rideDateTime,
 				FareAmount: rideDetails.rideFareAmount,
 				CreatedDate: SharedService.getCurrentTimestamp(),
-				//CreatedBy: rideDetails.driverID,
 				UpdatedDate: SharedService.getCurrentTimestamp(),
-				//UpdatedBy: rideDetails.driverID,
             }
             const rowId = await this.#dbContext.insertValue(Tables.RIDES, inputData);
             console.log("Ride record inserted ", rowId);
@@ -143,7 +137,6 @@ export class DriverService {
     async getDriverIDByUserId(userId){
         let resObj = {};
         let dbp = 0;
-        console.log("User Id ", userId);
         try{
             let query = `
             SELECT ${Tables.DRIVERS}.DriverID
@@ -153,7 +146,6 @@ export class DriverService {
         dbp++;
         // Execute the query with driverUserId as parameter
             const rows = await this.#dbContext.runSelectQuery(query, [userId]);
-            console.log("Row####", rows)
             return rows[0].DriverID;
 
         } catch (error) {
@@ -171,7 +163,6 @@ export class DriverService {
     async getPassengerNameById(passengerId){
         let resObj = {};
         let dbp = 0;
-        console.log("Driver Id ",driverId);
         try{
             let query = `
             SELECT ${Tables.USERS}.UserName
@@ -199,16 +190,14 @@ export class DriverService {
     async getDriverXRPAddress() {
         let resObj = {};
         let dbp = 0;
-        console.log('msgs', this.#message);
 
         try {
             this.#dbContext.open();
             let query = `SELECT ${Tables.USERS}.XRPAddress FROM ${Tables.USERS}, ${Tables.DRIVERS} WHERE ${Tables.USERS}.UserID = ${Tables.DRIVERS}.UserID AND ${Tables.DRIVERS}.DriverID = ?`;
             let params = this.#message.Data.DriverID;
             const rows = await this.#dbContext.runSelectQuery(query, [params]);
-            console.log('upt', rows);
             resObj.success = rows[0];
-            console.log('res', resObj);
+            console.log('Response', resObj);
             return resObj;
         } catch (error) {
             console.log('Error in retrieving driver XRP address', error);
@@ -232,14 +221,12 @@ export class DriverService {
 
             const updatedRideRequest = await this.#dbContext.updateValue(Tables.RIDEREQUESTS, {RequestStatus: "FINISHED"}, {RideRequestID: this.#message.Data.RideRequestID});
             dbp++;
-            console.log(updatedRideRequest);
 
             const updatedRides = await this.#dbContext.updateValue(Tables.RIDES, {RideStatus: "FINISHED"}, {RideRequestID: this.#message.Data.RideRequestID});
             dbp++;
-            console.log(updatedRides);
 
             if (updatedRideRequest.changes > 0) {
-                console.log('successfully added transaction ', updatedRideRequest.changes);
+                console.log('successfully ended trip ', updatedRideRequest.changes);
                 resObj.success = "Trip Ended Successfully";
             }
             

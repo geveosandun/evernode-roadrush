@@ -44,7 +44,7 @@ export class TransactionService {
             return resObj;
 
         } catch (error) {
-            console.log('error in try catch', error);
+            console.log('error occured in add transaction', error);
             throw new ErrorResponseDto(
                 this.#message, dbp,
                 "Error occured add transaction",
@@ -78,14 +78,14 @@ export class TransactionService {
                 Received: received
             }
 
-            console.log('res', resData);
+            console.log('Response', resData);
 
             resObj.success = resData;
             
             return resObj;
 
         } catch (error) {
-            console.log('error in try catch', error);
+            console.log('error occured in getTransaction', error);
             throw new ErrorResponseDto(
                 this.#message, dbp,
                 "Error occured in get transactions",

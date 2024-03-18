@@ -28,16 +28,12 @@ export class PassengerService {
         try {
             this.#dbContext.open();
             const data = this.#message.Data;
-            console.log("DATA ", data);
             let userId = data.passengerUserId;
-            console.log("***", userId)
             let query = `SELECT PassengerID FROM ${Tables.PASSENGERS}
                         WHERE UserID = ?`;
             const dataRow = await this.#dbContext.runSelectQuery(query,[userId]);
-            console.log("ID ",dataRow[0].PassengerID);
             dbp++;
             const inputData = {
-               // DriverID: data.driverId,
 				PassengerID: dataRow[0].PassengerID,
 				PickupLocation: data.pickupLocation,
 				Destination: data.destination,
@@ -55,7 +51,6 @@ export class PassengerService {
             dbp++
 
             const rowId = await this.#dbContext.insertValue(Tables.RIDEREQUESTS, inputData);
-            console.log("rowId****", rowId)
             dbp++
 
             if (rowId.lastId > 0) {
@@ -64,7 +59,7 @@ export class PassengerService {
 
             return resObj;
         } catch (error) {
-            console.log('error in try catch', error);
+            console.log('error in bookRide function', error);
             throw new ErrorResponseDto(
                 this.#message, dbp,
                 "Error occured in ride booking",
@@ -98,17 +93,14 @@ async gerCurrentRideDetails(){
         let queryRideRequests = `SELECT ${Tables.RIDEREQUESTS}.RequestStatus, ${Tables.RIDEREQUESTS}.DriverID FROM ${Tables.RIDEREQUESTS}
                     WHERE RideRequestID = ?`;
         const rideRequestdataRow = await this.#dbContext.runSelectQuery(queryRideRequests, [requestId]);
-        console.log("Ride row****",rideRequestdataRow)
         dbp++;
 
         const driverId = rideRequestdataRow[0].DriverID;
-        console.log("Driver Id****",driverId)
         if (driverId != null) {
             const queryDriver = `SELECT ${Tables.DRIVERS}.*
                                     FROM ${Tables.DRIVERS}
                                     WHERE ${Tables.DRIVERS}.DriverID = ?`
             const driverRow = await this.#dbContext.runSelectQuery(queryDriver, [driverId]);
-            console.log("Driver row****", driverRow)
             dbp++;
             const driversDetails = driverRow.map(row => new DriverDto(
                 row.DriverID,

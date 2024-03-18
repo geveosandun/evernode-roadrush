@@ -35,21 +35,6 @@ export class AuthenticationService {
 
             if (foundUser.length > 0) {
                 dbp++;
-                // const hash = crypto.createHash('SHA256');
-                // hash.update(this.#message.Data.Password);
-                // const hashedValue = hash.digest('hex');
-                // dbp++;
-
-                // console.log('user record', foundUser[0]);
-                // console.log('hash Password: ', hashedValue);
-
-                // if (hashedValue === foundUser[0].Password) {
-                //     console.log('success');
-                //     resObj.success = 'Login Success';
-                // } else {
-                //     console.log('fail');
-                //     resObj.error = new ErrorResponseDto(this.#message, dbp, "Password not Valid", new Error("Error occured in user login"));
-                // }
                 const resData = {
                     hasAccount: true,
                     user: {
@@ -61,17 +46,16 @@ export class AuthenticationService {
                 }
                 resObj.success = resData;
             } else {
-                // resObj.error = new ErrorResponseDto(this.#message, dbp, "User not Valid", new Error("Error occured in user login"));
                 const resData= {
                     hasAccount: false
                 };
                 resObj.success = resData;
             }
 
-            console.log('return', resObj)
+            console.log('Reponse', resObj)
             return resObj;
         } catch (error) {
-            console.log('error in try catch', error);
+            console.log('Encountered error in login', error);
             throw new ErrorResponseDto(
                 this.#message, dbp,
                 "Error occured in user login",

@@ -24,7 +24,6 @@ export class UserService {
         let dbp = 0;
         let query = ``;
         try {
-            console.log("DATA", data)
             this.#dbContext.open();
             const userId = data.userId;
             const loggedInAs = data.loggedInAs;
