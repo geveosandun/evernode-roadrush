@@ -9,6 +9,7 @@ import AppSettings from '../../helpers/app-settings';
 import AuthService from '../../services/auth-service';
 import React, {useState} from 'react';
 import RRButton from '../../components/button/button';
+import DeviceHelper from '../../helpers/device-helper';
 
 
 export function Login({navigation}): React.JSX.Element {
@@ -53,9 +54,15 @@ export function Login({navigation}): React.JSX.Element {
 
   const xummLogin = async () => {
     setShowWaitIndicator(true);
-    Linking.openURL(
-      `https://oauth2.xumm.app/auth?client_id=${AppSettings.xummApiKey}&redirect_uri=roadrush://login&scope=token&response_type=token&response_mode=query`,
-    );
+
+    if (!(await AuthService.checkAuthentication())) {
+      Linking.openURL(
+        `https://oauth2.xumm.app/auth?client_id=${AppSettings.xummApiKey}&redirect_uri=roadrush://login&scope=token&response_type=token&response_mode=query`,
+      );
+    } else {
+      setShowWaitIndicator(false);
+      navigation.navigate('usermodeselection');
+    }
   };
 
   return (
@@ -68,12 +75,12 @@ export function Login({navigation}): React.JSX.Element {
       <View style={{marginBottom: 75}} />
 
       <RRButton
-        onTap={() => xummLogin() /*submitLogin()*/}
+        onTap={() => xummLogin()}
         text="Login with Xaman"
         showRightArrow={true}
       />
       <View style={styles.geveoLogo} />
-      <Text style={styles.versionText}>Version 0.0.1</Text>
+      <Text style={styles.versionText}>Version {DeviceHelper.appVersion}</Text>
     </AnonymousLayout>
   );
 }

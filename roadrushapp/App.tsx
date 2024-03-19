@@ -3,7 +3,7 @@ import {StyleSheet} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {PassengerHome} from './src/screens/passenger/home/passenger-home';
-import {About} from './src/screens/about/about';
+import {Profile} from './src/screens/profile/profile';
 import {Login} from './src/screens/login/login';
 import SplashScreen from './src/screens/splash/splash';
 import UserModeSelection from './src/screens/user-mode-selection/user-mode-selection';
@@ -54,37 +54,31 @@ function App(): React.JSX.Element {
           component={DriverHome}
           options={{title: 'Driver Home'}}
         />
-
         <Stack.Screen
           name="rideviewdriver"
           component={RideViewDriver}
           options={{title: 'Ride  View Driver'}}
         />
-
         <Stack.Screen
           name="ridebookingpassenger"
           component={RideBookingPassenger}
           options={{title: 'Ride Booking'}}
         />
-
         <Stack.Screen
           name="activeridedetailspassenger"
           component={ActiveRideDetailsPassenger}
           options={{title: 'Ride Details'}}
         />
-
         <Stack.Screen
           name="wallet"
           component={Wallet}
           options={{title: 'Wallet'}}
         />
-
         <Stack.Screen
-          name="about"
-          component={About}
-          options={{title: 'About'}}
+          name="profile"
+          component={Profile}
+          options={{title: 'Profile'}}
         />
-        
         <Stack.Screen
           name="trips"
           component={Trips}

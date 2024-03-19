@@ -34,7 +34,6 @@ export default function AuthorizedLayoutWithoutScroll({
         barStyle={'default'}
       />
       <Toast />
-
       <View>
         <LinearGradient
           colors={[
@@ -44,20 +43,13 @@ export default function AuthorizedLayoutWithoutScroll({
           style={styles.screenBackground}>
           <HeaderBar title={title} showBackArrow={false} navigation />
           <WaitIndicator show={showWaitIndicator} />
-          <View
-            style={styles.scrollView}
-           // keyboardShouldPersistTaps={'handled'}
-            >
-            {children}
-          </View>
+          <View style={styles.scrollView}>{children}</View>
 
           {showBottomNavigation && (
-            <View style={{height: 80}}>
             <RRBottomNavigationBar
               selectedTab={selectedBottomNavigationTab}
               navigation={navigation}
             />
-            </View>
           )}
         </LinearGradient>
       </View>

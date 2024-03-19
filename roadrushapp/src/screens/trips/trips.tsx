@@ -1,10 +1,8 @@
-import {StyleSheet, View, Text, Image, Pressable} from 'react-native';
+import {StyleSheet, View, Text, Pressable} from 'react-native';
 import {BottomNavigationButtons} from '../../components/bottom-navigation-bar/bottom-navigation-bar';
 import AuthorizedLayout from '../../layouts/authorized-layout';
 import {useEffect, useState} from 'react';
 import ApiService from '../../services/api-service';
-import HotPocketClientService from '../../services/hp-client-service';
-import { compareAsc, format } from "date-fns";
 import DateService from '../../services/date-service';
 
 export default function Trips({navigation, route}) {
@@ -18,13 +16,7 @@ export default function Trips({navigation, route}) {
   const user = data.user;
   const loggedInAs = data.loggedInAs;
 
-
   useEffect(() => {
-    
-    // HotPocketClientService.getInstance().then(ins => {
-    //   console.log(ins);
-    // });
-
     apiService.getRideHistory(data.userId).then((response: any) => {
       console.log('Res RideHistory: ', response);
       setRideHIstory(response);
@@ -79,16 +71,16 @@ export default function Trips({navigation, route}) {
       {rideHistory &&
         rideHistory.map((item, index) => (
           <View key={index} style={styles.historyItem}>
-             <Text style={styles.historyData}>             
-               Date: {dateService.getThemedTimeStamp(item.UpdatedDate)}
+            <Text style={styles.historyData}>
+              Date: {dateService.getThemedTimeStamp(item.UpdatedDate)}
             </Text>
             <Text style={styles.historyData}>
               Distance : {item.Distance}km Price: {item.FareAmount} EVR
             </Text>
             <Text style={styles.historyData}>
-               Status: {item.RideStatus == "FINISHED" ? "Payment Pending": "Completed"}
+              Status:{' '}
+              {item.RideStatus == 'FINISHED' ? 'Payment Pending' : 'Completed'}
             </Text>
-           
           </View>
         ))}
         </View>
@@ -103,8 +95,8 @@ const styles = StyleSheet.create({
     margin: 10,
     padding: 10,
     backgroundColor: '#d5eda6',
-    borderRadius:15,
-    elevation: 6
+    borderRadius: 15,
+    elevation: 6,
   },
   image: {
     width: 75,
@@ -117,10 +109,10 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   historyItem: {
-    borderRadius:10,
+    borderRadius: 10,
     elevation: 6,
     margin: 10,
-    padding:10,
+    padding: 10,
     backgroundColor: '#f2f5f4',
   },
   button: {
@@ -128,20 +120,20 @@ const styles = StyleSheet.create({
     bottom: 1,
     right: 10,
     backgroundColor: 'green',
+    marginTop: 5,
     padding: 10,
-    borderRadius: 10,
-    marginTop:15,
+    borderRadius: 30,
     alignSelf: 'center',
-    width:100,
-    alignItems: 'center'
+    alignItems: 'center',
+    height: 40,
   },
   buttonText: {
     color: 'white',
     fontWeight: 'bold',
   },
-  historyText:{
-    margin:10,
-    fontSize:20,
-    fontWeight:'bold'
-  }
+  historyText: {
+    margin: 10,
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
 });
