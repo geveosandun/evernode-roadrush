@@ -19,6 +19,7 @@ export function DriverHome({navigation, route}): React.JSX.Element {
     });
     setUserId(user.user.UserID);
     apiService.getRideRequests(user.user.UserID).then((response: any) => {
+      console.log("REQ",response)
       setRequests(response);
     });
   }, []);
@@ -34,12 +35,14 @@ export function DriverHome({navigation, route}): React.JSX.Element {
       showBottomNavigation={true}
       title="Requests">
       <View style={styles.mainContainer}>
-        {requests.map(item => (
+        {requests.map(item => {
+          console.log("ITEM",item);
+          return(  
           <View key={parseInt(item.RideRequestID)} style={styles.item}>
             <View style={styles.textContainer}>
               <View style={styles.rideData}>
                 <Text style={styles.itemText}>
-                  Pick up: {item.PickUpAddress}{' '}
+                  Pick up: {item.PickUpAddress}
                 </Text>
                 <Text style={styles.itemTextRightAlign}>
                   Destination: {item.DestinationAddress}
@@ -50,7 +53,7 @@ export function DriverHome({navigation, route}): React.JSX.Element {
                   Distance: {item.Distance} km{' '}
                 </Text>
                 <Text style={styles.itemTextRightAlign}>
-                  Price: {item.Price} Evrs
+                  Price: {item.Price} EVR
                 </Text>
               </View>
               <RRButton
@@ -62,7 +65,7 @@ export function DriverHome({navigation, route}): React.JSX.Element {
               />
             </View>
           </View>
-        ))}
+        )})}
       </View>
     </AuthorizedLayout>
   );
@@ -91,13 +94,14 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 16,
+    color:'black'
   },
   itemTextRightAlign: {
     fontSize: 16,
+    color:'black',
     textAlign: 'right',
   },
   rideData: {
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },

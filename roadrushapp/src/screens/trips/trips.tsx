@@ -39,7 +39,7 @@ export default function Trips({navigation, route}) {
       title="Ride History">
         {ongoingTrip.PickUpAddress != null &&
       <View style={styles.topContainer}>
-        <Text style={{fontSize: 18, marginRight: 10, color:'black'}}>
+        <Text style={{fontSize: 17, marginRight: 10, color:'black'}}>
           Ongoing ride from {ongoingTrip.PickUpAddress} to{' '}
           {ongoingTrip.DestinationAddress}{' '}
         </Text>
@@ -73,6 +73,7 @@ export default function Trips({navigation, route}) {
         </View>
       </View>
       }
+      <View style={{flex:0.8}}>
       <Text style={styles.historyText}>History</Text>
       {rideHistory &&
         rideHistory.map((item, index) => (
@@ -81,7 +82,7 @@ export default function Trips({navigation, route}) {
                Date: {dateService.getThemedTimeStamp(item.UpdatedDate)}
             </Text>
             <Text style={styles.historyData}>
-              Distance : {item.Distance}km Price: {item.FareAmount} Evrs 
+              Distance : {item.Distance}km Price: {item.FareAmount} EVR
             </Text>
             <Text style={styles.historyData}>
                Status: {item.RideStatus == "FINISHED" ? "Payment Pending": "Completed"}
@@ -89,13 +90,14 @@ export default function Trips({navigation, route}) {
            
           </View>
         ))}
+        </View>
     </AuthorizedLayout>
   );
 }
 
 const styles = StyleSheet.create({
   topContainer: {
-    flex: 0.1,
+    flex: 0.2,
     //flexDirection: 'row',
     margin: 10,
     padding: 10,
@@ -122,7 +124,7 @@ const styles = StyleSheet.create({
   },
   button: {
    //position: 'absolute',
-    bottom: 10,
+    bottom: 1,
     right: 10,
     backgroundColor: 'green',
     padding: 10,
