@@ -25,6 +25,7 @@ export default function RideBookingPassenger({
   const apiService = ApiService.getInstance();
   const {origin, destination, originAddress, destinationAddress} = route.params;
   var distanceinKm = getPreciseDistance(origin, destination) / 1000;
+  var estimatedTime = Math.round((distanceinKm/40)*60);
   var priceForTheRideInEvrs = AppSettings.pricePerKm * distanceinKm;
 
   async function BookRide() {
@@ -63,6 +64,7 @@ export default function RideBookingPassenger({
             requestId: response,
           });
         });
+
     }
   }
 
@@ -100,15 +102,17 @@ export default function RideBookingPassenger({
             <FontAwesomeIcon icon={faCarSide} size={120} />
           </View>
           <View style={styles.rideFeeContainer}>
-            <Text>{distanceinKm} km</Text>
+            <Text style={{fontSize:16}}>{distanceinKm} km</Text>
             <Text
               style={{
                 marginLeft: 50,
                 color: AppTheme.specification.colors.red,
+                fontSize:16
               }}>
-              {priceForTheRideInEvrs} Evrs
+              {priceForTheRideInEvrs} EVR 
             </Text>
           </View>
+          <Text style={{fontSize:14, marginBottom:10}}>Estimated time: {estimatedTime} Mins </Text>
           <View style={styles.driverDetailsContainer}>
             <TouchableOpacity
               style={styles.bookBtn}
@@ -178,11 +182,12 @@ const styles = StyleSheet.create({
   },
   carIconContainer: {
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 10,
   },
   rideFeeContainer: {
     flexDirection: 'row',
     marginBottom: 10,
+    fontSize: 20
   },
   driverDetailsContainer: {
     flexDirection: 'row',

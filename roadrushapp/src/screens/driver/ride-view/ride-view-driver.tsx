@@ -54,7 +54,7 @@ export default function RideViewDriver({navigation, route}): React.JSX.Element {
         style={{
           flexDirection: 'row',
           alignItems: 'flex-end',
-          marginBottom: 20,
+          marginBottom: 75,
         }}>
         <RRButton
           showLeftArrow={false}

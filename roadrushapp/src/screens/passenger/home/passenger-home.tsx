@@ -12,7 +12,7 @@ export function PassengerHome({navigation, route}): React.JSX.Element {
     HotPocketClientService.getInstance().then(ins => {
       console.log(ins);
     });
-  });
+  },[]);
 
   async function onBottomNavigationTapped(tab: BottomNavigationButtons) {
     console.log(tab);

@@ -27,14 +27,7 @@ export default function ActiveRideDetailsPassenger({
   const data = route.params;
   const apiService = ApiService.getInstance();
   const [status, setStatus] = useState('REQUEST PROCESSING');
-  const [driverDetails, setDriverDetails] = useState({
-    DriverID: '',
-    UserID: '',
-    DriverLicenseNumber: '',
-    VehicleMake: '',
-    VehicleModel: '',
-    VehiclePlateNumber: '',
-  });
+  const [driverDetails, setDriverDetails] = useState<any>();
   const [payNowEnabled, setPayNowEnabled] = useState(false);
 
   useEffect(() => {
@@ -43,14 +36,16 @@ export default function ActiveRideDetailsPassenger({
       // Put your code here
       console.log('This runs every 5 seconds', data.requestId);
       apiService.gerCurrentRideDetails(data.requestId).then((res: any) => {
+        setDriverDetails(res.driverDetails[0]);
         if (res.status === 'FINISHED') {
           setStatus(res.status);
           setPayNowEnabled(true);
-          setDriverDetails(res.driverDetails[0]);
+        //  setDriverDetails(res.driverDetails[0]);
           clearInterval(intervalId);
         } else if (res.status === 'ACCEPTED') {
           setStatus(res.status);
-          setDriverDetails(res.driverDetails[0]);
+          console.log("RES**",res)
+         // setDriverDetails(res.driverDetails[0]);
         } else if (res.status === 'PENDING') {
           setStatus(res.status);
         }
@@ -114,7 +109,7 @@ export default function ActiveRideDetailsPassenger({
           </Text>
           <Text
             style={{color: AppTheme.specification.colors.red, marginLeft: 170}}>
-            {data.priceForTheRideInEvrs} Evrs
+            {data.priceForTheRideInEvrs} EVR
           </Text>
         </View>
         {payNowEnabled && (
@@ -132,16 +127,17 @@ export default function ActiveRideDetailsPassenger({
           origin={data.origin}
           destination={data.destination}></LiveMap>
       </View>
-      <View style={styles.driverDetails}>
-        <Text style={{marginLeft: 5, color: 'white'}}> {status}</Text>
-        {driverDetails && (
-          <Text>
-            Driver: {driverDetails.DriverID} Vehicle:{' '}
-            {driverDetails.VehicleMake} {driverDetails.VehicleModel} Plate
-            number: {driverDetails.VehiclePlateNumber}
+      <View style={styles.status}>
+        <Text style={{marginLeft: 5, color: 'white', alignSelf:'center'}}> {status}</Text>
+        </View>
+        <View style={styles.driverDetails}>
+        {driverDetails  &&
+          <Text style={{color:'white'}}>
+           Vehicle: {driverDetails.VehicleMake} {driverDetails.VehicleModel} 
+            - {driverDetails.VehiclePlateNumber} 
           </Text>
-        )}
-      </View>
+        }
+        </View>
     </AuthorizedLayoutWithoutScroll>
   );
 }
@@ -157,10 +153,21 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
   },
   driverDetails: {
+    justifyContent:'center',
     alignItems: 'center',
     flex: 0.1,
     flexDirection: 'row',
     backgroundColor: 'black',
+    marginBottom:75,
+    
+  },
+  status: {
+    justifyContent:'center',
+    alignItems: 'center',
+    flex: 0.1,
+    flexDirection: 'row',
+    backgroundColor: 'black',
+    padding:2
   },
   heading: {
     flexDirection: 'row',

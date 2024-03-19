@@ -15,18 +15,7 @@ export default function GoogleMapSearch({navigation}): React.JSX.Element {
   const [destination, setDestination] = useState<{latitude: number; longitude: number} | undefined>();
   const [originAddress, setOriginAddress] = useState('');
   const [destinationAddress, setDestinationAddress] = useState('');
-  const [markerList, setMarkerList] = useState([
-    {
-      latitude: 6.836611,
-      longitude: 81.003073,
-      title: 'I am here',
-    },
-    {
-      latitude: 6.841405,
-      longitude: 81.004405,
-      title: 'I am here',
-    },
-  ]);
+ 
 
   async function moveToLocation({latitude, longitude}) {
     mapRef.current.animateToRegion(
