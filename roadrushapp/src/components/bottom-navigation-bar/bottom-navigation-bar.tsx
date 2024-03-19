@@ -1,4 +1,4 @@
-import {faHome, faTaxi, faUser} from '@fortawesome/free-solid-svg-icons';
+import {faHome, faListUl, faTaxi, faUser} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {StyleSheet, TouchableOpacity, View} from 'react-native';
 import AppTheme from '../../helpers/theme';
@@ -10,7 +10,8 @@ const screenWidth = Dimensions.get('window').width;
 export enum BottomNavigationButtons {
   Home,
   Trips,
-  Account,
+  Profile,
+  Wallet,
 }
 
 export default function RRBottomNavigationBar({
@@ -18,9 +19,7 @@ export default function RRBottomNavigationBar({
   selectedTab = BottomNavigationButtons.Home,
   onTapCallback = null,
 }): React.JSX.Element {
-  
   async function onTap(tappedTab: BottomNavigationButtons) {
-   
     let allowNavigation = true;
 
     if (onTapCallback) {
@@ -33,10 +32,19 @@ export default function RRBottomNavigationBar({
           let activeUser = await AppSecureStorageService.getItem('user');
           let activeUserId = JSON.parse(activeUser).UserID;
           let loggedInAs = await AppSecureStorageService.getItem('loggedInAs');
-          navigation.navigate('trips',{userId:activeUserId,ongoingTrips:{}, user:activeUser,  loggedInAs:loggedInAs});
+          navigation.navigate('trips', {
+            userId: activeUserId,
+            ongoingTrips: {},
+            user: activeUser,
+            loggedInAs: loggedInAs,
+          });
           break;
 
-        case BottomNavigationButtons.Account:
+        case BottomNavigationButtons.Profile:
+          navigation.navigate('profile');
+          break;
+
+        case BottomNavigationButtons.Wallet:
           navigation.navigate('wallet');
           break;
 
@@ -84,14 +92,29 @@ export default function RRBottomNavigationBar({
         <View
           style={[
             styles.actionButton,
-            selectedTab == BottomNavigationButtons.Account
+            selectedTab == BottomNavigationButtons.Wallet
               ? styles.activeActionButton
               : styles.inactiveActionButton,
           ]}>
           <TouchableOpacity
             activeOpacity={0.7}
             onPress={async () => {
-              await onTap(BottomNavigationButtons.Account);
+              await onTap(BottomNavigationButtons.Wallet);
+            }}>
+            <FontAwesomeIcon icon={faListUl} size={25} />
+          </TouchableOpacity>
+        </View>
+        <View
+          style={[
+            styles.actionButton,
+            selectedTab == BottomNavigationButtons.Profile
+              ? styles.activeActionButton
+              : styles.inactiveActionButton,
+          ]}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={async () => {
+              await onTap(BottomNavigationButtons.Profile);
             }}>
             <FontAwesomeIcon icon={faUser} size={25} />
           </TouchableOpacity>
