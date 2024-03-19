@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View, Image, BackHandler} from 'react-native';
+import DeviceHelper from '../../helpers/device-helper';
 import AnonymousLayout from '../../layouts/anonymous-layout';
 import AuthService from '../../services/auth-service';
 import HotPocketClientService from '../../services/hp-client-service';
@@ -51,7 +52,9 @@ export default function SplashScreen({navigation}) {
         />
         <View style={styles.geveoLogo} />
         <View style={{alignSelf: 'center'}}>
-          <Text style={styles.versionText}>Version 0.0.1</Text>
+          <Text style={styles.versionText}>
+            Version {DeviceHelper.appVersion}
+          </Text>
         </View>
       </AnonymousLayout>
     </>

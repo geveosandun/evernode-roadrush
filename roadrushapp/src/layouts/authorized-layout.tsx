@@ -34,7 +34,6 @@ export default function AuthorizedLayout({
         barStyle={'default'}
       />
       <Toast />
-
       <View>
         <LinearGradient
           colors={[
@@ -51,12 +50,10 @@ export default function AuthorizedLayout({
           </ScrollView>
 
           {showBottomNavigation && (
-            <View style={{height: 80}}>
             <RRBottomNavigationBar
               selectedTab={selectedBottomNavigationTab}
               navigation={navigation}
             />
-            </View>
           )}
         </LinearGradient>
       </View>
