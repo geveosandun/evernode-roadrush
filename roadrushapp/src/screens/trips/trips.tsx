@@ -14,6 +14,7 @@ export default function Trips({navigation, route}) {
   const data = route.params;
   const [rideHistory, setRideHIstory] = useState([]);
   const ongoingTrip = data.ongoingTrips[0]|| {};
+  console.log("Ongoing trips",ongoingTrip)
   const user = data.user;
   const loggedInAs = data.loggedInAs;
 
@@ -55,7 +56,7 @@ export default function Trips({navigation, route}) {
                 destinationAddress: ongoingTrip.DestinationAddress,
                 distanceinKm: ongoingTrip.Distance,
                 priceForTheRideInEvrs: ongoingTrip.Price,
-                rideRequestID: ongoingTrip.RideRequestID,
+                requestId: ongoingTrip.RideRequestID,
               });
             } else if (loggedInAs == 'driver') {
               navigation.navigate('rideviewdriver', {item:{
