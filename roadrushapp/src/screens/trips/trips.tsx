@@ -11,7 +11,8 @@ export default function Trips({navigation, route}) {
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
   const data = route.params;
   const [rideHistory, setRideHIstory] = useState([]);
-  const ongoingTrip = data.ongoingTrips[0] || {};
+  const ongoingTrip = data.ongoingTrips[0]|| {};
+  console.log("Ongoing trips",ongoingTrip)
   const user = data.user;
   const loggedInAs = data.loggedInAs;
 
@@ -29,42 +30,43 @@ export default function Trips({navigation, route}) {
       showBottomNavigation={true}
       selectedBottomNavigationTab={BottomNavigationButtons.Trips}
       title="Ride History">
-      {ongoingTrip.PickUpAddress != null && (
-        <View style={styles.topContainer}>
-          <Text style={{fontSize: 18, marginRight: 10, color: 'black'}}>
-            Ongoing ride from {ongoingTrip.PickUpAddress} to{' '}
-            {ongoingTrip.DestinationAddress}{' '}
-          </Text>
-          <Pressable
-            style={styles.button}
-            onPress={() => {
-              if (loggedInAs == 'passenger') {
-                navigation.navigate('activeridedetailspassenger', {
-                  origin: JSON.parse(ongoingTrip.PickupLocation),
-                  destination: JSON.parse(ongoingTrip.Destination),
-                  originAddress: ongoingTrip.PickUpAddress,
-                  destinationAddress: ongoingTrip.DestinationAddress,
-                  distanceinKm: ongoingTrip.Distance,
-                  priceForTheRideInEvrs: ongoingTrip.Price,
-                  rideRequestID: ongoingTrip.RideRequestID,
-                });
-              } else if (loggedInAs == 'driver') {
-                navigation.navigate('rideviewdriver', {
-                  item: {
-                    PickUpAddress: ongoingTrip.PickUpAddress,
-                    DestinationAddress: ongoingTrip.DestinationAddress,
-                    Distance: ongoingTrip.Distance,
-                    Price: ongoingTrip.Price,
-                    RideRequestID: ongoingTrip.RideRequestID,
-                    CreatedBy: ongoingTrip.CreatedBy,
-                  },
-                });
-              }
-            }}>
-            <Text style={styles.buttonText}>View</Text>
-          </Pressable>
+        {ongoingTrip.PickUpAddress != null &&
+      <View style={styles.topContainer}>
+        <Text style={{fontSize: 17, marginRight: 10, color:'black'}}>
+          Ongoing ride from {ongoingTrip.PickUpAddress} to{' '}
+          {ongoingTrip.DestinationAddress}{' '}
+        </Text>
+        <View>
+        <Pressable
+          style={styles.button}
+          onPress={() => {
+            if (loggedInAs == 'passenger') {
+              navigation.navigate('activeridedetailspassenger', {
+                origin: JSON.parse(ongoingTrip.PickupLocation),
+                destination: JSON.parse(ongoingTrip.Destination),
+                originAddress: ongoingTrip.PickUpAddress,
+                destinationAddress: ongoingTrip.DestinationAddress,
+                distanceinKm: ongoingTrip.Distance,
+                priceForTheRideInEvrs: ongoingTrip.Price,
+                requestId: ongoingTrip.RideRequestID,
+              });
+            } else if (loggedInAs == 'driver') {
+              navigation.navigate('rideviewdriver', {item:{
+                PickUpAddress: ongoingTrip.PickUpAddress,
+                DestinationAddress: ongoingTrip.DestinationAddress,
+                Distance: ongoingTrip.Distance,
+                Price: ongoingTrip.Price,
+                RideRequestID: ongoingTrip.RideRequestID,
+                CreatedBy: ongoingTrip.CreatedBy,
+              }});
+            }
+          }}>
+          <Text style={styles.buttonText}>View</Text>
+        </Pressable>
         </View>
-      )}
+      </View>
+      }
+      <View style={{flex:0.8}}>
       <Text style={styles.historyText}>History</Text>
       {rideHistory &&
         rideHistory.map((item, index) => (
@@ -73,7 +75,7 @@ export default function Trips({navigation, route}) {
               Date: {dateService.getThemedTimeStamp(item.UpdatedDate)}
             </Text>
             <Text style={styles.historyData}>
-              Distance : {item.Distance}km Price: {item.FareAmount} Evrs
+              Distance : {item.Distance}km Price: {item.FareAmount} EVR
             </Text>
             <Text style={styles.historyData}>
               Status:{' '}
@@ -81,12 +83,15 @@ export default function Trips({navigation, route}) {
             </Text>
           </View>
         ))}
+        </View>
     </AuthorizedLayout>
   );
 }
 
 const styles = StyleSheet.create({
   topContainer: {
+    flex: 0.2,
+    //flexDirection: 'row',
     margin: 10,
     padding: 10,
     backgroundColor: '#d5eda6',
@@ -111,11 +116,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#f2f5f4',
   },
   button: {
-    width: 100,
+   //position: 'absolute',
+    bottom: 1,
+    right: 10,
     backgroundColor: 'green',
     marginTop: 5,
     padding: 10,
-    borderRadius: 30,
+    borderRadius: 5,
     alignSelf: 'center',
     alignItems: 'center',
     height: 40,

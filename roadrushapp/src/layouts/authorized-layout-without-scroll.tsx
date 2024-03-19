@@ -62,8 +62,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   scrollView: {
+    flex: 1,
+    // flexDirection: 'column',
     flexGrow: 1,
-    marginBottom: 75,
+    //marginBottom: 70,
   },
   scrollViewContentContainer: {
     flexGrow: 1,
