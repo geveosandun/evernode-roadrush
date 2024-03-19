@@ -36,15 +36,16 @@ export default function ActiveRideDetailsPassenger({
       // Put your code here
       console.log('This runs every 5 seconds', data.requestId);
       apiService.gerCurrentRideDetails(data.requestId).then((res: any) => {
+        setDriverDetails(res.driverDetails[0]);
         if (res.status === 'FINISHED') {
           setStatus(res.status);
           setPayNowEnabled(true);
-          setDriverDetails(res.driverDetails[0]);
+        //  setDriverDetails(res.driverDetails[0]);
           clearInterval(intervalId);
         } else if (res.status === 'ACCEPTED') {
           setStatus(res.status);
-          setDriverDetails(res.driverDetails[0]);
           console.log("RES**",res)
+         // setDriverDetails(res.driverDetails[0]);
         } else if (res.status === 'PENDING') {
           setStatus(res.status);
         }
@@ -126,11 +127,10 @@ export default function ActiveRideDetailsPassenger({
           origin={data.origin}
           destination={data.destination}></LiveMap>
       </View>
-      <View style={styles.driverDetails}>
+      <View style={styles.status}>
         <Text style={{marginLeft: 5, color: 'white', alignSelf:'center'}}> {status}</Text>
-        
-      </View>
-      <View style={styles.driverDetails}>
+        </View>
+        <View style={styles.driverDetails}>
         {driverDetails  &&
           <Text style={{color:'white'}}>
            Vehicle: {driverDetails.VehicleMake} {driverDetails.VehicleModel} 
@@ -158,6 +158,16 @@ const styles = StyleSheet.create({
     flex: 0.1,
     flexDirection: 'row',
     backgroundColor: 'black',
+    marginBottom:75,
+    
+  },
+  status: {
+    justifyContent:'center',
+    alignItems: 'center',
+    flex: 0.1,
+    flexDirection: 'row',
+    backgroundColor: 'black',
+    padding:2
   },
   heading: {
     flexDirection: 'row',

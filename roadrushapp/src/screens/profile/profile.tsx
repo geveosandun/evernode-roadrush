@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   button_bar: {
-    marginTop: 50,
+    marginTop: 0,
   },
   versionText: {
     marginTop: 20,
