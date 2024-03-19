@@ -63,14 +63,28 @@ export class TransactionService {
         try {
             this.#dbContext.open();
 
-            let payments = await this.#dbContext.getValues(Tables.EVERSTRANSACTIONS, {
-                FromAddress: this.#message.Data.XRPAddress
-            });
+            let params = this.#message.Data.XRPAddress;
+            let query1 = `SELECT ${Tables.RIDEREQUESTS}.PickUpAddress, ${Tables.RIDEREQUESTS}.DestinationAddress, ${Tables.RIDEREQUESTS}.Distance, ${Tables.EVERSTRANSACTIONS}.Amount, ${Tables.EVERSTRANSACTIONS}.CreatedDate, ${Tables.EVERSTRANSACTIONS}.ToAddress
+                            FROM ${Tables.RIDEREQUESTS} 
+                            JOIN ${Tables.EVERSTRANSACTIONS} ON ${Tables.RIDEREQUESTS}.RideRequestID = ${Tables.EVERSTRANSACTIONS}.RideRequestID
+                            WHERE ${Tables.EVERSTRANSACTIONS}.FromAddress = ?`;
+
+            let payments = await this.#dbContext.runSelectQuery(query1, [params]);
+
+            // let payments = await this.#dbContext.getValues(Tables.EVERSTRANSACTIONS, {
+            //     FromAddress: this.#message.Data.XRPAddress
+            // });
             dbp++;
 
-            let received = await this.#dbContext.getValues(Tables.EVERSTRANSACTIONS, {
-                ToAddress: this.#message.Data.XRPAddress
-            });
+            let query2 = `SELECT ${Tables.RIDEREQUESTS}.PickUpAddress, ${Tables.RIDEREQUESTS}.DestinationAddress, ${Tables.RIDEREQUESTS}.Distance, ${Tables.EVERSTRANSACTIONS}.Amount, ${Tables.EVERSTRANSACTIONS}.CreatedDate, ${Tables.EVERSTRANSACTIONS}.FromAddress
+                            FROM ${Tables.RIDEREQUESTS} 
+                            JOIN ${Tables.EVERSTRANSACTIONS} ON ${Tables.RIDEREQUESTS}.RideRequestID = ${Tables.EVERSTRANSACTIONS}.RideRequestID
+                            WHERE ${Tables.EVERSTRANSACTIONS}.ToAddress = ?`;
+
+            let received = await this.#dbContext.runSelectQuery(query2, [params]);
+            // let received = await this.#dbContext.getValues(Tables.EVERSTRANSACTIONS, {
+            //     ToAddress: this.#message.Data.XRPAddress
+            // });
             dbp++;
 
             const resData = {
