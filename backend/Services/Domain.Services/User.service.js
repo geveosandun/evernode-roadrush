@@ -77,7 +77,7 @@ export class UserService {
                 query = `SELECT ${Tables.RIDEREQUESTS}.*
                     FROM ${Tables.RIDEREQUESTS}
                     JOIN ${Tables.PASSENGERS} ON ${Tables.RIDEREQUESTS}.PassengerID = ${Tables.PASSENGERS}.PassengerID
-                    WHERE ${Tables.PASSENGERS}.UserID = ?  AND ${Tables.RIDEREQUESTS}.RequestStatus == "ACCEPTED"
+                    WHERE ${Tables.PASSENGERS}.UserID = ?  AND (${Tables.RIDEREQUESTS}.RequestStatus == "ACCEPTED" OR ${Tables.RIDEREQUESTS}.RequestStatus == "FINISHED")
                     ORDER BY ${Tables.RIDEREQUESTS}.RideDateTime DESC`;
             }
             const rows = await this.#dbContext.runSelectQuery(query, [userId]);
