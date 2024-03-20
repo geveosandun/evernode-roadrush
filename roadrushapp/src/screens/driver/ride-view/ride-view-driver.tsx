@@ -4,6 +4,9 @@ import RRButton from '../../../components/button/button';
 import LiveMap from '../../passenger/live-map/live-map';
 import AuthorizedLayoutWithoutScroll from '../../../layouts/authorized-layout-without-scroll';
 import ApiService from '../../../services/api-service';
+import { showToast } from '../../../services/toast-service';
+import { ToastMessageTypes } from '../../../helpers/constants';
+import AppSecureStorageService from '../../../services/secure-storage-service';
 
 export default function RideViewDriver({navigation, route}): React.JSX.Element {
   const _apiService = ApiService.getInstance();
@@ -22,8 +25,21 @@ export default function RideViewDriver({navigation, route}): React.JSX.Element {
 
   const endTrip = async () => {
     try {
+      setShowLoadingIndicator(true);
       const res = await _apiService.endTrip(passengerData.item.RideRequestID);
       console.log('returned', res);
+      let activeUser = JSON.parse(await AppSecureStorageService.getItem('user'));
+      const intervalId = setInterval(() => {
+        console.log('This runs every 5 seconds', passengerData.item.RideRequestID);
+        _apiService.gerCurrentRideDetails(passengerData.item.RideRequestID).then((res: any) => {
+          if (res.status === 'COMPLETED') {
+            showToast('Successfully received payment', ToastMessageTypes.success);
+            setShowLoadingIndicator(false);
+            navigation.navigate('driverhome', {activeUser});
+            clearInterval(intervalId);
+          }
+        });
+      }, 5000);
     } catch (error) {
       console.log(error);
     }

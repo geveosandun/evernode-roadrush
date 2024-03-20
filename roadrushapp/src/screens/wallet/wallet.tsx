@@ -18,7 +18,6 @@ export default function Wallet({navigation}) {
   useEffect(() => {
     _xrplService.getTrustlineBalance().then((res: any) => {
       setWalletBalance(parseFloat(res.balance));
-      setShowLoadingIndicator(false);
     });
     _apiService.getTransactions().then((res: any) => {
       res.Payments.map((obj: any) => (obj.Type = 'SEND'));
@@ -30,6 +29,7 @@ export default function Wallet({navigation}) {
         return dateB - dateA;
       });
       setTransactions(newArray);
+      setShowLoadingIndicator(false);
     });
   }, []);
 
@@ -43,7 +43,7 @@ export default function Wallet({navigation}) {
       <View style={{flex: 1, marginTop: 10}}>
         <View style={styles.walletContainer}>
           <Text style={{fontSize: 20}}>Your Balance is</Text>
-          <Text style={{fontSize: 40, color: AppTheme.specification.colors.primary}}>
+          <Text style={{fontSize: 40, color: AppTheme.specification.colors.primary, fontWeight: 'bold'}}>
             {walletBalance.toLocaleString('en-US').replace(' ', ',')} EVR
           </Text>
         </View>
@@ -78,7 +78,7 @@ export default function Wallet({navigation}) {
                     : 'From: ' + item.FromAddress}
                 </Text>
                 <Text style={styles.historyData}>
-                  Orgin: {item.PickUpAddress} Destination: {item.DestinationAddress}
+                  Trip: {item.PickUpAddress} to {item.DestinationAddress}
                 </Text>
                 <Text style={styles.historyData}>
                   Distance: {item.Distance} km
@@ -123,11 +123,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 5,
     color: 'red',
+    fontWeight: 'bold'
   },
   historyReceived: {
     fontSize: 16,
     marginBottom: 5,
     color: AppTheme.specification.colors.primary,
+    fontWeight: 'bold'
   },
   historyItem: {
     borderWidth: 0.75,
