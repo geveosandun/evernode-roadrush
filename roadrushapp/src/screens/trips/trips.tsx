@@ -8,7 +8,7 @@ import DateService from '../../services/date-service';
 export default function Trips({navigation, route}) {
   const apiService = ApiService.getInstance();
   const dateService = DateService.getInstance();
-  const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
+  const [showLoadingIndicator, setShowLoadingIndicator] = useState(true);
   const data = route.params;
   const [rideHistory, setRideHIstory] = useState([]);
   const ongoingTrip = data.ongoingTrips[0]|| {};
@@ -20,6 +20,7 @@ export default function Trips({navigation, route}) {
     apiService.getRideHistory(data.userId).then((response: any) => {
       console.log('Res RideHistory: ', response);
       setRideHIstory(response);
+      setShowLoadingIndicator(false)
     });
   }, []);
 
