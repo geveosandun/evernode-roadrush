@@ -6,6 +6,8 @@ import ApiService from '../../services/api-service';
 import AppTheme from '../../helpers/theme';
 import DateService from '../../services/date-service';
 import AuthorizedLayoutWithoutScroll from '../../layouts/authorized-layout-without-scroll';
+import axios from 'axios';
+import AppSettings from '../../helpers/app-settings';
 
 export default function Wallet({navigation}) {
   const _xrplService = new XRPLService();
@@ -14,6 +16,7 @@ export default function Wallet({navigation}) {
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(true);
   const [walletBalance, setWalletBalance] = useState(0);
   const [transactions, setTransactions] = useState([]);
+  const [exchangeRate, setExchangeRate] = useState('');
 
   useEffect(() => {
     _xrplService.getTrustlineBalance().then((res: any) => {
@@ -31,6 +34,11 @@ export default function Wallet({navigation}) {
       setTransactions(newArray);
       setShowLoadingIndicator(false);
     });
+    axios.get('https://api.coinranking.com/v2/coin/k71c5qIRt/price', {
+      headers: {
+        'x-access-token': AppSettings.coinRankingApiKey
+      },
+    }).then(res => setExchangeRate(res.data.data.price));
   }, []);
 
   return (
@@ -46,12 +54,13 @@ export default function Wallet({navigation}) {
           <Text style={{fontSize: 40, color: AppTheme.specification.colors.primary, fontWeight: 'bold'}}>
             {walletBalance.toLocaleString('en-US').replace(' ', ',')} EVR
           </Text>
+          <Text style={{fontSize: 18}}>{(walletBalance * parseFloat(exchangeRate)).toFixed(3)} USD</Text>
         </View>
         <View style={styles.historyContainer}>
           <Text style={{marginBottom: 20, fontSize: 20, fontWeight: 'bold'}}>
             Wallet History
           </Text>
-          <ScrollView style={styles.scrollView}>
+          <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
           {transactions.length > 0 &&
             transactions.map((item: any, index: any) => (
               <View key={index} style={styles.historyItem}>
