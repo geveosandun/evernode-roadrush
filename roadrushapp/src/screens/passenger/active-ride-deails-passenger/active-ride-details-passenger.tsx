@@ -18,6 +18,9 @@ import RRButton from '../../../components/button/button';
 import AuthorizedLayoutWithoutScroll from '../../../layouts/authorized-layout-without-scroll';
 import ApiService from '../../../services/api-service';
 import XummApiService from '../../../services/xumm-api-service';
+import { showToast } from '../../../services/toast-service';
+import { ToastMessageTypes } from '../../../helpers/constants';
+import AppSecureStorageService from '../../../services/secure-storage-service';
 
 export default function ActiveRideDetailsPassenger({
   navigation,
@@ -32,46 +35,46 @@ export default function ActiveRideDetailsPassenger({
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      // This function will run every 5 seconds
-      // Put your code here
       console.log('This runs every 5 seconds', data.requestId);
       apiService.gerCurrentRideDetails(data.requestId).then((res: any) => {
-        setDriverDetails(res.driverDetails[0]);
         if (res.status === 'FINISHED') {
           setStatus(res.status);
           setPayNowEnabled(true);
-        //  setDriverDetails(res.driverDetails[0]);
+          setDriverDetails(res.driverDetails[0]);
           clearInterval(intervalId);
         } else if (res.status === 'ACCEPTED') {
           setStatus(res.status);
           console.log("RES**",res)
-         // setDriverDetails(res.driverDetails[0]);
+         setDriverDetails(res.driverDetails[0]);
         } else if (res.status === 'PENDING') {
           setStatus(res.status);
         }
       });
     }, 5000);
-
-    // Clean up the interval when the component unmounts or when the effect is re-executed
     return () => clearInterval(intervalId);
   }, []);
 
   const onPay = async () => {
-    console.log(
-      driverDetails.DriverID,
-      data.priceForTheRideInEvrs.toString(),
-      data.requestId,
-    );
+    setShowLoadingIndicator(true);
     const xrpAddress = await apiService.getDriverXRPAddress(
       driverDetails.DriverID,
     );
     const x = new XummApiService();
     await x.init();
-    await x.makePaymentRequest(
+    const paymentResponse = await x.makePaymentRequest(
       xrpAddress,
       data.priceForTheRideInEvrs.toString(),
       data.requestId,
     );
+    let activeUser = JSON.parse(await AppSecureStorageService.getItem('user'));
+    paymentResponse.resolved.then((res: any) => {
+      console.log('abc', res);
+      if (res.signed && res.txid !== '') {
+        showToast('Transaction Successful', ToastMessageTypes.success);
+        setShowLoadingIndicator(false);
+        navigation.navigate('passengerhome', {activeUser});
+      }
+    });
   };
 
   return (

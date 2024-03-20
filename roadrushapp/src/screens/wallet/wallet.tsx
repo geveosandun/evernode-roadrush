@@ -18,7 +18,6 @@ export default function Wallet({navigation}) {
   useEffect(() => {
     _xrplService.getTrustlineBalance().then((res: any) => {
       setWalletBalance(parseFloat(res.balance));
-      setShowLoadingIndicator(false);
     });
     _apiService.getTransactions().then((res: any) => {
       res.Payments.map((obj: any) => (obj.Type = 'SEND'));
@@ -30,7 +29,7 @@ export default function Wallet({navigation}) {
         return dateB - dateA;
       });
       setTransactions(newArray);
-      console.log(newArray);
+      setShowLoadingIndicator(false);
     });
   }, []);
 
@@ -41,22 +40,18 @@ export default function Wallet({navigation}) {
       showBottomNavigation={true}
       selectedBottomNavigationTab={BottomNavigationButtons.Wallet}
       title="My Wallet">
-      <View style={styles.walletContainer}>
-        <Text style={{fontSize: 20}}>Your Balance is</Text>
-        <Text
-          style={{
-            fontSize: 35,
-            color: AppTheme.specification.colors.primary,
-          }}>
-          {walletBalance} EVR
-        </Text>
-      </View>
-      <View style={styles.historyContainer}>
-        <Text style={{marginBottom: 20, fontSize: 20, fontWeight: 'bold'}}>
-          Wallet History
-        </Text>
-
-        <ScrollView style={styles.scrollView}>
+      <View style={{flex: 1, marginTop: 10}}>
+        <View style={styles.walletContainer}>
+          <Text style={{fontSize: 20}}>Your Balance is</Text>
+          <Text style={{fontSize: 40, color: AppTheme.specification.colors.primary, fontWeight: 'bold'}}>
+            {walletBalance.toLocaleString('en-US').replace(' ', ',')} EVR
+          </Text>
+        </View>
+        <View style={styles.historyContainer}>
+          <Text style={{marginBottom: 20, fontSize: 20, fontWeight: 'bold'}}>
+            Wallet History
+          </Text>
+          <ScrollView style={styles.scrollView}>
           {transactions.length > 0 &&
             transactions.map((item: any, index: any) => (
               <View key={index} style={styles.historyItem}>
@@ -71,7 +66,7 @@ export default function Wallet({navigation}) {
                         ? styles.historyPayment
                         : styles.historyReceived
                     }>
-                    {item.Amount}
+                    {item.Amount.toLocaleString('en-US').replace(' ', ',')} EVR
                   </Text>
                   <Text>
                     {_dateService.getThemedTimeStamp(item.CreatedDate)}
@@ -82,9 +77,16 @@ export default function Wallet({navigation}) {
                     ? 'To: ' + item.ToAddress
                     : 'From: ' + item.FromAddress}
                 </Text>
+                <Text style={styles.historyData}>
+                  Trip: {item.PickUpAddress} to {item.DestinationAddress}
+                </Text>
+                <Text style={styles.historyData}>
+                  Distance: {item.Distance} km
+                </Text>
               </View>
             ))}
-        </ScrollView>
+          </ScrollView>
+        </View>
       </View>
     </AuthorizedLayoutWithoutScroll>
   );
@@ -102,7 +104,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   scrollView: {
-    marginBottom: 400,
+    height: 400
   },
   historyContainer: {
     margin: 20,
@@ -121,13 +123,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 5,
     color: 'red',
+    fontWeight: 'bold'
   },
   historyReceived: {
     fontSize: 16,
     marginBottom: 5,
     color: AppTheme.specification.colors.primary,
+    fontWeight: 'bold'
   },
   historyItem: {
-    marginVertical: 10,
+    borderWidth: 0.75,
+    borderColor: AppTheme.specification.colors.primary,
+    borderRadius: 12,
+    padding: 10,
+    marginBottom: 10,
+    minHeight: 70,
   },
 });

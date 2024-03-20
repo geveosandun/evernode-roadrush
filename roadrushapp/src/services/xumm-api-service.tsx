@@ -136,7 +136,6 @@ export default class XummApiService {
         async e => {
           console.log('event data', e.data);
 
-          // todo: save the payload uuid to database along with the transaction details
           if (e.data.signed) {
             const _apiService = ApiService.getInstance();
             const reqObj = {
@@ -164,7 +163,7 @@ export default class XummApiService {
       );
 
       console.log((await payload).created.next.always);
-      await payload;
+      return payload;
 
       console.log('Payment request submission completed.');
     } catch (e) {

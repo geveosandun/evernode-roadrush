@@ -36,6 +36,6 @@ export function PassengerHome({navigation, route}): React.JSX.Element {
 const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
-    marginBottom:75
+    marginBottom: 75
   },
 });
