@@ -52,6 +52,8 @@ export default function Trips({navigation, route}) {
               });
             } else if (loggedInAs == 'driver') {
               navigation.navigate('rideviewdriver', {item:{
+                PickupLocation: JSON.parse(ongoingTrip.PickupLocation),
+                Destination: JSON.parse(ongoingTrip.Destination),
                 PickUpAddress: ongoingTrip.PickUpAddress,
                 DestinationAddress: ongoingTrip.DestinationAddress,
                 Distance: ongoingTrip.Distance,

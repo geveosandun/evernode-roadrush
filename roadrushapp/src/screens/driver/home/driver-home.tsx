@@ -10,7 +10,7 @@ export function DriverHome({navigation, route}): React.JSX.Element {
   let user = route.params;
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
 
-  const [requests, setRequests] = useState([]);
+  const [requests, setRequests] = useState<any>();
   const [userId, setUserId] = useState('');
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export function DriverHome({navigation, route}): React.JSX.Element {
       showBottomNavigation={true}
       title="Requests">
       <View style={styles.mainContainer}>
-        {requests.map(item => {
+        {requests && requests.map(item => {
           console.log("ITEM",item);
           return(  
           <View key={parseInt(item.RideRequestID)} style={styles.item}>

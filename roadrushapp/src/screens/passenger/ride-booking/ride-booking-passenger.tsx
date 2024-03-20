@@ -24,6 +24,7 @@ export default function RideBookingPassenger({
 }): React.JSX.Element {
   const apiService = ApiService.getInstance();
   const {origin, destination, originAddress, destinationAddress} = route.params;
+  const [loader, setLoader]= useState(false);
   var distanceinKm = getPreciseDistance(origin, destination) / 1000;
   var estimatedTime = Math.round((distanceinKm/40)*60);
   var priceForTheRideInEvrs = AppSettings.pricePerKm * distanceinKm;
@@ -37,6 +38,7 @@ export default function RideBookingPassenger({
         ToastMessageTypes.error,
       );
     } else {
+      setLoader(true);
       let loggedInUserDetails = await AppSecureStorageService.getItem('user');
       let userDetailsJson = JSON.parse(loggedInUserDetails);
       let passengerUserId = userDetailsJson.UserID;
@@ -54,6 +56,7 @@ export default function RideBookingPassenger({
         )
         .then((response: any) => {
           console.log('Res** ', response);
+          setLoader(false);
           navigation.navigate('activeridedetailspassenger', {
             origin: origin,
             destination: destination,
@@ -71,7 +74,7 @@ export default function RideBookingPassenger({
   return (
     <AuthorizedLayout
       navigation={navigation}
-      showWaitIndicator={false}
+      showWaitIndicator={loader}
       title="Book Your Ride Now"
       showBottomNavigation={true}
       selectedBottomNavigationTab={BottomNavigationButtons.Trips}>

@@ -13,16 +13,16 @@ export default function RideViewDriver({navigation, route}): React.JSX.Element {
   const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
   const passengerData = route.params;
   console.log('passenger item', route.params);
-  const [destination, setDestination] = useState({
-    latitude: 6.836611,
-    longitude: 81.003073,
-  });
+  console.log("ITEM", route.params)
+ let origin = passengerData.item.PickupLocation;
+ let destination = passengerData.item.Destination;
+ console.log(typeof origin, origin);
+ console.log(typeof destination, destination);
 
-  const [origin, setOrigin] = useState({
-    latitude: 6.841405,
-    longitude: 81.004405,
-  });
-
+ if(typeof origin == 'string'){
+  origin = JSON.parse(origin);
+  destination = JSON.parse(destination);
+ }
   const endTrip = async () => {
     try {
       setShowLoadingIndicator(true);
