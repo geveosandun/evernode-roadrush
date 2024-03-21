@@ -32,6 +32,7 @@ export default function ActiveRideDetailsPassenger({
   const [status, setStatus] = useState('REQUEST PROCESSING');
   const [driverDetails, setDriverDetails] = useState<any>();
   const [payNowEnabled, setPayNowEnabled] = useState(false);
+  const [allowAccept, setAllowAccept] = useState(true);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -43,9 +44,15 @@ export default function ActiveRideDetailsPassenger({
           setDriverDetails(res.driverDetails[0]);
           clearInterval(intervalId);
         } else if (res.status === 'ACCEPTED') {
-          setStatus(res.status);
-          console.log("RES**",res)
-         setDriverDetails(res.driverDetails[0]);
+          setStatus(`${res.driverDetails[0].VehiclePlateNumber} is coming to pick you up!`);
+          setDriverDetails(res.driverDetails[0]);
+          if (allowAccept) {
+            const timeOUtId = setTimeout(() => {
+              setStatus('Trip Started!');
+              setAllowAccept(false);
+              clearTimeout(timeOUtId);
+            }, 2000);
+          }
         } else if (res.status === 'PENDING') {
           setStatus(res.status);
         }
@@ -68,7 +75,6 @@ export default function ActiveRideDetailsPassenger({
     );
     let activeUser = JSON.parse(await AppSecureStorageService.getItem('user'));
     paymentResponse.resolved.then((res: any) => {
-      console.log('abc', res);
       if (res.signed && res.txid !== '') {
         showToast('Transaction Successful', ToastMessageTypes.success);
         setShowLoadingIndicator(false);

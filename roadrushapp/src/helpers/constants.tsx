@@ -11,6 +11,6 @@ export class LocalStorageKeys {
 }
 
 export class EVRIssuer {
-  static address = 'rQwnhceqeCkw7NJQEL5vXD2qEGo9rmzXY7';
+  static address = 'rEvernodee8dJLaFsujS6q1EiXvZYmHXr8';
   static currencyCode = 'EVR';
 }

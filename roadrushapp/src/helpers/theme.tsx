@@ -5,7 +5,7 @@ const AppThemeSpec = {
     white: '#FFFFFF',
     black: '#000000',
     red: '#FF2800',
-    primary: '#23d856',
+    primary: '#22D855',
     secondary: '#282E3B',
     backgroundShade: '#22D85520', // with 20% alpha value
     mediumGrey: '#808080',
