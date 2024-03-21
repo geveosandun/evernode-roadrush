@@ -4,7 +4,7 @@ import AppSecureStorageService from "./secure-storage-service";
 const xrpl = require('xrpl');
 
 export default class XRPLService {
-    private client_url = 'wss://xahau-test.net';
+    private client_url = 'wss://xahau.network';
 
     constructor() {}
 

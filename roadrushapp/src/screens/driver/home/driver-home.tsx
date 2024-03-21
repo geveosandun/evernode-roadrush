@@ -8,7 +8,7 @@ import HotPocketClientService from '../../../services/hp-client-service';
 export function DriverHome({navigation, route}): React.JSX.Element {
   const apiService = ApiService.getInstance();
   let user = route.params;
-  const [showLoadingIndicator, setShowLoadingIndicator] = useState(false);
+  const [showLoadingIndicator, setShowLoadingIndicator] = useState(true);
 
   const [requests, setRequests] = useState<any>();
   const [userId, setUserId] = useState('');
@@ -17,12 +17,22 @@ export function DriverHome({navigation, route}): React.JSX.Element {
     HotPocketClientService.getInstance().then(ins => {
       console.log(ins);
     });
-    setUserId(user.user.UserID);
-    apiService.getRideRequests(user.user.UserID).then((response: any) => {
-      console.log("REQ",response)
-      setRequests(response);
-    });
-  }, []);
+    if(user.hasOwnProperty('user')) {
+      setUserId(user.user.UserID);
+      apiService.getRideRequests(user.user.UserID).then((response: any) => {
+        console.log("REQ",response)
+        setRequests(response);
+        setShowLoadingIndicator(false);
+      });
+    } else {
+      setUserId(user.UserID);
+      apiService.getRideRequests(user.UserID).then((response: any) => {
+        console.log("REQ",response)
+        setRequests(response);
+        setShowLoadingIndicator(false);
+      });
+    }
+  }, [user]);
 
   function acceptRide(rideDetails, userId) {
     apiService.acceptRide(rideDetails, userId);

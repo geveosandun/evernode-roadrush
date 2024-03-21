@@ -17,6 +17,7 @@ import AppSecureStorageService from '../../../services/secure-storage-service';
 import XRPLService from '../../../services/xrpl-service';
 import {showToast} from '../../../services/toast-service';
 import {ToastMessageTypes} from '../../../helpers/constants';
+import axios from 'axios';
 
 export default function RideBookingPassenger({
   navigation,
@@ -28,6 +29,7 @@ export default function RideBookingPassenger({
   var distanceinKm = getPreciseDistance(origin, destination) / 1000;
   var estimatedTime = Math.round((distanceinKm/40)*60);
   var priceForTheRideInEvrs = AppSettings.pricePerKm * distanceinKm;
+  const [exchangeRate, setExchangeRate] = useState('');
 
   async function BookRide() {
     const xrplService = new XRPLService();
@@ -71,6 +73,14 @@ export default function RideBookingPassenger({
     }
   }
 
+  useEffect(() => {
+    axios.get('https://api.coinranking.com/v2/coin/k71c5qIRt/price', {
+      headers: {
+        'x-access-token': AppSettings.coinRankingApiKey
+      },
+    }).then(res => setExchangeRate(res.data.data.price));
+  }, []);
+
   return (
     <AuthorizedLayout
       navigation={navigation}
@@ -112,8 +122,9 @@ export default function RideBookingPassenger({
                 color: AppTheme.specification.colors.red,
                 fontSize:16
               }}>
-              {priceForTheRideInEvrs} EVR 
+              {priceForTheRideInEvrs.toFixed(3)} USD
             </Text>
+            <Text style={{marginLeft: 5}}>({(priceForTheRideInEvrs / parseFloat(exchangeRate)).toFixed(3)} EVR)</Text>
           </View>
           <Text style={{fontSize:14, marginBottom:10}}>Estimated time: {estimatedTime} Mins </Text>
           <View style={styles.driverDetailsContainer}>
@@ -190,7 +201,8 @@ const styles = StyleSheet.create({
   rideFeeContainer: {
     flexDirection: 'row',
     marginBottom: 10,
-    fontSize: 20
+    fontSize: 20,
+    alignItems: 'center',
   },
   driverDetailsContainer: {
     flexDirection: 'row',

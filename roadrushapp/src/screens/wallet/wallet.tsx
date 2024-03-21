@@ -52,9 +52,9 @@ export default function Wallet({navigation}) {
         <View style={styles.walletContainer}>
           <Text style={{fontSize: 20}}>Your Balance is</Text>
           <Text style={{fontSize: 40, color: AppTheme.specification.colors.primary, fontWeight: 'bold'}}>
-            {walletBalance.toLocaleString('en-US').replace(' ', ',')} EVR
+            {(walletBalance * parseFloat(exchangeRate)).toFixed(3)} USD
           </Text>
-          <Text style={{fontSize: 18}}>{(walletBalance * parseFloat(exchangeRate)).toFixed(3)} USD</Text>
+          <Text style={{fontSize: 18}}>{walletBalance.toLocaleString('en-US').replace(' ', ',')} EVR</Text>
         </View>
         <View style={styles.historyContainer}>
           <Text style={{marginBottom: 20, fontSize: 20, fontWeight: 'bold'}}>

@@ -4,6 +4,7 @@ import AuthorizedLayout from '../../layouts/authorized-layout';
 import {useEffect, useState} from 'react';
 import ApiService from '../../services/api-service';
 import DateService from '../../services/date-service';
+import AppTheme from '../../helpers/theme';
 
 export default function Trips({navigation, route}) {
   const apiService = ApiService.getInstance();
@@ -77,9 +78,14 @@ export default function Trips({navigation, route}) {
             <Text style={styles.historyData}>
               Date: {dateService.getThemedTimeStamp(item.UpdatedDate)}
             </Text>
+            <View style={{flexDirection:'row', justifyContent: 'space-between'}}>
             <Text style={styles.historyData}>
-              Distance : {item.Distance}km Price: {item.FareAmount} EVR
+              Distance : {item.Distance}km
             </Text>
+            <Text style={styles.historyData}>
+              Amount: {item.FareAmount} EVR
+            </Text>
+            </View>
             <Text style={styles.historyData}>
               Status:{' '}
               {item.RideStatus == 'FINISHED' ? 'Payment Pending' : 'Completed'}
@@ -112,11 +118,13 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   historyItem: {
-    borderRadius: 10,
+    borderRadius: 12,
+    borderWidth: 0.75,
+    borderColor: AppTheme.specification.colors.primary,
     elevation: 6,
     margin: 10,
     padding: 10,
-    backgroundColor: '#f2f5f4',
+    backgroundColor: AppTheme.specification.colors.white,
   },
   button: {
    //position: 'absolute',
