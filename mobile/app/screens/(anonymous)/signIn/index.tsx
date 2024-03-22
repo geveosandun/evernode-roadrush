@@ -1,4 +1,4 @@
-import { Animated, Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { showToast } from "../../../services/toast-service";
 import { ToastMessageTypes } from "../../../helpers/constants";
 import AnonymousLayout from "../../../components/layouts/anonymous-layout";
@@ -10,6 +10,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 export default function SignInScreen({ navigation }) {
+  const _authService = AuthService.getInstance();
+
   const [showWaitIndicator, setShowWaitIndicator] = useState(false);
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
@@ -23,6 +25,28 @@ export default function SignInScreen({ navigation }) {
     setShowPassword(!showPassword);
   };
 
+  const submitLogin = () => {
+    const loginData = {
+      Username: userName,
+      Password: password
+    }
+
+    setShowWaitIndicator(true);
+    _authService.submitLoginRequest(loginData)
+      .then((response: any) => {
+        if (response === 'Login Success') {
+          showToast("Logged in Successfully!", ToastMessageTypes.success);
+          navigation.replace("SelectTypeScreen");
+        }
+      })
+      .catch((error) => {
+        showToast(error.displayErrorMessage, ToastMessageTypes.error);
+      })
+      .finally(() => {
+        setShowWaitIndicator(false);
+      });
+  }
+
   return (
     <>
       <AnonymousLayout showWaitIndicator={showWaitIndicator}>
@@ -33,7 +57,7 @@ export default function SignInScreen({ navigation }) {
           />
           <Image
             style={styles.tinyLogo}
-            source={require("../../../assets/images/splash.png")}
+            source={require("../../../assets/images/logo.png")}
           />
           <View style={styles.loginForm}>
             <View style={{borderBottomWidth: 0.5, borderBottomColor: AppTheme.colors.primary, marginBottom: 10}}>
@@ -61,13 +85,9 @@ export default function SignInScreen({ navigation }) {
                 }
               </TouchableOpacity>
             </View>
-            <Text style={{alignSelf: "flex-end", marginRight: 5, fontWeight: "bold"}}>Forgot Password?</Text>
             <View style={styles.loginBtn}>
-              <SCButton showLeftArrow={false} showRightArrow={true} text="Login" />
+              <SCButton showLeftArrow={false} showRightArrow={false} text="Login" onTap={submitLogin} />
             </View>
-          </View>
-          <View style={{alignSelf: "center", position: "absolute", bottom: 10, flexDirection: "row"}}>
-            <Text>Dont have an account? </Text><Text style={{fontWeight: "bold"}}>SignUp</Text>
           </View>
         </View>
       </AnonymousLayout>
@@ -81,7 +101,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   loginForm: {
-    marginTop: 70,
+    marginTop: 50,
     alignSelf: "center",
     width: "85%"
   },

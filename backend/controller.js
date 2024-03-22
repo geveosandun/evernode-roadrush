@@ -2,6 +2,11 @@ import { ServiceTypes } from "./Constants/ServiceTypes";
 import { AuthService } from "./Services/Common.Services/Auth.service";
 import { ContractUpdateController } from "./Controllers/ContractUpdate.Controller";
 import { TestController } from "./Controllers/Test.Controller";
+import { AuthenticationController } from "./Controllers/Authentication.Controller";
+import { PassengerController } from "./Controllers/Passenger.Controller";
+import { DriverController } from "./Controllers/Driver.Controller";
+import { UserController } from "./Controllers/User.Controller";
+import { TransactionController } from "./Controllers/Transactions.Controller";
 
 const settings = require("./settings.json").settings;
 
@@ -10,10 +15,21 @@ export class Controller {
 
 	#contractController = null;
 	#testController = null;
+	#authenticationController = null;
+	#passengerController = null;
+	#driverController = null;
+	#userController = null;
+	#transactionController = null;
+
 
 	async handleRequest(user, message, isReadOnly) {
 		this.#contractController = new ContractUpdateController(message);
 		this.#testController = new TestController(message); // For test purposes
+		this.#authenticationController = new AuthenticationController(message);
+		this.#passengerController = new PassengerController(message);
+		this.#driverController = new DriverController(message);
+		this.#userController = new UserController(message);
+		this.#transactionController = new TransactionController(message);
 		let _authService = new AuthService();
 
 		let result = {};
@@ -28,6 +44,21 @@ export class Controller {
 		} else {
 			if (message.Service == ServiceTypes.TEST) {
 				result = await this.#testController.handleRequest();
+			}
+			if (message.Service === ServiceTypes.AUTHENTICATION) {
+				result = await this.#authenticationController.handleRequest();
+			}
+			if (message.Service === ServiceTypes.PASSENGER) {
+				result = await this.#passengerController.handleRequest();
+			}
+			if (message.Service === ServiceTypes.DRIVER) {
+				result = await this.#driverController.handleRequest();
+			}
+			if (message.Service === ServiceTypes.USER) {
+				result = await this.#userController.handleRequest();
+			}
+			if (message.Service === ServiceTypes.TRANSACTION) {
+				result = await this.#transactionController.handleRequest();
 			}
 		}
 
