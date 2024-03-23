@@ -1,5 +1,19 @@
-RoadRush is a mobile app made for giving taxi services to the community, focusing on cutting out middlemen. By building it on the Evernode platform, we easily embraced this idea with its built-in distributed network system.
- 
-Compared to other top taxi apps, RoadRush doesn't mention charging extra fees because there's no middleman overseeing the system like most others. This means we can offer lower prices, and adding cryptocurrency wallets makes us more competitive.
- 
-All the data is kept safe on the Evernode network, and integrated wallet accounts handle all the transactions done through the app.
+<p align="center">
+  <img src="https://github.com/geveosandun/evernode-roadrush/assets/162102205/ba747c5a-a741-4746-90cc-787cf152b5b5" width="300">
+</p>
+
+<h3 align="center">
+  Powered by
+</h3>
+
+<p align="center">
+ <img src="https://github.com/geveosandun/evernode-roadrush/assets/162102205/274f3ee2-a5a8-4770-8003-875052909ede" width="300">
+</p>
+
+RoadRush is a ReactNative mobile app created to streamline taxi services by eliminating middlemen. Built on the Evernode platform, it seamlessly embodies the 'middleman-be-gone' philosophy through its distributed network system.
+
+Trip fares are calculated in USD for clarity, with wallet transactions converted to the equivalent EVERs amount. All transactions occur securely through individual Xaman wallets.
+
+Data is securely stored within Evernode's distributed network for reliability and security.
+
+Unlike other top taxi apps, RoadRush doesn't tack on extra fees since there's no middleman involved. This allows us to offer competitive prices, augmented by the integration of cryptocurrency wallets.
